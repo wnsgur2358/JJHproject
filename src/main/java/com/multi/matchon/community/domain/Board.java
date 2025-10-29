@@ -49,7 +49,6 @@ public class Board extends BaseEntity {
     private boolean pinned = false;
 
     // === 비즈니스 로직 ===
-
     public void setIsDeleted(boolean deleted) {
         this.isDeleted = deleted;
     }
