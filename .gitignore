@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Secrets
+.env
+src/main/resources/*.json
+
