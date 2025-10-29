@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <script th:src="@{/js/matchup/matchup-request-my.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-request-my.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h2 class="page-title">MATCHUP 내 참가 요청 목록</h2>
+
+    <div class="filter-wrapper">
+        <div id="filter">
+            <select id="sports-type">
+                <option value="" selected>전체 종목</option>
+                <option value="SOCCER">SOCCER</option>
+                <option value="FUTSAL">FUTSAL</option>
+            </select>
+            <input type="date" id="date-filter">
+            <label>
+                경기 시작 전
+                <input type="checkbox" id="availableOnly">
+            </label>
+            <button id="filterBtn">검색</button>
+        </div>
+        <div class="topbar-buttons">
+            <button class="btn-back" onclick="goBack()">뒤로가기</button>
+        </div>
+    </div>
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th class="col-type">종목</th>
+            <th class="col-sports-facility-address">경기장</th>
+            <th class="col-match-date">날짜</th>
+            <th class="col-status">상태</th>
+            <th class="col-quota">정원</th>
+            <th class="col-participants">신청 인원</th>
+            <th class="col-request-status">요청 상태</th>
+            <th class="col-request-cancel-count">요청 통계</th>
+            <th class="col-detail">상세 보기</th>
+            <th class="col-group-chat">단체 채팅</th>
+        </tr>
+        </thead>
+        <tbody id="request-container"></tbody>
+    </table>
+
+    <div id="paging-container">
+
+    </div>
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

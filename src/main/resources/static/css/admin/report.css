@@ -1,0 +1,245 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    padding: 30px 0 10px;
+    font-size: 28px;
+    color: #333;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto 50px;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+    border-radius: 6px;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+thead {
+    background-color: #007BFF;
+    color: white;
+}
+
+thead th {
+    background-color: #007BFF;
+    color: white;
+}
+
+thead th:hover {
+    background-color: #007BFF !important;
+    color: white !important;
+    cursor: default;
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+td:nth-child(6) {
+    text-align: justify;
+}
+
+th:nth-child(1), td:nth-child(1) { width: 4%; }     /* ID */
+th:nth-child(2), td:nth-child(2) { width: 8%; }    /* 유형 */
+th:nth-child(3), td:nth-child(3) { width: 10%; }    /* 신고대상 */
+th:nth-child(4), td:nth-child(4) { width: 10%; }    /* 신고자 */
+th:nth-child(5), td:nth-child(5) { width: 14%; }    /* 신고분류 */
+th:nth-child(6), td:nth-child(6) { width: 32%; }    /* 상세사유 */
+th:nth-child(7), td:nth-child(7) { width: 10%; }    /* 신고일 */
+th:nth-child(8), td:nth-child(8) { width: 8%; }    /* 보기 */
+th:nth-child(9), td:nth-child(9) { width: 12%; }    /* 회원 처리 */
+
+
+tbody tr:hover {
+    background-color: #fffbe6;
+    transition: background-color 0.2s ease-in-out;
+}
+
+td {
+    color: #333;
+}
+
+/* 보기 버튼 */
+.view-link {
+    display: inline-block;
+    padding: 6px 10px;
+    font-size: 13px;
+    background-color: dodgerblue;
+    color: white;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.view-link:hover {
+    background-color: royalblue;
+}
+
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tr {
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+
+    td {
+        padding: 12px;
+        text-align: left;
+        position: relative;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    td::before {
+        content: attr(data-label);
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        font-weight: bold;
+        color: #666;
+        width: 120px;
+        display: inline-block;
+    }
+}
+
+
+.ban-controls {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.ban-btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: #fff;
+    border: 1px solid blueviolet;
+    border-radius: 4px;
+    color: blueviolet;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.ban-btn:hover {
+    background-color: ghostwhite;
+}
+
+.unban-btn {
+    background-color: forestgreen;
+    width: 50px;
+    height: 25px;
+    color: white;
+    border: none;
+    font-weight: 500;
+}
+
+.unban-btn:hover {
+    background-color: darkgreen;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 4px;
+}
+
+.page-link {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    text-decoration: none;
+    color: #333;
+}
+
+.page-link.active {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.target-writer-name {
+    color: red;
+    font-weight: 600;
+}
+
+/* 🔽 드롭다운 스타일 */
+.filter-select {
+    width: 130px;
+    height: 32px;
+    padding: 4px 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: darkslategray;
+    background-color: #f9f9f9;
+    border: 2px solid dodgerblue;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.filter-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* ✅ 검색 버튼 스타일 */
+.filter-button {
+    background-color: dodgerblue;
+    text-align: center;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.filter-button:hover {
+    background-color: royalblue;
+}
+
+.report-filter-wrapper {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto 24px auto;
+    padding-left: 20px; /* ✅ 핵심: 시각적으로 왼쪽 맞춤 효과 */
+}
+
+/* 필터 내부 요소 정렬 */
+.report-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+
+
+
+
+
+

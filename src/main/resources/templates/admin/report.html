@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>신고 관리</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/report.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+<h1>신고 목록</h1>
+
+<!-- 필터 영역 -->
+<div class="report-filter-wrapper">
+    <form method="get" th:action="@{/admin/reports/page}">
+        <div class="report-filter">
+            <label>
+                신고유형:
+                <select name="reportType" class="filter-select">
+                    <option value="" th:selected="${reportType == null or reportType == ''}">전체</option>
+                    <option value="BOARD" th:selected="${reportType == 'BOARD'}">게시글</option>
+                    <option value="COMMENT" th:selected="${reportType == 'COMMENT'}">댓글</option>
+                </select>
+            </label>
+
+            <label>
+                신고분류:
+                <select name="reasonType" class="filter-select">
+                    <option value="" th:selected="${reasonType == null or reasonType == ''}">전체</option>
+                    <option value="ABUSE" th:selected="${reasonType == 'ABUSE'}">욕설/비방</option>
+                    <option value="ADVERTISEMENT" th:selected="${reasonType == 'ADVERTISEMENT'}">광고성 글</option>
+                    <option value="SPAM" th:selected="${reasonType == 'SPAM'}">도배</option>
+                    <option value="IRRELEVANT" th:selected="${reasonType == 'IRRELEVANT'}">카테고리 불일치</option>
+                    <option value="ETC" th:selected="${reasonType == 'ETC'}">기타</option>
+                </select>
+            </label>
+
+            <button type="submit" class="filter-button">🔍 검색</button>
+        </div>
+    </form>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>유형</th>
+        <th>신고대상</th>
+        <th>신고자</th>
+        <th>신고분류</th>
+        <th>상세사유</th>
+        <th>신고일</th>
+        <th>보기</th>
+        <th>회원 처리</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report, stat : ${reports}">
+        <td th:text="${(currentPage != null ? currentPage : 0) * 5 + stat.index + 1}">1</td>
+        <td th:text="${report.reportType}">BOARD</td>
+        <td th:text="${report.targetWriterName}" class="target-writer-name">Name</td>
+        <td th:text="${report.reporterName}">홍길동</td>
+        <td th:text="${report.reasonType}">욕설/비방</td>
+        <td th:text="${report.reason}">사유</td>
+        <td th:text="${#temporals.format(report.createdDate, 'yyyy-MM-dd HH:mm')}">날짜</td>
+        <td>
+            <span th:if="${!report.targetExists}">삭제됨</span>
+            <a th:if="${report.reportType == 'BOARD' and report.targetExists}"
+               th:href="@{'/community/' + ${report.boardId}}" class="view-link">게시글</a>
+            <a th:if="${report.reportType == 'COMMENT' and report.targetExists}"
+               th:href="@{'/community/' + ${report.boardId} + '?highlight=' + ${report.targetId}}"
+               class="view-link">댓글</a>
+        </td>
+        <td>
+            <div class="ban-controls" th:if="${!report.targetIsAdmin}">
+                <th:block th:if="${!report.suspended}">
+                    <button type="button" th:onclick="'suspendUser(event, ' + ${report.targetMemberId} + ', 7)'" class="ban-btn">7일</button>
+                    <button type="button" th:onclick="'suspendUser(event, ' + ${report.targetMemberId} + ', 30)'" class="ban-btn">30일</button>
+                    <button type="button" th:onclick="'suspendUser(event, ' + ${report.targetMemberId} + ', null)'" class="ban-btn">영구</button>
+                </th:block>
+                <button type="button" th:if="${report.suspended}" th:onclick="'unsuspendUser(event, ' + ${report.targetMemberId} + ')'" class="ban-btn unban-btn">해제</button>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이지네이션 -->
+<div class="pagination" th:if="${reportPage.totalPages > 1}">
+    <a class="page-link"
+       th:if="${reportPage.hasPrevious()}"
+       th:href="@{/admin/reports/page(page=${reportPage.number - 1}, reportType=${reportType}, reasonType=${reasonType})}">이전</a>
+
+    <a class="page-link"
+       th:each="i : ${#numbers.sequence(0, reportPage.totalPages - 1)}"
+       th:href="@{/admin/reports/page(page=${i}, reportType=${reportType}, reasonType=${reasonType})}"
+       th:text="${i + 1}"
+       th:classappend="${i == reportPage.number} ? 'active' : ''">
+    </a>
+
+    <a class="page-link"
+       th:if="${reportPage.hasNext()}"
+       th:href="@{/admin/reports/page(page=${reportPage.number + 1}, reportType=${reportType}, reasonType=${reasonType})}">다음</a>
+</div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script>
+    function suspendUser(event, memberId, days) {
+        Swal.fire({
+            text: '정말로 회원 계정을 정지하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            const formData = new URLSearchParams();
+            formData.append("memberId", memberId);
+            if (days != null) formData.append("days", days);
+
+            fetch("/member/suspend", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        Swal.fire({
+                            text: '회원 정지가 완료되었습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        }).then(() => location.reload());
+                    } else {
+                        res.json().then(data => {
+                            Swal.fire({
+                                text: data.message || "정지 실패",
+                                icon: 'warning',
+                                confirmButtonText: '확인'
+                            });
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire({ text: '요청 중 오류 발생', icon: 'warning', confirmButtonText: '확인' });
+                });
+        });
+    }
+
+    function markAsSuspended(memberId) {
+        const controls = document.querySelectorAll(".ban-controls");
+        controls.forEach(control => {
+            const btns = control.querySelectorAll(`.ban-btn[data-member-id='${memberId}']`);
+            if (btns.length === 0) return;
+
+            btns.forEach(btn => btn.remove());
+
+            const unbanBtn = document.createElement('button');
+            unbanBtn.textContent = '해제';
+            unbanBtn.className = 'ban-btn unban-btn';
+            unbanBtn.setAttribute('data-member-id', memberId);
+            unbanBtn.onclick = (e) => unsuspendUser(e, memberId);
+            control.appendChild(unbanBtn);
+        });
+    }
+
+    function unsuspendUser(event, memberId) {
+        Swal.fire({
+            text: '정말로 정지를 해제하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then((result) => {
+            if (!result.isConfirmed) return;
+
+            const formData = new URLSearchParams();
+            formData.append("memberId", memberId);
+
+            fetch("/member/unsuspend", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            })
+                .then(res => {
+                    if (res.ok) {
+                        Swal.fire({
+                            text: '회원 정지가 해제되었습니다.',
+                            icon: 'success',
+                            confirmButtonText: '확인'
+                        }).then(() => restoreSuspendButtons(memberId));
+                    } else {
+                        res.json().then(data => {
+                            Swal.fire({
+                                text: data.message || "해제 실패",
+                                icon: 'warning',
+                                confirmButtonText: '확인'
+                            });
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire({ text: '요청 중 오류 발생', icon: 'warning', confirmButtonText: '확인' });
+                });
+        });
+    }
+
+
+    function restoreSuspendButtons(memberId) {
+        const controls = document.querySelectorAll(".ban-controls");
+
+        controls.forEach(control => {
+            // 대상 멤버의 영역만 처리
+            const hasTargetMember = control.closest("tr").innerHTML.includes(`suspendUser(event, ${memberId}`);
+            if (!hasTargetMember) return;
+
+            // 기존 버튼 모두 제거
+            control.innerHTML = "";
+
+            // 정지 버튼 다시 추가
+            const durations = [7, 30, null];
+            durations.forEach(days => {
+                const btn = document.createElement('button');
+                btn.textContent = days === null ? '영구' : `${days}일`;
+                btn.className = 'ban-btn';
+                btn.setAttribute('data-member-id', memberId);
+                btn.onclick = (e) => suspendUser(e, memberId, days);
+                control.appendChild(btn);
+            });
+        });
+    }
+</script>
+</body>
+</html>

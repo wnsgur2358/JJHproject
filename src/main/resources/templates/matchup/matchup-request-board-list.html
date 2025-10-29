@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <script th:src="@{/js/matchup/matchup-request-board-list.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-request-board-list.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <div id="matchup-request-detail-dto"
+         th:data-board-id="${resMatchupBoardOverviewDto.boardId}"
+         th:data-match-datetime ="${resMatchupBoardOverviewDto.matchDatetime}"
+         th:data-match-endtime ="${resMatchupBoardOverviewDto.matchEndtime}"
+         th:data-current-participant-count="${resMatchupBoardOverviewDto.currentParticipantCount}"
+         th:data-max-participants="${resMatchupBoardOverviewDto.maxParticipants}"
+    >
+    </div>
+    <h2 class="page-title">MATCHUP 게시글의 참가 요청 목록</h2>
+    <div class="topbar-buttons">
+        <button class="back-btn" onclick="goBack()">뒤로가기</button>
+    </div>
+    <table class="match-info-table" th:object="${resMatchupBoardOverviewDto}">
+        <tr>
+            <td class="col-match-info-sports-type"><strong>종목:</strong> <span th:text="*{sportsTypeName}">FUTSAL</span></td>
+            <td class="col-match-info-writer truncate-write"><strong>작성자:</strong> <sapn th:text="*{writerName}"></sapn></td>
+            <td class="col-match-info-address truncate-address"><strong>주소:</strong> <span th:text="*{sportsFacilityAddress}"></span></td>
+            <td class="col-match-info-match-date"><strong>📅 날짜:</strong> <span id="match-date"></span></td>
+            <td class="col-match-info-status"><strong>상태:</strong>  <span id="match-status"></span></td>
+            <td class="col-match-info-participants"><strong>정원:</strong> ( <span th:text="*{currentParticipantCount}"></span> / <span th:text="*{maxParticipants}"></span> )</td>
+        </tr>
+    </table>
+    <hr>
+
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th class="col-applicant">신청자</th>
+            <th class="col-self-intro">자기소개</th>
+            <th class="col-participants">신청 인원</th>
+            <th class="col-request-status">요청 상태</th>
+            <th class="col-request-cancel-count">요청 통계</th>
+            <th class="col-action">요청 처리</th>
+        </tr>
+        </thead>
+        <tbody id="request-container"></tbody>
+    </table>
+
+    <div id="paging-container">
+
+    </div>
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

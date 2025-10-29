@@ -1,0 +1,252 @@
+/* ===== 페이지 제목 ===== */
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* ===== 레이아웃 ===== */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+#wrap {
+    max-width: 1400px;
+    margin: 60px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ===== 검색 영역 ===== */
+form#searchForm {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-area {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+/* 공통 높이 40px 적용 */
+select, input[type="text"], button[type="submit"] {
+    height: 40px;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* select 박스 */
+select {
+    width: 180px;
+    padding: 10px 14px;
+    color: darkslategray;
+    background-color: #f9f9f9;
+    border: 2px solid dodgerblue;
+    appearance: none;
+}
+
+/* 검색 input */
+input[type="text"] {
+    width: 250px;
+    padding: 10px 14px;
+    border: 2px solid dodgerblue;
+    background-color: #f9f9f9;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+/* 검색 버튼 */
+button[type="submit"] {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+/* ===== 글쓰기 버튼 ===== */
+.btn-write {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-write:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+/* ===== 테이블 컨테이너 ===== */
+.board-wrapper {
+    width: 100%;
+    max-width: 1400px;
+    margin: 30px auto;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow-x: hidden;
+}
+
+/* ===== 테이블 ===== */
+.board-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+}
+
+.board-table th,
+.board-table td {
+    padding: 16px 18px;
+    text-align: center;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.board-table td {
+    background-color: #ffffff;
+}
+
+.board-table tr:hover {
+    background-color: #e1f3ff;
+}
+
+/* 제목 좌측 정렬 */
+td.title-cell {
+    text-align: center;
+}
+
+/* 제목 링크 */
+.title-link {
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    color: darkslategray;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.title-link:hover {
+    color: dodgerblue;
+    text-decoration: underline;
+}
+
+/* ===== 상태 뱃지 ===== */
+.status-completed,
+.status-pending {
+    display: inline-block;
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.status-completed {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.status-pending {
+    background-color: #ddd;
+    color: #444;
+}
+
+/* ===== 페이지네이션 ===== */
+.pagination {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.pagination a {
+    margin: 0 6px;
+    padding: 8px 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #000;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+}
+
+.pagination a:hover {
+    background-color: #e0e0e0;
+}
+
+.pagination a.disabled {
+    pointer-events: none;
+    color: #aaa;
+    border-color: #eee;
+}
+
+.btn-back {
+    background-color: #888;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+    background-color: #666;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}

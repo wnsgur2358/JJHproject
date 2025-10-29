@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/mypage.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="wrap">
+
+<div th:replace="~{common/header::header}"></div>
+
+<!-- 마이페이지 본문 -->
+<div class="mypage-container">
+    <aside class="mypage-sidebar">
+        <img th:src="${profileImageUrl}" src="/img/common-profile.png"
+             alt="프로필 이미지"
+             class="profile-img"
+             onerror="this.onerror=null;this.src='/img/common-profile.png';"/>
+
+        <form id="profileUploadForm" enctype="multipart/form-data">
+            <input type="file" id="profileImageInput" name="profileImage" style="display: none;" />
+        </form>
+
+        <div class="button-group-vertical">
+            <button type="button" onclick="triggerUpload()"
+                    class="profile" th:text="${isDefaultProfile} ? '사진 등록' : '사진 수정'"></button>
+
+            <div th:unless="${isDefaultProfile}">
+                <button type="button" class="delete-button" onclick="deleteProfile()">
+                    <img src="/img/delete.png" alt="삭제 아이콘" class="delete-icon" />사진 삭제</button>
+            </div>
+        </div>
+
+        <div class="withdraw-section">
+            <h3>회원 탈퇴</h3>
+            <button type="button" class="danger-btn" onclick="openWithdrawPopup()">탈퇴하기</button>
+        </div>
+    </aside>
+
+    <main class="mypage-main">
+        <h1>마이페이지</h1>
+
+        <div th:switch="${memberRole}">
+            <!-- USER용 -->
+            <div th:case="'USER'" class="mypage-table">
+                <table>
+                    <tr><th>이름</th><td th:text="${memberName}"></td></tr>
+                    <tr><th>활동 시간대</th><td><select id="timeSelect" class="category-select"></select></td></tr>
+                    <tr><th>포지션</th><td><select id="positionSelect" class="category-select"></select></td></tr>
+                    <tr><th>마이온도</th><td th:text="${myTemperature} + ' °C'"></td></tr>
+                    <tr><th>소속팀</th><td th:text="${teamName}"></td></tr>
+                    <tr>
+                        <th>이메일 수신 동의</th>
+                        <td>
+                            <input type="checkbox" id="emailAgreementCheckboxUser"
+                                   th:checked="${emailAgreement} ? 'checked' : null">
+                        </td>
+                    </tr>
+                </table>
+                <div class="submit-btn-container">
+                    <button class="edit-button" onclick="submitMypage()">수정하기</button>
+                </div>
+            </div>
+
+            <!-- HOST용 -->
+            <div th:case="'HOST'" class="mypage-table">
+                <table>
+                    <tr><th>이름</th><td th:text="${memberName}"></td></tr>
+                    <tr>
+                        <th>주최 기관 이름</th>
+                        <td>
+                            <input type="text" id="hostNameInput" th:value="${hostName}" placeholder="기관명 입력" />
+                            <button type="button" class="host-submit" onclick="submitHostName()">등록</button>
+                            <button type="button" id="scheduleButton">대회 등록</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>이메일 수신 동의</th>
+                        <td>
+                            <input type="checkbox" id="emailAgreementCheckboxHost"
+                                   th:checked="${emailAgreement} ? 'checked' : null">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- 탈퇴 팝업 -->
+<div id="withdrawModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="report-modal-title">
+            <img src="/img/warning2.png" alt="경고" class="report-icon" />
+            회원 탈퇴
+        </div>
+        <p class="withdraw-message">탈퇴하시려면 비밀번호를 입력해주세요.</p>
+        <input type="password" id="withdrawPasswordPopup"
+               class="withdraw-input"
+               placeholder="비밀번호 입력"/>
+
+        <div class="modal-buttons">
+            <button onclick="confirmWithdraw()">확인</button>
+            <button onclick="closeWithdrawPopup()">취소</button>
+        </div>
+    </div>
+</div>
+
+</div>
+<div th:replace="~{common/footer::footer}"></div>
+
+<script th:inline="javascript">
+    const currentPosition = /*[[${myPosition}]]*/ "";
+    const currentTimeType = /*[[${myTimeType}]]*/ "";
+    const hostName = /*[[${hostName}]]*/ null;
+
+    const positionLabelMap = {
+        "GOALKEEPER": "골키퍼", "CENTER_BACK": "센터백", "LEFT_RIGHT_BACK": "풀백",
+        "LEFT_RIGHT_WING_BACK": "윙백", "CENTRAL_DEFENSIVE_MIDFIELDER": "수비형 미드필더",
+        "CENTRAL_MIDFIELDER": "중앙 미드필더", "CENTRAL_ATTACKING_MIDFIELDER": "공격형 미드필더",
+        "LEFT_RIGHT_WING": "윙", "STRIKER_CENTER_FORWARD": "스트라이커",
+        "SECOND_STRIKER": "세컨드 스트라이커", "LEFT_RIGHT_WINGER": "윙어"
+    };
+
+    const timeLabelMap = {
+        "WEEKDAY_MORNING": "평일 오전", "WEEKDAY_AFTERNOON": "평일 오후", "WEEKDAY_EVENING": "평일 저녁",
+        "WEEKEND_MORNING": "주말 오전", "WEEKEND_AFTERNOON": "주말 오후", "WEEKEND_EVENING": "주말 저녁"
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch("/mypage/enums")
+            .then(res => res.json())
+            .then(data => {
+                const positionSelect = document.getElementById("positionSelect");
+                const timeSelect = document.getElementById("timeSelect");
+
+                data.positionNames.forEach(pos => {
+                    const option = document.createElement("option");
+                    option.value = pos;
+                    option.text = positionLabelMap[pos] || pos;
+                    if (pos === currentPosition) option.selected = true;
+                    positionSelect.appendChild(option);
+                });
+
+                data.timeTypes.forEach(time => {
+                    const option = document.createElement("option");
+                    option.value = time;
+                    option.text = timeLabelMap[time] || time;
+                    if (time === currentTimeType) option.selected = true;
+                    timeSelect.appendChild(option);
+                });
+            });
+
+        const scheduleButton = document.getElementById("scheduleButton");
+        scheduleButton?.addEventListener("click", () => {
+            const hostNameInput = document.getElementById("hostNameInput")?.value.trim();
+            if (!hostNameInput || hostNameInput.toLowerCase() === "null") {
+                //alert("기관명을 입력해주세요.");
+                Swal.fire({text: '기관명을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+
+                return
+            }
+            if (!hostName || hostName.trim().toLowerCase() !== hostNameInput.toLowerCase()){
+                //alert("등록 버튼을 먼저 누르세요.");
+                Swal.fire({text: '등록 버튼을 먼저 누르세요.', icon: 'warning', confirmButtonText: '확인'});
+                return
+            }
+
+            location.href = "/schedule";
+        });
+
+        // 사용자용 체크박스 이벤트 처리
+        const checkboxUser = document.getElementById("emailAgreementCheckboxUser");
+        if (checkboxUser) {
+            checkboxUser.addEventListener("change", () => {
+                updateEmailAgreement(checkboxUser.checked);
+            });
+        }
+
+        // 호스트용 체크박스 이벤트 처리
+        const checkboxHost = document.getElementById("emailAgreementCheckboxHost");
+        if (checkboxHost) {
+            checkboxHost.addEventListener("change", () => {
+                updateEmailAgreement(checkboxHost.checked);
+            });
+        }
+    });
+
+    function updateEmailAgreement(checked) {
+        fetch("/mypage/email-agreement", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ emailAgreement: checked }),
+            credentials: "include"
+        }).then(res => {
+            if (res.ok) {
+                //alert("메일 수신 설정이 변경되었습니다.");
+                Swal.fire({text: '메일 수신 설정이 변경되었습니다.', icon: 'success', confirmButtonText: '확인'});
+
+            } else {
+                res.text().then(msg => {
+                    //alert("변경 실패: " + msg)
+                    Swal.fire({text: "변경 실패: " + msg, icon: 'warning', confirmButtonText: '확인'});
+                });
+            }
+        }).catch(err => {
+            //alert("요청 중 오류가 발생했습니다: " + err.message);
+            Swal.fire({text: "요청 중 오류가 발생했습니다: " + err.message, icon: 'warning', confirmButtonText: '확인'});
+
+        });
+    }
+
+
+    function triggerUpload() {
+        const input = document.getElementById("profileImageInput");
+        input.click();
+
+        input.onchange = () => {
+            if (input.files.length > 0) {
+                const file = input.files[0];
+                const formData = new FormData();
+                formData.append("profileImage", file);
+                fetch("/mypage/uploadProfile", {
+                    method: "POST",
+                    body: formData,
+                    credentials: "include"
+                }).then(res => {
+                    if (res.ok) location.reload();
+                    else {
+                        res.text().then(msg => {
+                            //alert("업로드 실패: " + msg);
+                            Swal.fire({text: "업로드 실패: " + msg, icon: 'warning', confirmButtonText: '확인'});
+
+                        });
+                    }
+                }).catch(err => {
+                    //alert("서버 오류가 발생했습니다: " + err.message);
+                    Swal.fire({text: "서버 오류가 발생했습니다: " + err.message, icon: 'warning', confirmButtonText: '확인'});
+                });
+            }
+        };
+    }
+
+    function deleteProfile() {
+        // if (!confirm("정말로 프로필 사진을 삭제하시겠습니까?")) return;
+
+        Swal.fire({
+            text: '정말로 프로필 사진을 삭제하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 사용자가 '네'를 눌렀을 때 처리
+                fetch("/mypage/deleteProfile", {
+                    method: "DELETE",
+                    credentials: "include"
+                }).then(res => {
+                    if (res.ok) {
+                        const uploadBtn = document.querySelector(".button-group button");
+                        uploadBtn.textContent = "사진 등록"; // 텍스트 변경
+                        location.reload(); // 또는 필요시 새로고침
+                    } else {
+                        res.text().then(msg => {
+                            //alert("삭제 실패: " + msg);
+                            Swal.fire({text: "삭제 실패: " + msg, icon: 'warning', confirmButtonText: '확인'});
+                        });
+                    }
+                });
+            } else {
+                // 사용자가 '아니요' 눌렀을 때
+                return;
+            }
+        });
+
+
+    }
+
+    function submitMypage() {
+        const token = getCookie("Authorization");
+        if (!token) {
+            //alert("로그인이 필요합니다.");
+            Swal.fire({text: "로그인이 필요합니다.", icon: 'warning', confirmButtonText: '확인'});
+            return
+        }
+
+        // const temperature = parseFloat(document.getElementById("temperatureInput").value);
+        // if (temperature < 30) return alert("마이온도는 30도 이상이어야 합니다.");
+        const data = {
+            positionName: document.getElementById("positionSelect").value,
+            timeType: document.getElementById("timeSelect").value
+            //temperature
+        };
+        fetch("/mypage/update", {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(data)
+        }).then(res => {
+            if (res.ok) location.reload();
+            else res.text().then(msg => {
+                //alert("오류: " + msg);
+                Swal.fire({text: "오류: " + msg, icon: 'warning', confirmButtonText: '확인'});
+            });
+
+        });
+    }
+
+    function submitHostName() {
+        const name = document.getElementById("hostNameInput").value.trim();
+        if (!name) {
+            //alert("기관명을 입력해주세요.");
+            Swal.fire({text: '기관명을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            return
+        }
+
+        fetch(`/mypage/hostName/exist?name=${encodeURIComponent(name)}`)
+            .then(res => res.json())
+            .then(exists => {
+                if (exists) {
+                    //alert("이미 등록된 기관명입니다.");
+                    Swal.fire({text: '이미 등록된 기관명입니다.', icon: 'warning', confirmButtonText: '확인'});
+                    return
+                }
+
+                fetch("/mypage/hostName", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ hostName: name }),
+                    credentials: "include"
+                }).then(res => {
+                    if (res.ok) location.reload();
+                    else res.text().then(msg => {
+                        //alert("등록 오류: " + msg);
+                        Swal.fire({text: "등록 오류: " + msg, icon: 'warning', confirmButtonText: '확인'});
+                    });
+
+                });
+            });
+    }
+
+    function openWithdrawPopup() {
+        document.getElementById("withdrawModal").style.display = "flex";
+    }
+
+    function closeWithdrawPopup() {
+        document.getElementById("withdrawModal").style.display = "none";
+    }
+
+    function confirmWithdraw() {
+        const password = document.getElementById("withdrawPasswordPopup").value.trim();
+        if (!password) {
+            //alert("비밀번호를 입력해주세요.");
+            Swal.fire({text: '비밀번호를 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            return
+        }
+        document.getElementById("withdrawModal").style.display = 'none';
+
+        //if (!confirm("정말 탈퇴하시겠습니까?")) return;
+
+        Swal.fire({
+            text: '정말 탈퇴하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                // 사용자가 '네'를 눌렀을 때 처리
+                await fetch("/mypage/withdraw", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ password }),
+                    credentials: "include"
+                }).then(res => {
+                    if (res.ok) logout();
+                    else res.text().then(msg => {
+                        //alert("오류: " + msg);
+                        Swal.fire({text: "오류: " + msg, icon: 'warning', confirmButtonText: '확인'});
+                    });
+
+                });
+            } else {
+                // 사용자가 '아니요' 눌렀을 때
+                return;
+            }
+        });
+
+
+    }
+
+    function logout() {
+        fetch("/auth/logout", { method: "POST", credentials: "include" })
+            .finally(() => {
+                window.location.href = "/main";
+            });
+    }
+
+    function getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (const c of cookies) {
+            const [k, v] = c.trim().split('=');
+            if (k === name) return v;
+        }
+        return null;
+    }
+</script>
+</body>
+</html>

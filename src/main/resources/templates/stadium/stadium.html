@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>전국 구장 보기</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        #map-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #map {
+            width: 900px;
+            height: 900px;
+        }
+
+        .title1 {
+            text-align: center;
+        }
+
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .search-box input[type="text"] {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 300px;
+        }
+
+        .search-box button {
+            background-color: dodgerblue;
+            color: white;
+            padding: 8px 16px;
+            margin-left: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box button:hover{
+            background-color: royalblue;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+        }
+
+        /* 인포 윈도우 디자인 (카카오꺼 그대로 가져옴) */
+        .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+        .wrap * {padding: 0;margin: 0;}
+        .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+        .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+        .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+        .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+        .info .close:hover {cursor: pointer;}
+        .info .body {position: relative;overflow: hidden;}
+        .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+        .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+        .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
+        .info .img {position: absolute;top: 6px;left: 5px;width: 73px;height: 71px;border: 1px solid #ddd;color: #888;overflow: hidden;}
+        .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+        .info .link {color: #5085BB;}
+
+        .MapControllerView {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .MapControllerView .accessLocation {
+            display: block;
+            position: relative;;
+            width: 32px;
+            height: 32px;
+            padding: 1px 3px 5px;
+            background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_search.png) no-repeat -150px -450px
+        }
+
+        .MapControllerView .accessLocation:hover {
+            background-position: -150px -400px
+        }
+
+        .MapControllerView .accessLocation:hover .coach_accessLocation {
+            display: block;
+            z-index: 99
+        }
+
+        .MapControllerView .accessLocation.ACTIVE {
+            background-position: -150px -350px
+        }
+
+        .MapControllerView .accessLocation .coach_accessLocation {
+            display: none;
+            overflow: hidden;
+            position: absolute;
+            top: 3px;
+            right: 40px;
+            width: 52px;
+            height: 28px;
+            font-size: 0;
+            line-height: 0;
+            background: url(//t1.daumcdn.net/localimg/localimages/07/2018/pc/common/img_coachMark.png) no-repeat 0 -40px;
+            text-indent: -9999px
+        }
+
+        .custom_typebtn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+
+        .custom_typebtn .refresh_btn {
+            display: block;
+            width: 32px;
+            height: 32px;
+            background: url(/img/refresh_btn.png) no-repeat center center;
+            background-size: contain;
+            text-indent: -9999px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+<!-- 헤더 -->
+<div th:replace="~{common/header::header}"></div>
+
+<div class="allcontent">
+    <h1 class="title1">구장 보기</h1>
+
+    <!-- 구장 검색 -->
+    <div class="search-box">
+        <input type="text" id="keyword" name="keyword" placeholder="구장명 검색..." />
+        <button onclick="searchStadium()">검색</button>
+    </div>
+
+    <ul id="stadium-data" style="display: none;"></ul>
+
+    <div id="map-container">
+        <div id="map">
+<!--            사용자 현재 위치로 돌아가기 버튼 -->
+            <div class="MapControllerView">
+                <a href="#none" class="accessLocation" onclick="moveToCurrentLocation()" title="내 위치로 이동">
+                    <span class="screen_out"></span>
+                    <span class="coach_accessLocation"></span>
+                </a>
+            </div>
+<!--            원래 맵 상태로 돌아가기 버튼 재배치.. -->
+            <div class="custom_typebtn">
+                <a href="#none" class="refresh_btn" onclick="resetMap()" title="돌아가기">
+                    <span class="screen_out">돌아가기</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 카카오맵 api 키 입니다.-->
+<script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+${@environment.getProperty('matchon.kakao-api')}+'&autoload=false&libraries=clusterer,services'"></script>
+<!--<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=`+ +&autoload=false&libraries=clusterer,services"></script>-->
+<script>
+    let currentMarker = null;
+
+    let map;
+
+    <!--    카카오맵 기본 위치, 레벨 조정 -->
+    kakao.maps.load(function () {
+        map = new kakao.maps.Map(document.getElementById('map'), {
+            center: new kakao.maps.LatLng(37.289506, 127.053467),
+            level: 14
+        });
+
+
+
+
+        window.activeOverlay = null;
+
+
+        // 현 위치
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const userPosition = new kakao.maps.LatLng(lat, lng);
+
+                if (currentMarker) {
+                    currentMarker.setMap(null);
+                }
+
+
+                // 카카오맵 마커(현위치 마커)
+                // https://t1.daumcdn.net/localimg/localimages/07/2018/mw/m640/ico_marker.png
+
+                const markerImage = new kakao.maps.MarkerImage(
+                    "https://t1.daumcdn.net/localimg/localimages/07/2018/mw/m640/ico_marker.png",
+                    new kakao.maps.Size(36, 36)
+                );
+
+                currentMarker = new kakao.maps.Marker({
+                    map: map,
+                    position: userPosition,
+                    image: markerImage
+                });
+
+                // 지도 중심 이동
+                map.setCenter(userPosition);
+
+            }, function (error) {
+                console.error("현 위치 가져오기 실패", error);
+                //alert('위치 정보를 가져오지 못했습니다.');
+                Swal.fire({text: '위치 정보를 가져오지 못했습니다.', icon: 'warning', confirmButtonText: '확인'});
+            });
+        } else {
+            //alert('이 브라우저에서는 Geolocation을 지원하지 않습니다.');
+            Swal.fire({text: '이 브라우저에서는 Geolocation을 지원하지 않습니다.', icon: 'warning', confirmButtonText: '확인'});
+        }
+
+
+        const bounds = new kakao.maps.LatLngBounds();
+
+        // 구장 마커 이미지
+        const markerImage = new kakao.maps.MarkerImage(
+            "/img/stadium_marker.png",
+            new kakao.maps.Size(36, 35)
+        );
+
+        const stadiumMap = {};
+        const markers = [];
+
+        const clusterer = new kakao.maps.MarkerClusterer({
+            map: map,
+            averageCenter: true,
+            minLevel: 5
+        });
+
+        fetch("/api/stadiums")
+            .then(response => response.json())
+            .then(data => {
+                const ul = document.getElementById("stadium-data");
+
+                data.forEach(stadium => {
+                    const { id, stadiumName, latitude, longitude, stadiumAddress, stadiumTel } = stadium;
+                    if (!latitude || !longitude) return;
+
+                    const li = document.createElement("li");
+                    li.textContent = stadiumName;
+                    li.dataset.name = stadiumName;
+                    li.dataset.lat = latitude;
+                    li.dataset.lng = longitude;
+                    ul.appendChild(li);
+
+                    const position = new kakao.maps.LatLng(latitude, longitude);
+                    bounds.extend(position);
+
+                    const marker = new kakao.maps.Marker({
+                        map: map,
+                        position: position,
+                        title: stadiumName,
+                        image: markerImage
+                    });
+
+                    markers.push(marker);
+
+                    // InfoWindow 생성 (마우스 오버용)
+                    const infoWindow = new kakao.maps.InfoWindow({
+                        content: `<div style="padding:5px;font-size:13px;">${stadiumName}</div>`
+                    });
+
+                    // 마우스 오버 시 이름 보여주기
+                    kakao.maps.event.addListener(marker, 'mouseover', function () {
+                        infoWindow.open(map, marker);
+                    });
+
+                    // 마우스 아웃 시 닫기
+                    kakao.maps.event.addListener(marker, 'mouseout', function () {
+                        infoWindow.close();
+                    });
+
+
+                    const content = `
+                        <div class="wrap">
+                            <div class="info">
+                                <div class="title">
+                                    ${stadiumName}
+                                    <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                                </div>
+                                <div class="body">
+                                    <div class="img">
+                                        <img src="/img/stadium_marker.png" width="73" height="70">
+                                    </div>
+                                    <div class="desc">
+                                        <div class="ellipsis"> ${stadiumAddress || '주소 없음'}</div>
+                                        <div class="ellipsis"> ${stadiumTel || '전화번호 없음'}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // 오버레이 설정
+                    const customOverlay = new kakao.maps.CustomOverlay({
+                        position: position,
+                        content: content,
+                        yAnchor: 1
+                    });
+
+                    // 마커 클릭시 오버레이 뜸
+                    kakao.maps.event.addListener(marker, 'click', function () {
+                        if (window.activeOverlay) activeOverlay.setMap(null);
+                        customOverlay.setMap(map);
+                        window.activeOverlay = customOverlay;
+                    });
+
+                    stadiumMap[stadiumName] = { marker, customOverlay };
+                });
+
+                clusterer.addMarkers(markers);
+
+                if (!bounds.isEmpty()) {
+                    console.log("전 레벨 : ", map.getLevel());
+                    map.setBounds(bounds);
+                    kakao.maps.event.addListener(map, 'idle', function once() {
+                        console.log("후 레벨 : ", map.getLevel());
+                        kakao.maps.event.removeListener(map, 'idle', once);
+                    })
+                }
+            })
+            .catch(error => {
+                console.error("stadium 데이터 불러오기 실패:", error);
+            });
+
+
+
+
+        // 구장 검색해서 이동
+        window.searchStadium = function () {
+            const keyword = document.getElementById("keyword").value.trim();
+            if (!keyword) return;
+
+            let found = false;
+            for (const name in stadiumMap) {
+                if (name.includes(keyword)) {
+                    const { marker, customOverlay } = stadiumMap[name];
+                    const position = marker.getPosition();
+                    map.setLevel(3);
+                    map.setCenter(position);
+                    if (window.activeOverlay) activeOverlay.setMap(null);
+                    customOverlay.setMap(map);
+                    window.activeOverlay = customOverlay;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                //alert("일치하는 구장이 없습니다.");
+                Swal.fire({text: '일치하는 구장이 없습니다.', icon: 'warning', confirmButtonText: '확인'});
+            }
+        };
+    });
+    // 현 위치 버튼 클릭시 현위치로 지도 이동(레벨 확대..)
+    function moveToCurrentLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                const userPosition = new kakao.maps.LatLng(lat, lng);
+
+                // 기존 마커 제거
+                if (currentMarker) {
+                    currentMarker.setMap(null);
+                }
+
+                const markerImage = new kakao.maps.MarkerImage(
+                    "https://t1.daumcdn.net/localimg/localimages/07/2018/mw/m640/ico_marker.png",
+                    new kakao.maps.Size(36, 36)
+                );
+
+                currentMarker = new kakao.maps.Marker({
+                    map: map,
+                    position: userPosition,
+                    image: markerImage
+                });
+
+                map.setLevel(2);
+
+                // 지도 중심 이동
+                map.setCenter(userPosition);
+
+            }, function (error) {
+                //alert('현 위치 정보를 가져올 수 없습니다.');
+                Swal.fire({text: '현 위치 정보를 가져올 수 없습니다.', icon: 'warning', confirmButtonText: '확인'});
+
+            });
+        } else {
+            //alert('이 브라우저는 위치 정보를 지원하지 않습니다.');
+            Swal.fire({text: '이 브라우저는 위치 정보를 지원하지 않습니다.\'', icon: 'warning', confirmButtonText: '확인'});
+
+        }
+    }
+
+
+    // 커스텀 오버레이 닫기
+    function closeOverlay() {
+        if (window.activeOverlay) {
+            window.activeOverlay.setMap(null);
+            window.activeOverlay = null;
+        }
+    }
+
+    // 원래 맵 상태로 돌아가기
+    window.resetMap = function () {
+        map.setCenter(new kakao.maps.LatLng(37.289506, 127.053467));
+        map.setLevel(13);
+
+        if (window.activeOverlay) {
+            window.activeOverlay.setMap(null);
+            window.activeOverlay = null;
+        }
+    };
+
+
+</script>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <meta charset="UTF-8">
+  <title>팀 채팅 목록</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/chat/my-chat-list.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+  <script th:src="@{/js/chat/team-chat-list.js}" defer></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+  <h1>팀 채팅 목록</h1>
+
+  <div class="chat-room-header chat-card">
+    <div class="chat-col chat-name">채팅방이름</div>
+    <div class="chat-col chat-group">그룹 채팅 여부</div>
+    <div class="chat-col chat-unread">읽지 않은 메시지</div>
+    <div class="chat-col chat-actions">입장</div>
+  </div>
+
+  <div class="chat-room-list">
+    <div th:if="${#lists.isEmpty(teamRooms)}">
+      <p>참여 중인 팀 채팅방이 없습니다.</p>
+    </div>
+
+    <div class="chat-card" th:each="room : ${teamRooms}">
+      <div class="chat-col chat-name" th:text="${room.roomName}">채팅방 이름</div>
+      <div class="chat-col chat-group"><strong>${expressIsGroupChat(room.isGroupChat)}</strong></div>
+      <div class="chat-col chat-unread" th:text="${room.unReadCount}">0</div>
+      <div class="chat-col chat-actions">
+        <a th:href="@{'/chat/my/room?roomId=' + ${room.roomId}}" class="chat-enter-btn">입장</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

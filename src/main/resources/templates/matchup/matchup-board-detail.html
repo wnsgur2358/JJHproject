@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+  <title>MATCHON</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+  <script th:src="@{/js/matchup/matchup-board-detail.js}" defer></script>
+  <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+${@environment.getProperty('matchon.kakao-api')}+'&libraries=services'"></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-board-detail.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    a {
+      display:block;
+    }
+  </style>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+  <div id="matchup-board-detail-dto"
+       th:data-writer-email="${resMatchupBoardDto.writerEmail}"
+       th:data-sports-facility-name="${resMatchupBoardDto.sportsFacilityName}"
+       th:data-sports-facility-address="${resMatchupBoardDto.sportsFacilityAddress}"
+       th:data-match-datetime="${resMatchupBoardDto.matchDatetime}"
+       th:data-match-endtime="${resMatchupBoardDto.matchEndtime}"
+       th:data-current-participant-count="${resMatchupBoardDto.currentParticipantCount}"
+       th:data-max-participants="${resMatchupBoardDto.maxParticipants}"
+       th:data-min-manner-temperature="${resMatchupBoardDto.minMannerTemperature}"
+       th:data-match-description="${resMatchupBoardDto.matchDescription}"
+       th:data-saved-name="${resMatchupBoardDto.savedName}"
+       th:data-my-manner-temperature="${resMatchupBoardDto.myMannerTemperature}"
+       th:data-login-email = "${#authentication.name}"
+  >
+  <h2 class="page-title">MATCHUP 글 상세보기</h2>
+  <div class="form-container" th:object="${resMatchupBoardDto}">
+    <form>
+      <div class="form-group">
+        <label>
+          종목
+          <input type="text" th:value="*{sportsTypeName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          작성자
+          <input type="text" th:value="*{writerName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          소속팀
+          <input type="text" th:value="*{teamName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label> 팀 소개</label>
+        <div class="readonly-box clickable truncate" th:text="*{teamIntro}"></div>
+      </div>
+      <div class="form-group">
+        <label>경기장 예약내역</label>
+        <input type="text" id="reservationUrl" class="file-link-input" th:value="*{originalName}" style="cursor: pointer" readonly>
+      </div>
+      <div class="form-group">
+        <label>
+          경기장명
+         <input type="text" th:value="*{sportsFacilityName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          경기장 주소
+          <input type="text" th:value="*{sportsFacilityAddress}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>경기장 위치</label>
+        <div id="map" style="width:100%;height:350px;"></div>
+      </div>
+      <div class="form-group">
+        <label>
+          경기 날짜
+          <input type="text" id="match-date" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          참가 인원
+          <input type="text" th:value="${'('+ resMatchupBoardDto.currentParticipantCount + ' / '+resMatchupBoardDto.maxParticipants + ')'}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          신청 가능 여부
+          <input type="text" id="status" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          입장 가능 매너 온도
+          <input type="text" th:value="*{minMannerTemperature}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          내 매너 온도
+          <input type="text" th:value="*{myMannerTemperature} !=null ? *{myMannerTemperature} : 20" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>경기 방식</label>
+        <div class="readonly-box clickable truncate" th:text="*{matchDescription}"></div>
+      </div>
+
+      <div class="button-group">
+        <!-- 작성자 본인에게만 보이는 수정/삭제 버튼 -->
+        <a class="btn btn-modify" id="modifyBtn" th:href="@{/matchup/board/edit(boardId=${resMatchupBoardDto.boardId})}" th:style="${resMatchupBoardDto.matchDatetime > T(java.time.LocalDateTime).now() and resMatchupBoardDto.writerEmail == #authentication.name} ? 'display:inline' : 'display:none'">
+          수정하기
+        </a>
+
+        <a th:href="@{/matchup/board/delete(boardId=${resMatchupBoardDto.boardId})}" class="btn" id="deleteBtn" th:style="${resMatchupBoardDto.matchDatetime > T(java.time.LocalDateTime).now() and resMatchupBoardDto.writerEmail == #authentication.name} ? 'display:inline' : 'display:none'">
+          삭제하기
+        </a>
+
+        <!-- 작성자가 아닌 사용자에게만 보이는 문의/참가요청 버튼 -->
+        <a class="btn btn-chat" id="chat1-1Btn" th:href="@{/chat/private(receiverId=${resMatchupBoardDto.writerId})}" th:style="${resMatchupBoardDto.matchDatetime > T(java.time.LocalDateTime).now() and resMatchupBoardDto.writerEmail != #authentication.name} ? 'display:inline' : 'display:none'" target="_blank">
+          문의하기
+        </a>
+
+        <a class="btn btn-request" id="requestBtn" th:href="@{/matchup/request(boardId=${resMatchupBoardDto.boardId})}" th:style="${resMatchupBoardDto.matchDatetime > T(java.time.LocalDateTime).now() and resMatchupBoardDto.writerEmail != #authentication.name} ? 'display:inline' : 'display:none'">
+          참가요청
+        </a>
+
+        <a class="btn back-btn" onclick="goBack()">뒤로가기</a>
+
+      </div>
+    </form>
+  </div>
+
+  </div>
+
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

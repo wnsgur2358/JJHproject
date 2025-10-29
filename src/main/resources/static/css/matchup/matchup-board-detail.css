@@ -1,0 +1,191 @@
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* ===== 공통 레이아웃 ===== */
+.form-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid beige;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* ===== 폼 그룹 ===== */
+.form-group {
+    margin-bottom: 2px;
+}
+
+.readonly-box,
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #3498db;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+}
+
+.readonly-box {
+    white-space: pre-wrap; /* 줄바꿈 및 공백 유지 */
+    min-height: 100px;
+}
+.readonly-box.clickable{
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+}
+.readonly-box.clickable:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); /* 연하게 */
+    background-color: #fff;
+    outline: none;
+}
+
+.file-link-input {
+    color: #3498db;              /* 파란색 텍스트 */
+    text-decoration: none;  /* 밑줄로 링크처럼 */
+    cursor: pointer;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 14px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.file-link-input:hover {
+    color: royalblue;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+    background-color: #fff;
+}
+
+/*버튼 설정*/
+.button-group{
+    display: flex;
+    justify-content: center;
+
+}
+/* 공통 버튼 레이아웃 */
+.button-group a.btn {
+    display: inline-block;
+    padding: 6px 16px;
+    font-size: 14px;
+    border-radius: 7px;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 6px;
+    transition: all 0.3s ease;
+}
+
+/* 버튼별 개별 색상 */
+.btn-modify {
+    background-color: forestgreen;
+}
+.btn-modify:hover {
+    background-color: darkgreen;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 80, 00, 0.3);
+}
+
+.btn-request {
+    background-color: dodgerblue;
+}
+.btn-request:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.btn-chat {
+    background-color: mediumpurple;
+}
+.btn-chat:hover {
+    background-color: blueviolet;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(90, 0, 90, 0.3);
+}
+
+.btn-back {
+    background-color: #ccc;
+}
+.btn-back:hover {
+    background-color: #a9a9a9;
+    transform: translateY(1px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+
+/*삭제 버튼*/
+#deleteBtn {
+    background: transparent;
+    border: none;
+    color: #F44336;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 7px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+#deleteBtn:hover {
+    background-color: mistyrose;
+    color: red;
+}
+
+/* 지도 */
+#map {
+    width: 100%;
+    height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    margin-bottom: 20px;
+}
+
+.truncate {
+    width: 900px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+}
+
+.truncateMap{
+    width: 150px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+}
+

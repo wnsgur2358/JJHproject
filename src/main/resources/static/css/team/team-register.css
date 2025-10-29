@@ -1,0 +1,128 @@
+.field-error {
+    color: red;
+    font-size: 0.9em;
+    margin-top: 4px;
+}
+.error-block {
+    background-color: #ffe6e6;
+    padding: 10px;
+    border: 1px solid red;
+    margin-bottom: 16px;
+}
+.team-register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 40px 20px;
+    background-color: #f8f9fc;
+}
+
+.team-register-form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    width: 100%;
+}
+
+.team-register-form h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.team-register-form label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.team-register-form input[type="text"],
+.team-register-form textarea,
+.team-register-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.team-register-form textarea {
+    resize: none;       /* Prevents user resizing */
+    height: 120px;       /* Fixed height */
+    line-height: 1.5;    /* Optional: Better text spacing */
+}
+
+.team-register-form .field-error,
+.team-register-form .error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.team-register-form .radio-group,
+.team-register-form .checkbox-group {
+    margin-top: 8px;
+}
+
+.team-register-form .checkbox-group label,
+.team-register-form .radio-group label {
+    display: block;
+    margin-top: 4px;
+}
+
+.team-register-form .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.team-register-form .button-group button {
+    padding: 10px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.team-register-form .button-group button[type="submit"] {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.team-register-form .button-group button[type="submit"]:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.team-register-form .button-group button[type="button"] {
+    background-color: #888;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.team-register-form .button-group button[type="button"]:hover {
+    background-color: #666;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}

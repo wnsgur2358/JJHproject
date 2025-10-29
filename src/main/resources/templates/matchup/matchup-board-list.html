@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <script th:src="@{/js/matchup/matchup-board-list.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-board-list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h2 class="page-title">MATCHUP 게시글 목록</h2>
+    <div class="topbar-wrapper">
+        <div id="filter">
+            <select id="sports-type">
+                <option value="" selected>전체 종목</option>
+                <option value="SOCCER">SOCCER</option>
+                <option value="FUTSAL">FUTSAL</option>
+            </select>
+            <select id="region">
+                <option value="" selected>전체 지역</option>
+                <option value="서울">서울</option>
+                <option value="부산">부산</option>
+                <option value="대구">대구</option>
+                <option value="인천">인천</option>
+                <option value="광주">광주</option>
+                <option value="대전">대전</option>
+                <option value="울산">울산</option>
+                <option value="세종">세종</option>
+                <option value="경기">경기</option>
+                <option value="강원">강원</option>
+                <option value="충북">충북</option>
+                <option value="충남">충남</option>
+                <option value="전라">전북</option>
+                <option value="전라">전남</option>
+                <option value="경상">경북</option>
+                <option value="경상">경남</option>
+                <option value="제주">제주</option>
+            </select>
+
+            <input type="date" id="date-filter">
+
+            <label for="availableOnly">
+                신청 가능
+                <input type="checkbox" id="availableOnly">
+            </label>
+            <button id="filterBtn">검색</button>
+        </div>
+        <div class="topbar-buttons">
+            <button class="btn-write">글 작성하기</button>
+            <button class="btn-my-board">내가 작성한 글 목록</button>
+            <button class="btn-my-request">내가 요청한 목록</button>
+            <button class="btn-my-match">내 경기 참가 목록</button>
+        </div>
+    </div>
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th class="col-no">NO.</th>
+            <th class="col-writer">작성자</th>
+            <th class="col-type">종목</th>
+            <th class="col-sports-facility-address">경기장</th>
+            <th class="col-match-date">날짜</th>
+            <th class="col-status">상태</th>
+            <th class="col-quota">정원</th>
+            <th class="col-temp">입장 온도</th>
+            <th class="col-detail">상세보기</th>
+        </tr>
+        </thead>
+        <tbody id="board-container"></tbody>
+    </table>
+
+    <div id="paging-container">
+
+    </div>
+
+
+
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

@@ -1,0 +1,125 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+}
+
+#wrap {
+    text-align: center;
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    border-bottom: 2px solid dodgerblue;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+}
+
+/* 권역 선택 */
+#region {
+    background-color: royalblue;
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.region-select {
+    border: none;
+    flex-grow: 1;
+    font-size: 14px;
+    outline: none;
+    background-color: transparent;
+    padding: 4px 0;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+.form-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-box label {
+    flex-shrink: 0;
+    width: 90px;
+    font-weight: 600;
+}
+
+.form-box input {
+    border: none;
+    flex-grow: 1;
+    font-size: 14px;
+    outline: none;
+    resize: none;
+    padding: 4px 0;
+}
+
+.form-box textarea {
+    border: none;
+    flex-grow: 1;
+    font-size: 14px;
+    outline: none;
+    resize: vertical;
+    padding: 4px 0;
+    line-height: 1.5;
+    min-height: 80px;
+    background-color: transparent;
+}
+
+
+.textarea-box {
+    align-items: flex-start;
+}
+
+.form-box span {
+    font-size: 14px;
+}
+
+/* 등록 버튼 */
+button {
+    margin-top: 20px;
+    width: 100%;
+    background-color: dodgerblue;
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: royalblue;
+}
+
+.address-btn {
+    background-color: forestgreen;
+    color: white;
+    padding: 5px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.address-btn:hover {
+    background-color: darkgreen;
+}

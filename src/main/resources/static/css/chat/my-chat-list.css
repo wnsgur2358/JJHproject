@@ -1,0 +1,132 @@
+/* 전체 wrap 내부 padding */
+#wrap {
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* 제목 가운데 정렬 */
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+/* 헤더 및 카드 공통 레이아웃 */
+.chat-card {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+/* 헤더 배경 */
+.chat-room-header {
+    font-weight: bold;
+    border: 2px solid dodgerblue;
+    border-radius: 8px;
+    background-color: aliceblue;
+    color: darkslategray;
+}
+
+/* 각 칼럼 스타일 */
+.chat-col {
+    padding: 0.5rem;
+    word-break: break-word;
+}
+
+/* 칼럼 너비 비율 설정 */
+.chat-name {
+    flex: 2;
+}
+.chat-group {
+    flex: 1;
+    text-align: center;
+}
+.chat-unread {
+    flex: 1;
+    text-align: center;
+}
+.chat-enter,
+.chat-exit {
+    flex: 1;
+    text-align: center;
+}
+
+/* 버튼 스타일 */
+.chat-actions {
+    flex: 2;
+    display: flex;
+    justify-content: center; /* 좌우 가운데 정렬 */
+    gap: 0.5rem; /* 버튼 사이 간격 */
+}
+
+.btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.enter-btn {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.enter-btn:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.exit-btn {
+    background-color: orangered;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.exit-btn:hover {
+    background-color: red;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(90, 0, 0, 0.3);
+}
+
+.exit-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.enter-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.no-result {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    padding: 2rem 0;
+}
+
+
+

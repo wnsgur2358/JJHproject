@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 상세</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        #wrap {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+            min-height: 600px;
+            justify-content: space-between;
+        }
+        .meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .meta-time {
+            font-size: 13px;
+            color: #888;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .badge.category {
+            background-color: #007BFF;
+            color: white;
+        }
+        .badge.status.pending {
+            background-color: #ccc;
+            color: #333;
+        }
+        .badge.status.completed {
+            background-color: #28a745;
+            color: white;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0 24px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+        .content-box {
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 16px;
+            margin-bottom: 30px;
+            background-color: #fdfdfd;
+            border-left: 4px solid #007BFF;
+            border-radius: 6px;
+            min-height: 100px;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .answer {
+            padding: 16px;
+            background-color: #f9f9f9;
+            border-left: 5px solid #28a745;
+            font-size: 15px;
+            border-radius: 6px;
+        }
+        .btn-area {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-top: auto;
+        }
+        .edit-btn, .cancel-btn, .delete-btn {
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .edit-btn {background-color: dodgerblue;}
+
+        .edit-btn:hover {
+            background-color: royalblue;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+        }
+
+        .cancel-btn {background-color: #c8c8c8;}
+
+        .cancel-btn:hover{
+            background-color: #aaa;
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .delete-btn {background-color: red}
+
+        .delete-btn:hover{
+            background-color: darkred;
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(90, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{common/header :: header}"></div>
+
+<div id="wrap">
+    <div class="meta">
+        <span class="badge category" th:text="${inquiry.categoryLabel}">카테고리</span>
+        <span class="badge status"
+              th:classappend="${inquiry.inquiryStatus.name() == 'COMPLETED'} ? ' completed' : ' pending'"
+              th:text="${inquiry.getStatusLabel()}">상태</span>
+    </div>
+
+    <div class="meta-time">
+        작성일: <span th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd HH:mm')}"></span>
+    </div>
+
+    <h2 th:text="${inquiry.inquiryTitle}" style="word-break: break-word; white-space: pre-wrap;">제목</h2>
+
+    <div class="content-box" th:text="${inquiry.inquiryContent}">내용</div>
+
+    <div class="btn-area" th:if="${inquiry.inquiryStatus.name() == 'PENDING'}">
+        <a th:href="@{'/inquiry/edit/' + ${inquiry.id}}">
+            <button type="button" class="edit-btn">수정</button>
+        </a>
+        <a th:href="@{/inquiry}">
+            <button type="button" class="cancel-btn">취소</button>
+        </a>
+    </div>
+
+    <div class="answer" th:if="${inquiry.inquiryStatus.name() == 'COMPLETED'}">
+        <h3>답변</h3>
+        <p th:text="${inquiry.answerContent}">답변 내용</p>
+
+        <div class="btn-area">
+            <form th:action="@{'/inquiry/delete/' + ${inquiry.id}}" method="post">
+                <button type="submit" class="delete-btn">삭제</button>
+            </form>
+            <a th:href="@{/inquiry}">
+                <button type="button" class="cancel-btn">취소</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{common/footer :: footer}"></div>
+
+</body>
+</html>

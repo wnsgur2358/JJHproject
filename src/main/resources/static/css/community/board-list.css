@@ -1,0 +1,159 @@
+/* ===== 게시판 테이블 ===== */
+.board-table {
+    width: 90%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.board-table th,
+.board-table td {
+    padding: 16px 18px;
+    text-align: center;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.board-table td {
+    background-color: #ffffff;
+}
+
+.board-table tr:hover {
+    background-color: #e1f3ff;
+}
+
+/* ===== 테이블 열 너비 설정 ===== */
+.col-no       { width: 8%; }
+.col-category { width: 14%; }
+.col-title    { width: 44%; }
+.col-author   { width: 14%; }
+.col-date     { width: 20%; }
+
+/* ===== 상단 바 (카테고리 + 버튼) ===== */
+.board-top-bar {
+    width: 90%;
+    margin: 20px auto 10px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-select-box {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.category-select {
+    width: 180px;
+    height: 40px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: darkslategray;
+    background-color: #f9f9f9;
+    border: 2px solid dodgerblue;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* ===== 버튼 디자인 ===== */
+.write-button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.write-button:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+
+/* ===== 게시글 제목 링크 ===== */
+.board-title-link {
+    color: darkslategray;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-title-link:hover {
+    color: #1c7ed6;
+    text-decoration: underline;
+}
+
+/* ===== 고정글(공지글) 강조 ===== */
+.pinned-row,
+.pinned-row td {
+    background-color: lavenderblush;
+    font-weight: bold;
+}
+
+.notice-cell {
+    color: red;
+}
+
+.pinned-icon {
+    color: red;
+    margin-right: 4px;
+}
+
+/* 댓글 수 배지 */
+.comment-count {
+    margin-left: 4px;
+    color: mediumseagreen;
+    font-size: 0.9em;
+}
+
+/* ===== 페이지네이션 ===== */
+.pagination {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+}
+
+.pagination a:hover {
+    background-color: #e0e0e0;
+}

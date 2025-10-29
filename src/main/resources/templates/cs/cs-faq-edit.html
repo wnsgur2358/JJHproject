@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>FAQ 수정</title>
+    <!-- 관리자만 가능! 사용자는 조회만 가능! -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <!-- 스타일은 따로 css로 빼놨음 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/faq/faq-register.css}">
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h1 class="titlefaq">FAQ 수정</h1>
+
+    <form th:action="@{/faq/edit/{id}(id=${faqDto.faqId})}" method="post">
+        <div class="filter-cs">
+
+            <div class="write-box">
+                <label>제목</label>
+                <input type="text" name="faqTitle" maxlength="100" th:value="${faqDto.faqTitle}" required />
+            </div>
+
+            <div class="write-box">
+                <label for="faqCategory">카테고리</label>
+                <select class="all-list" name="faqCategory" id="faqCategory" required>
+                    <option value="" disabled>-- 선택하세요 --</option>
+                    <option th:each="type : ${T(com.multi.matchon.customerservice.domain.CustomerServiceType).values()}"
+                            th:value="${type}"
+                            th:text="${type.label}"
+                            th:selected="${faqDto.faqCategory == type}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="write-box">
+                <label for="faqContent">내용</label>
+                <textarea name="faqContent" id="faqContent" placeholder="내용을 입력 해 주세요...." required
+                          th:text="${faqDto.faqContent}"></textarea>
+            </div>
+
+            <div class="button-box">
+                <button type="submit" class="compleate">수정 완료</button>
+                <button type="button" class="cancel-btn" onclick="location.href='/cs'">취소</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+/* team-edit.css */
+
+.team-edit-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 40px 20px;
+    background-color: #f8f9fc;
+}
+
+.team-edit-form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 600px;
+    width: 100%;
+}
+
+.team-edit-form h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.team-edit-form label {
+    display: block;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+.team-edit-form input[type="text"],
+.team-edit-form textarea,
+.team-edit-form input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.team-edit-form textarea {
+    resize: none;       /* Prevents user resizing */
+    height: 120px;       /* Fixed height */
+    line-height: 1.5;    /* Optional: Better text spacing */
+}
+
+.team-edit-form .field-error,
+.team-edit-form .error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.team-edit-form .radio-group,
+.team-edit-form .checkbox-group {
+    margin-top: 8px;
+}
+
+.team-edit-form .checkbox-group label,
+.team-edit-form .radio-group label {
+    display: block;
+    margin-top: 4px;
+}
+
+.team-edit-form .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.team-edit-form .button-group button {
+    padding: 10px 30px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.team-edit-form .button-group button[type="submit"] {
+    background-color: #1d72d6;
+    color: white;
+}
+
+.team-edit-form .button-group button[type="button"] {
+    background-color: #ccc;
+    color: black;
+}
+
+.error-block {
+    background-color: #ffe6e6;
+    padding: 10px;
+    border: 1px solid red;
+    margin-bottom: 16px;
+}
+.team-edit-form .button-group button[type="submit"]:hover {
+    background-color: royalblue;
+}
+
+.team-edit-form .button-group button[type="button"]:hover {
+    background-color: #aaa;
+}

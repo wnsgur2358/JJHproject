@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 작성</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        #wrap {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* 폼 요소 정렬 */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        form > div:not(.btn-wrap) {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .btn-wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #999;
+        }
+
+        /* 제목 글자수 카운터 */
+        #titleLengthCounter {
+            font-size: 13px;
+            color: #666;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+         /*버튼 영역 */
+        .btn-wrap {
+            display: flex;
+            justify-content: center; /* 가운데 정렬 */
+            gap: 12px;               /* 버튼 사이 여백 */
+            margin-top: 20px;
+        }
+
+        /* 버튼 공통 스타일 */
+        .submit-btn,
+        .cancel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 38px;               /* 동일한 높이 */
+            padding: 0 12px;            /* 내부 좌우 여백 */
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        /* 작성(제출) 버튼 */
+        .submit-btn {
+            width: 100px;
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .submit-btn:hover {
+            background-color: royalblue;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+        }
+
+        /* 취소 버튼 */
+        .cancel-btn {
+            width: 80px;
+            background-color: #888;
+            color: white;
+        }
+
+        .cancel-btn:hover {
+            background-color: #666;
+            transform: translateY(1px);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h2 th:text="${inquiry.id != null ? '문의 수정' : '문의 작성'}"></h2>
+    <form th:action="@{${inquiry.id} != null ? '/inquiry/update/' + ${inquiry.id} : '/inquiry/create'}"
+          th:object="${inquiry}" method="post">
+        <div>
+            <label for="inquiryCategory">카테고리</label>
+            <select id="inquiryCategory" th:field="*{inquiryCategory}" th:disabled="${inquiry.id != null}" required>
+                <option value="">선택</option>
+                <option th:each="type : ${T(com.multi.matchon.customerservice.domain.CustomerServiceType).values()}"
+                        th:value="${type.name()}" th:text="${type.label}"></option>
+            </select>
+            <input type="hidden" th:if="${inquiry.id != null}" th:name="inquiryCategory" th:value="${inquiry.inquiryCategory}" />
+        </div>
+        <div>
+            <label for="inquiryTitle">제목</label>
+            <input id="inquiryTitle" type="text" th:field="*{inquiryTitle}" maxlength="100"
+                   placeholder="제목을 입력해주세요" required oninput="updateTitleLength(this)">
+            <div style="text-align: right; font-size: 13px; color: #666;">
+                <span id="titleLengthCounter">0</span>/100자
+            </div>
+        </div>
+        <div>
+            <label for="inquiryContent">내용</label>
+            <textarea id="inquiryContent" th:field="*{inquiryContent}" rows="7"
+                      placeholder="내용을 입력해주세요" required></textarea>
+        </div>
+        <div class="btn-wrap">
+            <button type="submit" class="submit-btn" th:text="${inquiry.id != null ? '수정' : '작성'}"></button>
+            <a th:href="@{/inquiry}" class="cancel-btn">취소</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateTitleLength(input) {
+        const counter = document.getElementById("titleLengthCounter");
+        const maxLen = 100;
+        const currentLen = input.value.length;
+
+        if (currentLen > maxLen) {
+            //alert("제목은 100자까지 입력 가능합니다.");
+            Swal.fire({text: '제목은 100자까지 입력 가능합니다.', icon: 'warning', confirmButtonText: '확인'})
+
+            input.value = input.value.substring(0, maxLen);
+            counter.textContent = maxLen;
+        } else {
+            counter.textContent = currentLen;
+        }
+    }
+</script>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

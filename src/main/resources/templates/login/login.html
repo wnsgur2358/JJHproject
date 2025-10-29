@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>로그인</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/footer.css}" />
+    <link rel="stylesheet" th:href="@{/css/login/login.css}" />
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}" />
+    <link rel="stylesheet" th:href="@{/css/login/popup.css}" />
+    <script th:src="@{/js/login/login.js}" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<!-- 로그인 박스 -->
+<div id="wrap">
+    <h2>LOGIN</h2>
+
+    <div id="suspendMessage"></div>
+
+    <form id="loginForm" autocomplete="off">
+        <input type="email" id="email" placeholder="이메일" required />
+        <input type="password" id="password" placeholder="비밀번호" required />
+        <button type="submit">로그인</button>
+    </form>
+
+    <a href="#" id="openResetPopup" class="link">비밀번호를 잊으셨습니까?</a>
+</div>
+
+<!-- 팝업 오버레이 -->
+<div id="popupOverlay" class="popup-overlay"></div>
+
+<!-- 임시 비밀번호 발송 팝업 -->
+<div id="resetPopup" class="popup">
+    <h3 class="popup-title">
+        <span>임시 비밀번호</span>
+        <img th:src="@{/img/forgot.png}" alt="비밀번호 문의 아이콘" class="icon-help" />
+    </h3>
+    <form id="resetForm">
+        <input type="email" id="resetEmail" placeholder="가입한 이메일 입력" required />
+        <button type="submit">임시 비밀번호 발송</button>
+    </form>
+    <div id="resetResult" class="success-msg"></div>
+    <button type="button" class="popup-close-btn" onclick="closeResetPopup()">닫기</button>
+</div>
+
+<!-- 새 비밀번호 설정 팝업 -->
+<div id="changePasswordPopup" class="popup">
+    <h3>새 비밀번호 설정</h3>
+    <form id="changePasswordForm">
+        <input type="password" id="newPassword" placeholder="새 비밀번호" required />
+        <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required />
+        <button type="submit">비밀번호 변경</button>
+    </form>
+    <div id="changeResult" class="success-msg" style="color: red;"></div>
+    <button type="button" class="popup-close-btn" onclick="closeChangePopup()">닫기</button>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<!-- 로그인 처리 및 팝업 로직 -->
+
+</body>
+</html>

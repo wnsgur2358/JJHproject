@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>가입 신청 상세 보기</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/team/team-join-request.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="page-container">
+    <h2 class="page-title">가입 신청 상세 보기</h2>
+
+    <div class="request-detail">
+        <img th:src="${joinRequest.profileImageUrl}"
+             alt="프로필 이미지"
+             class="profile-image"
+             onerror="this.onerror=null; this.src='/img/default-user.png';"/>
+
+        <h3 th:text="${joinRequest.nickname}" class="nickname">닉네임</h3>
+
+        <p><strong>선호하는 포지션:</strong> <span th:text="${joinRequest.position}">미정</span></p>
+        <p><strong>매너 온도:</strong> <span th:text="${joinRequest.temperature}">36.5도</span></p>
+        <p><strong>선호하는 시간대:</strong> <span th:text="${joinRequest.preferredTime}">미정</span></p>
+        <p>
+            <strong>간단한 소개글:</strong>
+            <span th:text="${joinRequest.introduction}" class="intro-text"></span>
+        </p>
+
+        <!-- ✅ Add this hidden input for JS -->
+        <input type="hidden" id="applicantId" th:value="${joinRequest.applicantId}">
+
+        <div class="button-group">
+            <button class="btn-approve" th:onclick="'approveRequest(' + ${joinRequest.requestId} + ')'">승인하기</button>
+            <button id="startChatBtn" class="btn btn-primary" style="margin-top: 10px;">1:1 채팅하기</button>
+            <button class="btn-reject" th:onclick="'rejectRequest(' + ${joinRequest.requestId} + ')'">거절하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const chatBtn = document.getElementById('startChatBtn');
+    chatBtn.addEventListener('click', async () => {
+        const applicantId = document.getElementById('applicantId').value;
+        try {
+            const res = await fetch(`/chat/room/private?receiverId=${applicantId}`);
+            if (!res.ok) throw new Error("채팅방 요청 실패");
+
+            const data = await res.json();
+            const roomId = data.data;
+            if (!roomId) throw new Error("채팅방 ID 없음");
+
+            window.location.href = `/chat/my/room?roomId=${roomId}`;
+        } catch (err) {
+            //alert("채팅방 연결 실패: " + err.message);
+            Swal.fire({text: "채팅방 연결 실패: " + err.message, icon: 'warning', confirmButtonText: '확인'});
+
+        }
+    });
+
+    async function approveRequest(requestId) {
+        //if (!confirm("정말로 승인하시겠습니까?")) return;
+
+        Swal.fire({
+            text: '정말로 승인하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                // 사용자가 '네'를 눌렀을 때 처리
+                try {
+                    const res = await fetch(`/team/team/join-request/${requestId}/approve`, {
+                        method: 'POST'
+                    });
+
+                    const result = await res.json();
+
+                    if (!res.ok || !result.success) {
+                        // ❗ Show backend error message (like "이미 팀이 있는 사용자 입니다")
+                        //alert(result.message || "가입 승인 중 오류가 발생했습니다.");
+                        Swal.fire({text: result.message || "가입 승인 중 오류가 발생했습니다.", icon: 'warning', confirmButtonText: '확인'});
+
+                        return;
+                    }
+
+                    //alert("가입 요청이 승인되었습니다.");
+                    Swal.fire({text: '가입 요청이 승인되었습니다.', icon: 'success', confirmButtonText: '확인'}).then(()=>{
+                        window.location.href = "/team"; // Or redirect to the request list
+                    });
+
+
+
+                } catch (err) {
+                    //alert("승인 중 네트워크 오류가 발생했습니다.");
+                    Swal.fire({text: '승인 중 네트워크 오류가 발생했습니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                    console.error(err);
+                }
+            } else {
+                // 사용자가 '아니요' 눌렀을 때
+                return
+            }
+        });
+
+
+    }
+
+
+    function rejectRequest(requestId) {
+        //if (!confirm("정말로 거절하시겠습니까?")) return;
+
+        Swal.fire({
+            text: '정말로 거절하시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                // 사용자가 '네'를 눌렀을 때 처리
+                fetch(`/team/team/join-request/${requestId}/reject`, {
+                    method: 'POST'
+                }).then(res => {
+                    if (!res.ok) throw new Error();
+                    //alert("가입 요청이 거절되었습니다.");
+                    Swal.fire({text: '가입 요청이 거절되었습니다.', icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                        window.location.href = "/team";
+                    });
+
+
+                }).catch(() => {
+                    //alert("거절에 실패했습니다.");
+                    Swal.fire({text: '거절에 실패했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                });
+            } else {
+                // 사용자가 '아니요' 눌렀을 때
+                return
+            }
+        });
+
+
+    }
+</script>
+
+</body>
+</html>

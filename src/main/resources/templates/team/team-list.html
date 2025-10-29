@@ -1,0 +1,104 @@
+<!-- team-list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MATCHON - 팀 목록</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}"/>
+    <link rel="stylesheet" th:href="@{/css/footer.css}"/>
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}"/>
+    <link rel="stylesheet" th:href="@{/css/team/team-list.css}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/team/team-list.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h1 class="page-title">TEAM 목록</h1>
+    <div id="user-info" th:data-email="${#authentication.name}"></div>
+
+    <div id="filter">
+        <select id="region" class="select-dropbox">
+            <option value="" selected>전체 지역</option>
+            <option value="CAPITAL_REGION">수도권</option>
+            <option value="YEONGNAM_REGION">영남권</option>
+            <option value="HONAM_REGION">호남권</option>
+            <option value="CHUNGCHEONG_REGION">충청권</option>
+            <option value="GANGWON_REGION">강원권</option>
+            <option value="JEJU">제주</option>
+        </select>
+
+        <select id="recruiting-position" class="select-dropbox">
+            <option value="" selected>필요 포지션</option>
+            <option value="GOALKEEPER">골키퍼</option>
+            <option value="CENTER_BACK">센터백</option>
+            <option value="LEFT_RIGHT_BACK">풀백</option>
+            <option value="LEFT_RIGHT_WING_BACK">윙백</option>
+            <option value="CENTRAL_DEFENSIVE_MIDFIELDER">수비형 미드필더</option>
+            <option value="CENTRAL_MIDFIELDER">중앙 미드필더</option>
+            <option value="CENTRAL_ATTACKING_MIDFIELDER">공격형 미드필더</option>
+            <option value="LEFT_RIGHT_WING">윙</option>
+            <option value="STRIKER_CENTER_FORWARD">스트라이커</option>
+            <option value="SECOND_STRIKER">세컨드 스트라이커</option>
+            <option value="LEFT_RIGHT_WINGER">와이드 윙어</option>
+        </select>
+
+        <select id="rating-filter" class="select-dropbox">
+            <option value="">별점 전체</option>
+            <option value="1">1점 이상</option>
+            <option value="2">2점 이상</option>
+            <option value="3">3점 이상</option>
+            <option value="4">4점 이상</option>
+            <option value="5">5점</option>
+        </select>
+
+        <select id="recruitmentStatus" name="recruitmentStatus" class="select-dropbox">
+            <option value="">모집 전체</option>
+            <option value="true">모집중</option>
+            <option value="false">모집 완료</option>
+        </select>
+
+
+        <button id="filterBtn">검색</button>
+    </div>
+
+    <div id="team-container" style="display: none;">
+        <div th:each="team : ${teams}" class="team-card">
+            <img th:src="${team.imageUrl}" alt="Team Image"/>
+            <div class="team-info">
+                <h2 th:text="${team.teamName}">팀 이름</h2>
+                <p th:text="'지역: ' + ${team.translatedRegion}">지역</p>
+                <p>
+                    별점: <span th:text="${team.teamRatingAverage} + '점'">0점</span>
+                    <span class="star-rating"
+                          th:with="width=${team.teamRatingAverage * 20}"
+                          th:style="'width:' + width + '%'">
+    </span>
+                </p>
+                <p>DEBUG STAR: <span th:text="${team.starRatingVisual}">[nothing]</span></p>
+                <p th:text="'포지션: ' + ${#strings.listJoin(team.recruitingPositionsKorean, ', ')}">포지션</p>
+                <p th:text="${team.recruitmentStatus} ? '모집 중' : '모집 완료'">모집 상태</p>
+                <p th:text="'작성자: ' + ${team.createdBy}">작성자</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <a th:href="@{/team/team/register}">
+            <button class="btn-register">팀 등록하기</button>
+        </a>
+        <button type="button" id="myTeamBtn" class="btn-myteam">내 팀 보기</button>
+
+        <button type="button" id="backToAllBtn" class="back-list" style="display: none;">
+            목록으로
+        </button>
+    </div>
+
+    <div id="paging-container">
+
+    </div>
+</div>
+<div id="myTeamViewFlag" th:data-view="${myTeamView}"></div>
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

@@ -1,0 +1,338 @@
+.screen {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+.screen .div {
+    background-color: #ffffff;
+    overflow: hidden;
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+}
+
+.screen .information {
+    position: absolute;
+    top: 269px;
+    left: 2058px;
+    transform: rotate(1.31deg);
+    font-family: "Passion One-Regular", Helvetica;
+    font-weight: 400;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .overlap-group {
+    position: absolute;
+    width: 1920px;
+    height: 609px;
+    top: 0;
+    left: 0;
+    background-color: #000000;
+}
+
+.screen .fi-rr-caret-left {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 282px;
+    left: 176px;
+}
+
+.screen .img {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 269px;
+    left: 1576px;
+}
+
+.screen .overlap {
+    position: absolute;
+    width: 126px;
+    height: 58px;
+    top: 29px;
+    left: 1750px;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color: #ffffff;
+}
+
+.screen .sign-up {
+    position: absolute;
+    top: 12px;
+    left: 28px;
+    transform: rotate(0.65deg);
+    font-family: "Passion One-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .div-wrapper {
+    position: absolute;
+    width: 126px;
+    height: 58px;
+    top: 29px;
+    left: 1576px;
+    border-radius: 10px;
+    border: 1px solid;
+    border-color: #ffffff;
+}
+
+.screen .text-wrapper {
+    position: absolute;
+    top: 12px;
+    left: 36px;
+    transform: rotate(0.65deg);
+    font-family: "Passion One-Bold", Helvetica;
+    font-weight: 700;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .go-wrapper {
+    position: absolute;
+    width: 161px;
+    height: 61px;
+    top: 508px;
+    left: 857px;
+    background-image: url(./img/rectangle-3828.svg);
+    background-size: 100% 100%;
+}
+
+.screen .go {
+    position: absolute;
+    top: 12px;
+    left: 58px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 25px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 37.5px;
+    white-space: nowrap;
+}
+
+.screen .introduction {
+    position: absolute;
+    top: 43px;
+    left: 270px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #255e93;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .match-up {
+    position: absolute;
+    top: 43px;
+    left: 458px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .guest {
+    position: absolute;
+    top: 43px;
+    left: 592px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .stadium {
+    position: absolute;
+    top: 42px;
+    left: 692px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .community {
+    position: absolute;
+    top: 43px;
+    left: 817px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .schedule {
+    position: absolute;
+    top: 43px;
+    left: 980px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .text-wrapper-2 {
+    position: absolute;
+    top: 43px;
+    left: 1135px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .team {
+    position: absolute;
+    top: 43px;
+    left: 1209px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .shop {
+    position: absolute;
+    top: 43px;
+    left: 1313px;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 30px;
+    white-space: nowrap;
+}
+
+.screen .fi-rr-comments {
+    position: absolute;
+    width: 33px;
+    height: 33px;
+    top: 43px;
+    left: 1455px;
+}
+
+.screen .fi-rr-bell {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 44px;
+    left: 1517px;
+}
+
+.screen .fi-rr-marker {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 44px;
+    left: 1394px;
+}
+
+.screen .chatgpt-image {
+    position: absolute;
+    width: 151px;
+    height: 151px;
+    top: 18px;
+    left: 29px;
+}
+
+.screen .wanna-match-you-re {
+    position: absolute;
+    top: 198px;
+    left: 492px;
+    -webkit-text-stroke: 1px #000000;
+    font-family: "Inter-Black", Helvetica;
+    font-weight: 900;
+    color: transparent;
+    font-size: 100px;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 150px;
+}
+
+.screen .span {
+    color: #ffffff;
+}
+
+.screen .text-wrapper-3 {
+    color: #db778d;
+}
+
+.screen .text-wrapper-4 {
+    color: #255e93;
+}
+
+.screen .text-wrapper-5 {
+    position: absolute;
+    top: 1018px;
+    left: 701px;
+    font-family: "Inter-Light", Helvetica;
+    font-weight: 300;
+    color: #000000c2;
+    font-size: 32px;
+    text-align: right;
+    letter-spacing: -0.64px;
+    line-height: 38.4px;
+    white-space: nowrap;
+}
+
+.screen .frame {
+    position: absolute;
+    width: 1944px;
+    height: 1px;
+    top: 1002px;
+    left: -24px;
+    background-color: #255e93;
+}

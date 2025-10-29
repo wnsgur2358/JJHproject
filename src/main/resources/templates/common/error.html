@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div id="error-detail-dto"
+         th:data-error-message="${errorMessage}"
+
+    >
+    </div>
+
+
+  <script defer>
+      //th:inline="javascript"
+      const detailDto = document.querySelector("#error-detail-dto");
+      const errorMessage = detailDto.dataset.errorMessage;
+
+    (function(){
+
+      //const errorCode = [[${errorMessage}]]
+      //console.log(errorCode);
+
+        if(errorMessage.includes("Matchup")){
+            //alert(errorMessage)
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href="/matchup/board";
+            });
+
+        } else if(errorMessage.includes("Chat")){
+            //alert(errorMessage);
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.close();
+            });
+
+        } else if(errorMessage.includes("blockUser")){
+            //alert(errorMessage);
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href="/chat/my/rooms"
+            });
+
+        }else if(errorMessage.includes("Unauthorization")){
+            //alert(errorMessage);
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href="/";
+            });
+
+        }
+        else if(errorMessage.includes(403)){
+            //alert(errorMessage);
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href ="/";
+            });
+
+        } else if(errorMessage.includes(401)){
+            //alert(errorMessage);
+            Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href ="/";
+            });
+        }
+        else{
+            //aalert("알 수 없는 오류로 인해 메인 페이지로 이동합니다.")
+            Swal.fire({text: "알 수 없는 오류로 인해 메인 페이지로 이동합니다.", icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                window.location.href="/";
+            });
+
+        }
+
+    })()
+  </script>
+
+</body>
+</html>

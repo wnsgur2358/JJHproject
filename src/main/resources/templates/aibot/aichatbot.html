@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MatchON 챗봇</title>
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div id="chat-start">
+    <img src="/img/aichatbot.png" class="bot-start-image"/>
+    <div class="bot-start-message">
+        <b>MatchON 챗봇에 오신걸 환영합니다!</b><br>
+        궁금한 사항을 입력해주세요
+    </div>
+    <button class="chat-start-button" onclick="initChat()">Start Chat</button>
+</div>
+
+<div id="chat-ui" style="display:none;">
+    <div class="chat-date" id="date"></div>
+    <div id="chat-box"></div>
+
+    <div id="chips">
+        <button onclick="sendChip('MatchON 소개')">MatchON 소개</button>
+        <button onclick="sendChip('매너온도')">매너온도</button>
+        <button onclick="sendChip('팀 만들기')">팀 만들기</button>
+        <button onclick="sendChip('MatchUP 소개')">MatchUP 소개</button>
+        <button onclick="sendChip('대회 일정 확인')">대회 일정 확인</button>
+        <button onclick="sendChip('대회 일정 등록')">대회 일정 등록</button>
+        <button onclick="sendChip('상담 종료하기')" class="exit">상담 종료하기</button>
+    </div>
+
+    <div id="input-wrapper">
+        <input type="text" id="chat-input" placeholder="메시지를 입력하세요"/>
+        <button onclick="sendMessage()" class="send-arrow">➤</button>
+    </div>
+</div>
+
+<script th:src="@{/js/aibot/aichatbot.js}"></script>
+</body>
+</html>

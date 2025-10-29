@@ -1,0 +1,141 @@
+server:
+  port: 8092
+
+spring:
+  profiles:
+    active: local
+  output:
+    ansi:
+      enabled: ALWAYS
+  jmx:
+    enabled: false
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY}
+        secret-key: ${AWS_SECRET_KEY}
+      s3:
+#
+        bucket: ${S3_BUCKET}
+        base-url: ${S3_BASE_URL}
+      region:
+        static: sa-east-1
+#        ${S3_REGION}
+      stack:
+        auto: false
+  thymeleaf:
+    cache: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PAS SWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: false
+
+
+#  ${DOMAIN_URL}
+
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  issuer: ${JWT_ISSUER}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    show_sql: true
+  output:
+    ansi:
+      enabled: ALWAYS
+  security:
+    user:
+      name: user
+      password: 1234
+      roles: USER
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  redis:
+    port: 6379
+    host: localhost
+
+matchon:
+  kakao-api: ${KAKAO_API_KEY}
+  dialogflow-key-path: ${DIALOGFLOW_KEY_PATH}
+#  /app/keys/dialogflow-key.json
+#  ${DIALOGFLOW_KEY_PATH}
+
+file:
+  upload-dir: C:/upload-dir
+
+app:
+  domain-url: localhost:8090
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_PROD_URL}
+    username: ${DB_PROD_USER}
+    password: ${DB_PROD_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: none
+    show_sql: false
+  output:
+    ansi:
+      enabled: ALWAYS
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  redis:
+    port: ${REDIS_PROD_PORT}
+    host: ${REDIS_PROD_IP}
+#fdfdsfsdfsdfs
+
+matchon:
+  kakao-api: ${KAKAO_API_KEY}
+  dialogflow-key-path: /app/keys/dialogflow-key.json
+#  /app/keys/dialogflow-key.json
+#  ${DIALOGFLOW_KEY_PATH}
+
+
+app:
+  domain-url: ${DOMAIN_URL}
+
+
+
+

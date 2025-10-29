@@ -1,0 +1,252 @@
+
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* ===== 공통 레이아웃 ===== */
+.form-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid beige;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* ===== 폼 그룹 ===== */
+.form-group {
+    margin-bottom: 2px;
+}
+
+/*board 정보*/
+.board-info input
+{
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 15px;
+    border: 1px solid lightblue;
+    border-radius: 6px;
+    background-color: lightblue;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #2c3e50;
+    line-height: 1.4;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.board-info input:focus{
+    border-color: #3498db;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+}
+
+/*request 정보*/
+
+.readonly-box,
+.request-info textarea,
+.request-info input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+
+.request-info textarea:focus,
+.request-info input:focus {
+    border-color: #3498db;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+}
+.readonly-box {
+    white-space: pre-wrap; /* 줄바꿈 및 공백 유지 */
+    min-height: 100px;
+}
+.readonly-box.clickable{
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+}
+.readonly-box.clickable:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); /* 연하게 */
+    background-color: #fff;
+    outline: none;
+}
+
+#button-group{
+    display: flex;
+    justify-content: center;
+
+}
+#button-group a.btn {
+    display: inline-block;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: dodgerblue;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+#button-group a.btn:hover {
+    background-color: royalblue;
+}
+
+/* 지도 스타일 */
+#map {
+    width: 100%;
+    height: 350px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+}
+
+.disabled {
+    background-color: #555 !important;  /* 더 진한 회색 */
+    color: #ddd !important;
+    pointer-events: none;          /* 클릭 안 되게 */
+    cursor: not-allowed;           /* 마우스 모양 변경 */
+    opacity: 0.7;                  /* 살짝 흐리게 */
+    text-decoration: none;
+}
+
+.truncate {
+    width: 900px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+}
+
+.truncateMap{
+    width: 150px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+}
+/*===========================*/
+/* 정보 테이블 */
+/*table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*    margin-bottom: 2rem;*/
+/*}*/
+
+/*th, td {*/
+/*    padding: 0.75rem 1rem;*/
+/*    border-bottom: 1px solid #ddd;*/
+/*    text-align: left;*/
+/*}*/
+
+/*th {*/
+/*    background-color: #f9f9f9;*/
+/*    font-weight: bold;*/
+/*    width: 25%;*/
+/*}*/
+
+
+
+/*!* 공통 버튼 스타일 *!*/
+/*a#approvedBtn,*/
+/*a#deniedBtn,*/
+/*a#approveWithdrawRequestBtn,*/
+/*a#denyWithdrawRequestBtn,*/
+/*a#modifyBtn,*/
+/*a#cancelBtn,*/
+/*a#retryBtn,*/
+/*a#withdrawBtn,*/
+/*a.back-btn {*/
+/*    display: inline-block;*/
+/*    margin: 0.5rem 0.5rem 0 0;*/
+/*    padding: 8px 14px;*/
+/*    border-radius: 6px;*/
+/*    text-decoration: none;*/
+/*    font-weight: bold;*/
+/*    color: white;*/
+/*    transition: opacity 0.2s ease-in-out;*/
+/*}*/
+
+/*!* 역할별 색상 지정 *!*/
+/*#approvedBtn,*/
+/*#modifyBtn {*/
+/*    background-color: #007a00; !* 초록 *!*/
+/*}*/
+
+/*#deniedBtn,*/
+/*#cancelBtn{*/
+/*    background-color: #c0392b; !* 빨강 *!*/
+/*}*/
+
+/*#approveWithdrawRequestBtn,*/
+/*#retryBtn {*/
+/*    background-color: #9b59b6; !* 보라색 *!*/
+/*}*/
+/*#denyWithdrawRequestBtn,*/
+/*#withdrawBtn {*/
+/*    background-color: #f39c12; !* 주황 *!*/
+/*}*/
+/*a.back-btn {*/
+/*    background-color: #555; !* 진한 회색 (대비 향상) *!*/
+/*    cursor: pointer; !* ✅ 마우스 손가락 모양으로 변경 *!*/
+
+/*}*/
+
+
+/*!* Hover 효과 (모든 버튼 공통) *!*/
+/*a#approvedBtn:hover,*/
+/*a#deniedBtn:hover,*/
+/*a#approveWithdrawRequestBtn:hover,*/
+/*a#denyWithdrawRequestBtn:hover,*/
+/*a#modifyBtn:hover,*/
+/*a#cancelBtn:hover,*/
+/*a#retryBtn:hover,*/
+/*a#withdrawBtn:hover,*/
+/*a.back-btn:hover {*/
+/*    opacity: 1;*/
+/*    transform: scale(1.02);*/
+/*    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);*/
+/*}*/
+
+/*!* 버튼 그룹 정렬 *!*/
+/*#button-group {*/
+/*    display: flex;*/
+/*    flex-wrap: wrap;*/
+/*    justify-content: center;*/
+/*    gap: 0.5rem;*/
+/*    margin-bottom: 2rem;*/
+/*}*/
+
+
+
+/*td {*/
+/*    word-break: break-all;    !* 글자 단위 줄바꿈 (한글/영어 모두 적용) *!*/
+/*    white-space: normal;*/
+/*}*/
+
+

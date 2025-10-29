@@ -1,0 +1,357 @@
+/* ===== 게시글 상세 레이아웃 ===== */
+.content-box {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 40px;
+    background: #fff;
+    border: 1px solid beige;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== 게시글 제목 및 메타 정보 ===== */
+.post-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e2e2;
+}
+
+.meta-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: #f0f3f5;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* ===== 게시글 상단 조작 영역 ===== */
+.post-header {
+    position: relative;
+    padding-top: 10px;
+    padding-right: 140px;
+}
+
+.post-header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-action-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.post-actions {
+    margin-top: 18px;
+}
+
+.post-action-right button {
+    margin-left: 10px;
+}
+
+.back-link {
+    font-size: 14px;
+    color: royalblue;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* ===== 버튼 스타일 (삭제, 신고, 수정) ===== */
+.comment-btn {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.comment-btn:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.board-delete-button {
+    background: transparent;
+    border: none;
+    color: #F44336;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.board-delete-button:hover {
+    background-color: lemonchiffon;
+    color: red;
+}
+
+.report-button {
+    padding: 3px 8px;
+    background: none;
+    color: #F44336;
+    border: none;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.report-button:hover {
+    background-color: mistyrose;
+    color: red;
+    transform: scale(1.05);
+}
+
+.post-action-right .report-button {
+    padding: 4px 10px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.edit-link {
+    display: inline-block;
+    background-color: forestgreen;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.edit-link:hover {
+    background-color: darkgreen;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 60, 0, 0.3)
+}
+
+/* ===== 첨부파일 영역 ===== */
+.attachment-box {
+    margin-top: 40px;
+    padding: 20px 25px;
+    background-color: #f4f7fa;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.attachment-box strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #222;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+}
+
+.attachment-box ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 8px;
+}
+
+.attachment-box li {
+    margin-bottom: 6px;
+}
+
+.attachment-box a {
+    color: royalblue;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.attachment-box a:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.attachment-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+}
+
+.attachment-item:hover .attachment-icon {
+    transform: scale(1.1);
+    opacity: 0.95;
+}
+
+.attachment-box li img {
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+}
+
+.attachment-box li:hover img {
+    transform: scale(1.1);
+}
+
+/* ===== 댓글 영역 ===== */
+.comment-section {
+    width: 100%;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fdfdfd;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.comment-section h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.comment-section textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    resize: vertical;
+}
+
+.comment-section ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.comment-section li {
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+.comment-section li.highlight {
+    border: 2px solid goldenrod;
+    background-color: lightyellow;
+    animation: fadeHighlight 2s ease-in-out;
+}
+
+@keyframes fadeHighlight {
+    0% { background-color: pink; }
+    100% { background-color: transparent; }
+}
+
+/* ===== 댓글 요소 ===== */
+.comment-meta {
+    font-size: 15px;
+    color: #666;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.comment-meta small {
+    font-size: 14px;
+    font-weight: 400;
+    color: #555;
+}
+
+.comment-meta span {
+    margin-right: 6px;
+}
+
+.comment-section li p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #222;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 4px 0 0 0;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ===== 댓글 삭제 버튼 ===== */
+.btn-comment-delete {
+    padding: 2px 8px;
+    background: none;
+    color: #F44336;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-comment-delete:hover {
+    background-color: lemonchiffon;
+    color: red;
+}
+
+.admin-delete-wrapper {
+    text-align: center;
+    margin: 10px;
+}
+
+.admin-comment-delete-wrapper {
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+.admin-delete-button {
+    background-color: #d9534f;
+    color: white;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.admin-delete-button:hover {
+    background-color: #c9302c;
+}
+
+
+

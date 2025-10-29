@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>대회 등록</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/event/event-register.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <script th:src="@{/js/event/event-register.js}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h2>대회 등록</h2>
+
+    <form action="/event/new" method="post" onsubmit="return checkHostBeforeSubmit();">
+
+        <div class="form-box">
+            <label>날짜 :</label>
+            <span th:text="${selectedDate}"></span>
+            <input type="hidden" name="eventDate" th:value="${selectedDate}">
+        </div>
+
+        <div class="form-box">
+            <label>주최기관 :</label>
+            <span id="hostNameSpan" th:text="${hostName} ?: '미등록'">미등록</span>
+        </div>
+
+        <!-- 권역 선택 -->
+        <div class="form-box">
+            <label>권역 :</label>
+            <select name="eventRegionType" required>
+                <option value="CAPITAL_REGION">수도권</option>
+                <option value="JEJU">제주권</option>
+                <option value="YEONGNAM_REGION">영남권</option>
+                <option value="HONAM_REGION">호남권</option>
+                <option value="CHUNGCHEONG_REGION">충청권</option>
+                <option value="GANGWON_REGION">강원권</option>
+            </select>
+        </div>
+
+
+        <div class="form-box">
+            <label>대회명 :</label>
+            <input type="text" name="eventTitle" placeholder="예: 서울권 풋살대회" required>
+        </div>
+
+        <div class="form-box">
+            <label>대회 소개 :</label>
+            <input type="text" name="eventDescription" placeholder="대회에 대한 간단한 설명을 입력하세요." rows="5" required>
+        </div>
+
+
+        <div class="form-box">
+            <label>장소 :</label>
+            <input type="text" id="eventAddress" name="eventAddress" readonly placeholder="주소 찾기 버튼을 누르세요." required>
+            <input type="button" onclick="getAddress()" class="address-btn" value="주소 찾기">
+        </div>
+
+
+        <div class="form-box">
+            <label>참가 방법 :</label>
+            <input type="text" name="eventMethod" placeholder="예: 이메일 신청" required>
+        </div>
+
+
+        <div class="form-box">
+            <label>문의 :</label>
+            <input type="text" name="eventContact" placeholder="예: sufa@naver.com / 010-0000-0000" required>
+        </div>
+
+
+        <button type="submit">등록하기</button>
+    </form>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

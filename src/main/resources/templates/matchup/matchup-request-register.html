@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>MATCHON</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+  <script type="text/javascript" th:src="'//dapi.kakao.com/v2/maps/sdk.js?appkey='+${@environment.getProperty('matchon.kakao-api')}+'&libraries=services'"></script>
+  <script th:src="@{/js/matchup/matchup-request-register.js}" defer></script>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-request-register.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+  <h2 class="page-title">MATCHUP 참가 요청 작성</h2>
+  <div id="matchup-request-register-dto"
+       th:data-sports-type-name="${reqMatchupRequestDto.sportsTypeName}"
+       th:data-sports-facility-name = "${reqMatchupRequestDto.sportsFacilityName}"
+       th:data-sports-facility-address="${reqMatchupRequestDto.sportsFacilityAddress}"
+       th:data-match-datetime="${reqMatchupRequestDto.matchDatetime}"
+       th:data-match-endtime="${reqMatchupRequestDto.matchEndtime}"
+       th:data-current-participant-count="${reqMatchupRequestDto.currentParticipantCount}"
+       th:data-max-participants="${reqMatchupRequestDto.maxParticipants}"
+  >
+  </div>
+
+  <div class="form-container" th:object="${reqMatchupRequestDto}">
+    <form id="board-info">
+      <div class="form-group">
+        <label>
+          종목
+          <input type="text" th:value="*{sportsTypeName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          작성자
+          <input type="text" th:value="*{writerName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          경기장명
+          <input class="truncate" type="text" th:value="*{sportsFacilityName}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          경기장 주소
+          <input class="truncate" type="text" th:value="*{sportsFacilityAddress}" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>경기장 위치</label>
+        <div id="map" style="width:100%;height:350px;"></div>
+      </div>
+      <div class="form-group">
+        <label>
+          경기 날짜
+          <input type="text" id="match-date" readonly>
+        </label>
+      </div>
+      <div class="form-group">
+        <label>
+          현재 정원
+          <input type="text" th:value="${'('+ reqMatchupRequestDto.currentParticipantCount + ' / '+reqMatchupRequestDto.maxParticipants + ')'}" readonly>
+        </label>
+      </div>
+    </form>
+    <hr>
+    <form th:object="${reqMatchupRequestDto}" th:action="@{/matchup/request}" method="post" id="request-info">
+      <input type="hidden" th:field="*{boardId}"/>
+      <input type="hidden" th:field="*{matchDatetime}">
+      <input type="hidden" th:field="*{matchEndtime}">
+
+      <label>
+        소개(300자)
+        <textarea placeholder="자기 소개를 입력하세요." th:field="*{selfIntro}" required maxlength="300">
+                </textarea>
+      </label>
+      <label>
+        참가 인원
+        <select th:field="*{participantCount}" required></select>
+      </label>
+
+      <div class="btn-group">
+        <button type="submit">요청하기</button>
+        <button type="button" class="cancel-btn" onclick="goBack()">취소하기</button>
+      </div>
+    </form>
+
+  </div>
+
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

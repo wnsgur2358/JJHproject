@@ -1,0 +1,341 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #fff;
+}
+
+
+footer {
+    padding: 0;
+    margin: 0;
+}
+
+.mypage-container {
+    background-color: #fff;
+    display: flex;
+    max-width: 1280px;
+    margin: 60px auto 180px;
+    gap: 40px;
+    padding: 0 20px;
+}
+
+.mypage-sidebar {
+    flex: 0 0 220px;
+    text-align: center;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #ccc;
+}
+
+.button-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.button-group-vertical button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.mypage-main {
+    flex: 1;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.mypage-main h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid dodgerblue;
+    padding-bottom: 10px;
+}
+
+.mypage-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.mypage-table th, .mypage-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    font-size: 14px;
+}
+
+.mypage-table th {
+    background-color: #f3f6fa;
+    width: 150px;
+    font-weight: 600;
+}
+
+.profile {
+    background: linear-gradient(to right, #FF5050, #C964E2);
+    color: #fff;
+}
+
+.profile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(128, 0, 128, 0.3);
+}
+
+.submit-btn-container {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.host-submit,
+.edit-button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.host-submit:hover,
+.edit-button:hover {
+    background-color: royalblue;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.host-submit {
+    background-color: dodgerblue;
+    color: white;
+    width: 62px;
+    margin-left: 4px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.host-submit:hover {
+    background-color: royalblue;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+#scheduleButton {
+    background-color: forestgreen;
+    color: white;
+    margin-left: 4px;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+#scheduleButton:hover {
+    background-color: darkgreen;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 12px rgba(0, 90, 0, 0.3);
+}
+
+.category-select {
+    width: 160px;
+    height: 35px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: darkslategray;
+    background-color: #f9f9f9;
+    border: 2px solid dodgerblue;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.category-select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+.withdraw-section {
+    margin-top: auto;
+    padding-top: 30px;
+}
+
+.danger-btn {
+    padding: 8px 15px;
+    background-color: white;
+    color: red;
+    border: 2px solid red;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.danger-btn:hover {
+    background-color: red;
+    color: #fff;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 24px;
+    border-radius: 12px;
+    width: 380px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    border-top: 5px solid #e53935;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal-content h3 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #e53935;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.modal-buttons button:first-child {
+    background-color: #e53935;
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background-color: #c62828;
+}
+
+.modal-buttons button:last-child {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.modal-buttons button:last-child:hover {
+    background-color: #ebebeb;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* 탈퇴 팝업 전용 스타일 */
+.report-modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #e53935;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.report-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.withdraw-message {
+    text-align: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+.withdraw-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.button-group-vertical .delete-button {
+    background: transparent;
+    border: none;
+    color: #F44336;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.button-group-vertical .delete-button:hover {
+    background-color: mistyrose;
+    color: red;
+    transform: scale(1.03);
+}
+
+.delete-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    margin-right: 4px;
+    margin-bottom: 3px;
+}
+
+
+

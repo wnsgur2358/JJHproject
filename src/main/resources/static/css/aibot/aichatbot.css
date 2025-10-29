@@ -1,0 +1,183 @@
+.chat-container {
+    width: 100%;
+    max-width: 420px;
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+    background: #FAFAFA;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.chat-header {
+    background: #255E93;
+    color: white;
+    padding: 14px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.chat-close {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    position: absolute;
+    right: 12px;
+    top: 8px;
+}
+
+#chat-start {
+    text-align: center;
+    padding: 30px;
+}
+
+.bot-start-image {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.bot-start-message {
+    font-size: 14px;
+    color: #000080;
+    margin-bottom: 20px;
+}
+
+.chat-start-button {
+    background: #F6C67B;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.chat-date {
+    text-align: center;
+    font-size: 13px;
+    padding: 8px;
+    color: #666;
+}
+
+#chat-box {
+    background: #fff;
+    flex: 1;
+    min-height: 350px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.message {
+    display: flex;
+    margin: 6px 0;
+    align-items: flex-end;
+}
+
+.bot {
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.user {
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.bot-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+}
+
+.msg-content {
+    max-width: 240px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+
+.user .msg-content {
+    background: #EAF7FF;
+    font-weight: bold;
+    margin-right: 0;
+}
+
+.timestamp {
+    font-size: 10px;
+    color: gray;
+    margin-top: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.bot .timestamp {
+    text-align: right;
+    margin-left: 4px;
+}
+
+.user .timestamp {
+    text-align: left;
+    margin-right: 4px;
+}
+
+#chips {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+#chips button {
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #EDF1F7;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+#chips .exit {
+    background: #F6C67B;
+    color: white;
+}
+
+#input-wrapper {
+    display: flex;
+    padding: 6px 8px;
+    border-top: 1px solid #eee;
+}
+
+#input-wrapper input {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+#input-wrapper {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+#input-wrapper button.send-arrow {
+    background: transparent;
+    color: #333;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 10px;
+}

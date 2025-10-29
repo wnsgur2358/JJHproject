@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>대회 일정</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/event/schedule.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:inline="javascript">
+        const userRole = /*[[${#authentication.principal.member.memberRole}]]*/ "USER";
+    </script>
+    <script th:src="@{/js/event/schedule.js}" defer></script>
+
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <div class="container">
+        <div class="header">
+            <h1>대회 일정</h1>
+            <div class="region-labels">
+                <span class="region-dot" style="background-color:#FFC3C3;"></span> 수도권
+                <span class="region-dot" style="background-color:#FFC582;"></span> 제주권
+                <span class="region-dot" style="background-color:#FFEDA3;"></span> 영남권
+                <span class="region-dot" style="background-color:#C7FAB8;"></span> 호남권
+                <span class="region-dot" style="background-color:#B5DBFF;"></span> 충청권
+                <span class="region-dot" style="background-color:#E7D0FF;"></span> 강원권
+            </div>
+        </div>
+        <div class="month-title" id="monthYear"></div>
+        <div style="text-align: center; margin-bottom: 10px;" th:if="${#authorization.expression('hasRole(''HOST'')')}">
+            <button class="register-btn my-btn" onclick="location.href='/event/my'" style="margin-right: 10px;">My</button>
+            <button class="register-btn register-event-btn" onclick="submitSelectedDate()">등록</button>
+        </div>
+        <div class="calendar-wrapper">
+            <img src="/img/back.png" class="calendar-nav-img left-arrow" onclick="changeMonth(-1)">
+            <img src="/img/go.png" class="calendar-nav-img right-arrow" onclick="changeMonth(1)">
+            <!-- 요일 헤더 -->
+            <div class="calendar-header">
+                <div class="day-header sunday">SUN</div>
+                <div class="day-header">MON</div>
+                <div class="day-header">TUE</div>
+                <div class="day-header">WED</div>
+                <div class="day-header">THU</div>
+                <div class="day-header">FRI</div>
+                <div class="day-header saturday">SAT</div>
+            </div>
+            <!-- 날짜 셀 -->
+            <div class="calendar" id="calendar"></div>
+        </div>
+    </div>
+</div>
+<div id="tooltip"></div>
+<div th:replace="~{common/footer::footer}"></div>
+
+
+</body>
+</html>

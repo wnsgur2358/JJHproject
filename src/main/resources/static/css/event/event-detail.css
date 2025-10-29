@@ -1,0 +1,90 @@
+#wrap {
+    max-width: 700px;
+    margin: 40px auto;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+h2 {
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 24px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: normal;
+}
+
+.description-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.description-box label {
+    width: 90px;
+    flex-shrink: 0;
+    font-weight: 600;
+    margin-top: 4px;
+}
+.info-box {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 14px;
+    font-size: 16px;
+}
+
+
+.info-box label {
+    font-weight: 600;
+    width: 90px;
+    flex-shrink: 0;
+}
+
+
+.event-description {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 15px;
+    text-align: left;
+    flex-grow: 1;
+    word-break: break-word;
+}
+#map {
+    width: 100%;
+    height: 300px;
+    margin: 16px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+.btn-wrap {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 30px;
+}
+.btn-wrap button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+}
+.back-btn {
+    background-color: #555;
+    color: white;
+}
+.delete-btn {
+    background-color: #f33;
+    color: white;
+}
+.delete-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

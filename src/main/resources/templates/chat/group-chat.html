@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chat/group-chat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webstomp-client@1/dist/webstomp.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/chat/group-chat.js}" defer></script>
+
+</head>
+<body>
+<!--  <div th:replace="~{common/header::header}"></div>-->
+  <div id="wrap">
+    <h2 class="page-title">group chat</h2>
+      <div id="group-chat-detail-dto"
+           th:data-login-email = "${#authentication.name}"
+           th:data-room-id = "${roomId}"
+      >
+      </div>
+    <div class="container">
+      <div class="card">
+        <div class="topbar">
+         <button class="participant-list" id="openPanelBtn">참가자 목록</button>
+         <div class="card-title">채팅</div>
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="messageInput" placeholder="메시지입력" />
+        <button id="sendBtn">전송</button>
+      </div>
+    </div>
+    <!-- 왼쪽 사이드 패널 -->
+    <div class="side-panel" id="sidePanel">
+      <div class="side-panel-header">
+          <h4>채팅 참가자 목록</h4>
+          <div>
+              <button class="refresh-list">⟳</button>
+              <button class="close-panel" id="closePanelBtn">&times;</button>
+          </div>
+      </div>
+      <div class="side-panel-content">
+
+
+
+          <!-- 여기에 동적으로 불러올 수도 있음 -->
+      </div>
+    </div>
+
+      <!-- 딤처리 -->
+<!--    <div class="overlay" id="overlay"></div>-->
+  </div>
+
+  <div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

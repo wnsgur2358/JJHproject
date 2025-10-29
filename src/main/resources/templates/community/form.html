@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${boardId != null} ? '게시글 수정' : '게시글 작성'">게시글 작성</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/community/common.css}">
+    <link rel="stylesheet" th:href="@{/css/community/board-form.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="flex-layout">
+<div class="page-wrapper">
+    <div th:replace="~{common/header::header}"></div>
+
+    <h2 style="text-align: center;" th:text="${boardId != null} ? '게시글 수정' : '게시글 작성'">게시글 작성</h2>
+
+    <div class="form-container">
+        <form th:action="@{${formAction}}"
+              th:object="${boardRequest}" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>제목</label>
+                <input type="text" th:field="*{title}" maxlength="100" required/>
+                <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <div class="form-group author-group">
+                <label>작성자</label>
+                <div class="author-display" th:text="${memberName}">작성자 이름</div>
+            </div>
+
+            <div class="form-group">
+                <label>카테고리</label>
+                <select th:field="*{category}" required>
+                    <option value="">-- 선택하세요 --</option>
+                    <option th:each="category : ${categories}"
+                            th:if="${isAdmin} or ${category.name() != 'ANNOUNCEMENT'}"
+                            th:value="${category}"
+                            th:text="${category.displayName}">
+                    </option>
+                </select>
+                <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+            </div>
+
+            <div class="form-group" th:if="${isAdmin}">
+                <label>
+                    <input type="checkbox" th:field="*{pinned}"/>
+                    상단 고정
+                </label>
+            </div>
+
+            <div class="form-group-editor">
+                <label for="editor">내용</label>
+                <div id="editor" class="toast-editor-container"></div>
+                <input type="hidden" th:field="*{content}" id="hiddenContent"/>
+                <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+            </div>
+
+            <div class="form-group file-upload-group">
+                <label for="fileInput" class="file-upload-label">
+                    <img src="/img/attach-icon.png" alt="파일 첨부" class="attach-icon"/>
+                    <span>파일 첨부하기</span>
+                </label>
+                <input type="file" name="files" id="fileInput" multiple style="display: none;"/>
+            </div>
+
+            <div class="attachment-box">
+                <strong>첨부파일</strong>
+                <ul id="existingAttachments">
+                    <li id="emptyMessage" th:if="${attachments == null or attachments.isEmpty()}">첨부된 파일이 없습니다.</li>
+                    <li th:each="att : ${attachments}" th:attr="data-id=${att.id}" class="attachment-item">
+                        <img th:src="@{/img/attach-file.png}" alt="첨부 아이콘" class="attachment-icon"/>
+                        <a th:href="@{/community/download-force/{filename}(filename=${att.savedName})}"
+                           th:text="${att.originalName}" target="_blank"></a>
+                        <button type="button" class="file-delete-btn btn-comment-delete" th:data-id="${att.id}">x</button>
+                    </li>
+                </ul>
+            </div>
+
+            <input type="hidden" name="deletedAttachmentIds" id="deletedAttachmentIds"/>
+
+            <div style="text-align: center;">
+                <button type="submit" th:text="${boardId != null} ? '수정 완료' : '등록'" class="submit-btn">등록</button>
+                <button type="button" onclick="confirmCancel()" class="btn-outline-danger">취소</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/compressorjs@1.2.1/dist/compressor.min.js"></script>
+
+<script th:inline="javascript">
+    function confirmCancel() {
+        // if (confirm("작성 중인 내용이 삭제됩니다. 목록으로 돌아가시겠습니까?")) {
+        //     window.location.href = "/community";
+        // }
+
+        Swal.fire({
+            text: '작성 중인 내용이 삭제됩니다. 목록으로 돌아가시겠습니까?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: '예',
+            cancelButtonText: '아니요'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // 사용자가 '네'를 눌렀을 때 처리
+                window.location.href = "/community";
+
+            } else {
+                // 사용자가 '아니요' 눌렀을 때
+
+            }
+        });
+
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const editor = new toastui.Editor({
+            el: document.querySelector('#editor'),
+            height: '500px',
+            initialEditType: 'wysiwyg',
+            previewStyle: 'tab',
+            toolbarItems: [
+                ['heading', 'bold', 'italic', 'strike'],
+                ['ul', 'ol'],
+                ['table', 'link', 'image']
+            ],
+            hooks: {
+                addImageBlobHook: (blob, callback) => {
+                    new Compressor(blob, {
+                        quality: 0.7,
+                        maxWidth: 1200,
+                        success(compressedBlob) {
+                            const formData = new FormData();
+                            formData.append('image', compressedBlob);
+                            fetch('/community/image-upload', {
+                                method: 'POST',
+                                body: formData
+                            })
+                                .then(res => res.json())
+                                .then(data => {
+                                    callback(data.url, '이미지', `<img src="${data.url}" loading="lazy" style="max-width:100%; height:auto; display:block;" />`);
+                                });
+                        },
+                        error(err) {
+                            console.error('이미지 압축 오류:', err);
+                        }
+                    });
+                }
+            }
+        });
+
+        const hiddenContent = document.getElementById('hiddenContent');
+        if (hiddenContent.value) {
+            editor.setHTML(hiddenContent.value);
+        }
+
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const htmlContent = editor.getHTML().trim();
+            const plainText = editor.getMarkdown().replace(/[\n\r]/g, '').trim();
+
+            if (!plainText) {
+                //alert("내용은 필수입니다.");
+                Swal.fire({text: '내용은 필수입니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                e.preventDefault();
+                return;
+            }
+
+            hiddenContent.value = htmlContent;
+        });
+    });
+
+    const fileInput = document.getElementById('fileInput');
+    const existingUl = document.getElementById("existingAttachments");
+    let fileList = [];
+
+    fileInput.addEventListener('change', function () {
+        const selectedFiles = Array.from(fileInput.files);
+        fileList = fileList.concat(selectedFiles);
+
+        const seen = new Set();
+        fileList = fileList.filter(file => {
+            if (seen.has(file.name)) return false;
+            seen.add(file.name);
+            return true;
+        });
+
+        updateAttachmentBox();
+    });
+
+    function updateAttachmentBox() {
+        if (!existingUl) return;
+
+        const existingFileNames = new Set(
+            Array.from(existingUl.querySelectorAll('li a, li span')).map(el => el.textContent.trim())
+        );
+
+        fileList.forEach((file, index) => {
+            if (existingFileNames.has(file.name)) return;
+
+            const li = document.createElement("li");
+            li.classList.add("attachment-item", "new-file");
+
+            const icon = document.createElement("img");
+            icon.src = "/img/attach-file.png";
+            icon.alt = "첨부 아이콘";
+            icon.className = "attachment-icon";
+
+            const fileName = document.createElement("span");
+            fileName.textContent = file.name;
+            fileName.style.color = "#555";
+
+            const delBtn = document.createElement("button");
+            delBtn.textContent = "x";
+            delBtn.type = "button";
+            delBtn.className = "file-delete-btn btn-comment-delete";
+            delBtn.onclick = () => {
+                fileList.splice(index, 1);
+                li.remove();
+                updateInputFiles();
+            };
+
+            li.appendChild(icon);
+            li.appendChild(fileName);
+            li.appendChild(delBtn);
+            existingUl.appendChild(li);
+
+            const emptyMsg = document.getElementById("emptyMessage");
+            if (emptyMsg) emptyMsg.remove();
+        });
+
+        updateInputFiles();
+    }
+
+    function updateInputFiles() {
+        const dataTransfer = new DataTransfer();
+        fileList.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+    }
+
+    const deletedIds = new Set();
+    document.addEventListener("click", function (e) {
+        if (e.target.classList.contains("file-delete-btn") && e.target.dataset.id) {
+            const attachmentId = e.target.dataset.id;
+
+            fetch(`/community/attachments/${attachmentId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            }).then(response => {
+                if (response.ok) {
+                    e.target.closest("li").remove();
+                    deletedIds.add(attachmentId);
+                    document.getElementById("deletedAttachmentIds").value = Array.from(deletedIds).join(",");
+                } else if (response.status === 403) {
+                    //alert("삭제 권한이 없습니다.");
+                    Swal.fire({text: '삭제 권한이 없습니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                } else {
+                    //alert("삭제 실패");
+                    Swal.fire({text: '삭제 실패', icon: 'warning', confirmButtonText: '확인'});
+
+                }
+            }).catch(err => {
+                console.error("삭제 요청 오류:", err);
+                //alert("오류 발생");
+                Swal.fire({text: '오류 발생', icon: 'warning', confirmButtonText: '확인'});
+
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

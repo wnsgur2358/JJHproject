@@ -1,0 +1,285 @@
+#wrap {
+    width: 70%;
+    margin: 0 auto;
+    min-height: calc(100vh - 120px);
+}
+
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 55%;
+    margin: 0 auto;
+
+    position: relative;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: 800px;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 50px; /* 원하는 높이로 조절 */
+}
+
+.participant-list{
+    z-index: 1;
+}
+
+.card-title {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.chat-box {
+    flex: 1;  /* ✅ 여기가 핵심: 가능한 높이 모두 차지 */
+    overflow-y: auto;
+    border: 2px solid dodgerblue;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+
+    /* 추가: 메시지를 세로로 정렬 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 메시지 간 간격 */
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    max-width: 66%;
+    display: block;
+    padding: 10px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    position: relative;
+}
+
+.sent {
+    text-align: left;
+    background-color: #EAF7FF; /* 보낸 메시지 배경 */
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.received {
+    text-align: left;
+    background-color: #fff; /* 받은 메시지 배경 */
+    border: 1px solid #ddd;
+    align-self: flex-start;
+    margin-right: auto;
+}
+
+.chat-message strong {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.chat-timestamp {
+    display: block;
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 5px;
+    text-align: right;
+}
+
+#messageInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;  /* ✅ 이게 핵심 */
+
+}
+
+#sendBtn {
+    background-color: dodgerblue;
+    color: white;
+    padding: 12px 20px;
+    border: 2px solid #1c6cd9;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+
+    box-shadow: 0 4px #1a5fc8, 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease-in-out;
+
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#sendBtn:hover {
+    background-color: #1e90ff;
+}
+
+#sendBtn:active {
+    box-shadow: 0 2px #154fa8, 0 2px 4px rgba(0, 0, 0, 0.15);
+    transform: translateY(2px);
+    background-color: #187bcd;
+}
+
+.chat-message.system-message {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+    margin: 10px 0;
+}
+
+/* ===== 왼쪽 사이드 패널 ===== */
+.side-panel {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 280px;
+    height: 90%; /* 브라우저 높이의 90% */
+    background-color: #fff;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+    z-index: 1001;
+
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+}
+
+.side-panel.show {
+    left: 0;
+}
+
+.side-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
+    flex: 0 0 auto; /* 고정 높이 */
+}
+
+.side-panel-content {
+    flex: 1 1 auto; /* 나머지 높이 모두 차지 */
+    overflow-y: auto; /* 스크롤 표시 */
+    padding: 1rem;
+}
+
+.close-panel {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.refresh-list {
+    background: none;           /* 배경 없음 */
+    border: none;               /* 테두리 없음 */
+    font-size: 20px;            /* 아이콘 크기 */
+    color: black;               /* 글자(이모지) 색상 = 검정 */
+    cursor: pointer;            /* 마우스 올리면 포인터 표시 */
+    margin-left: auto;          /* 오른쪽 정렬 (flex일 때) */
+    padding: 4px 8px;           /* 클릭 범위 확보 */
+}
+
+.refresh-list:hover {
+    transform: rotate(90deg); /* 회전 효과 */
+}
+
+#openPanelBtn{
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+#openPanelBtn:hover{
+    background-color: royalblue;
+}
+
+.enter-btn {
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.enter-btn:hover {
+    background-color: #0056b3;
+}
+
+.side-panel-content div{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0 5px;
+}
+
+.exit-btn {
+    background-color: #20c997;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+.exit-btn:hover {
+    background-color: #138d75;
+}
+
+.exit-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.enter-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
+/*!* ===== 딤 처리 ===== *!*/
+/*.overlay {*/
+/*    position: fixed;*/
+/*    top: 0;*/
+/*    left: 0;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    background-color: rgba(0, 0, 0, 0.4);*/
+/*    display: none;*/
+/*    z-index: 1000;*/
+/*}*/
+
+/*.overlay.show {*/
+/*    display: block;*/
+/*}*/
+

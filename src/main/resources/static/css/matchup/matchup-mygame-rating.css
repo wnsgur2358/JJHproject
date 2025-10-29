@@ -1,0 +1,311 @@
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+.topbar-buttons {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.sended-btn,
+.received-btn,
+.topbar-buttons button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.sended-btn:hover,
+.received-btn:hover,
+.topbar-buttons button:hover{
+    background-color: royalblue;
+}
+
+.received-btn.disabled{
+    background-color: #bcbcbc;
+    color: white;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: auto;
+}
+
+/* 마우스 올려도 hover 효과 제거 */
+.received-btn.disabled:hover{
+    background-color: #bcbcbc;
+    color: white;
+}
+
+
+/* ===== 게시판 테이블 ===== */
+.board-table {
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.board-table th,
+.board-table td {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.board-table td {
+    background-color: #ffffff;
+}
+
+.board-table tr:hover {
+    background-color: #e1f3ff;
+}
+
+/* ===== 테이블 열 너비 설정 ===== */
+.col-target {width: 10%}
+.col-received-manner-score{width: 10%}
+.col-received-manner-score{width:10%}
+.col-received-review{width:10%}
+.col-sended-manner-score{width:10%}
+.col-sended-manner-score{width:10%}
+.col-sended-review{width:10%}
+
+
+
+
+/* ===== 페이징 ===== */
+#paging-container button {
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color : white;
+}
+
+/* hover 효과도 동일하게 */
+#paging-container button:hover {
+    background-color: #e0e0e0;
+}
+
+/* 활성화된 버튼 */
+#paging-container button.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+    cursor: not-allowed;
+}
+
+/* 페이징 영역 가운데 정렬 */
+#paging-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.no-result {
+    text-align: center !important;
+    color: #777;
+    padding: 2rem 0;
+}
+
+.truncate {
+    width: 448px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+
+}
+
+/*모달창*/
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 24px;
+    border-radius: 12px;
+    width: 380px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    animation: fadeIn 0.3s ease;
+    max-height: 60vh;
+    overflow-y: auto;              /* 내용이 넘치면 세로 스크롤 생성 */
+}
+
+
+.modal-content h3 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+
+.modal-content label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+    margin-top: 14px;
+}
+
+.modal-content select,
+.modal-content textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.modal-content select:focus,
+.modal-content textarea:focus {
+    outline: none;
+    border-color: #e53935;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
+}
+
+.modal-content textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* ===== 폼 그룹 ===== */
+.form-group {
+    margin-bottom: 2px;
+}
+
+.readonly-box,
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #3498db;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    outline: none;
+}
+
+textarea{
+    overflow: hidden;
+    resize: none;
+}
+
+.readonly-box {
+    white-space: pre-wrap; /* 줄바꿈 및 공백 유지 */
+    min-height: 100px;
+}
+.readonly-box.clickable{
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+
+}
+.readonly-box.clickable:hover {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); /* 연하게 */
+    background-color: #fff;
+    outline: none;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.modal-buttons button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.modal-buttons button:first-child {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background-color: royalblue;
+}
+
+.modal-buttons button:last-child {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.modal-buttons button:last-child:hover {
+    background-color: #ebebeb;
+}
+
+
+

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-board-edit.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/matchup/matchup-board-edit.js}" defer></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h2 class="page-title">MATCHUP 글 수정하기</h2>
+    <div id="matchup-board-edit-dto"
+         th:data-sports-type-name="${resMatchupBoardDto.sportsTypeName}"
+         th:data-current-participant-count="${resMatchupBoardDto.currentParticipantCount}"
+         th:data-max-participants="${resMatchupBoardDto.maxParticipants}"
+         th:data-min-manner-temperature="${resMatchupBoardDto.minMannerTemperature}"
+         th:data-original-name="${resMatchupBoardDto.originalName}"
+         th:data-saved-name="${resMatchupBoardDto.savedName}"
+         th:data-my-manner-temperature="${resMatchupBoardDto.myMannerTemperature}"
+         th:data-match-datetime = "${resMatchupBoardDto.matchDatetime}"
+         th:data-match-endtime = "${resMatchupBoardDto.matchEndtime}"
+    >
+    </div>
+    <div class="form-container">
+        <form th:object="${resMatchupBoardDto}" th:action="@{/matchup/board/edit}" method="post" enctype="multipart/form-data" >
+            <input type="hidden" th:field="*{boardId}"/>
+            <input type="hidden" th:field="*{writerEmail}"/>
+            <input type="hidden" th:field="*{writerName}"/>
+            <input type="hidden" th:field="*{originalName}"/>
+            <input type="hidden" th:field="*{savedName}"/>
+            <input type="hidden" th:field="*{savedPath}"/>
+            <input type="hidden" th:field="*{myMannerTemperature}"/>
+
+            <div class="form-group">
+                <label>
+                    종목
+                    <select th:field="*{sportsTypeName}">
+                        <option value="SOCCER" id="option-soccer">SOCCER</option>
+                        <option value="FUTSAL" id="option-futsal">FUTSAL</option>
+                    </select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    소속팀
+                    <input type="text" th:field="*{teamName}" readonly>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    팀 소개(300자)
+                    <textarea cols="30" rows="5" th:field="*{teamIntro}" required maxlength="300">
+                    </textarea>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>경기장 예약 내역</label>
+
+                <!-- 파일 미리보기 영역 -->
+                <div id="reservationLoadBox">
+                    <span>
+                      <a id="reservationPreviewLink"
+                         class="file-link"
+                         th:text="${resMatchupBoardDto.originalName}">
+                      </a>
+                    </span>
+                </div>
+
+                <!-- 파일 업로드 영역 (초기 숨김) -->
+                <div id="reservationFileBox" style="display: none;">
+                    <input type="file" id="reservationFileInput" th:field="*{reservationFile}" />
+                </div>
+
+                <!-- 파일 변경 버튼 -->
+                <button type="button" id="toggleBtn">파일 변경</button>
+            </div>
+            <div class="form-group">
+                <label>
+                    경기장명(100자)
+                    <input type="text" placeholder="경기장명" th:field="*{sportsFacilityName}" required maxlength="100">
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    경기장 주소(100자)
+                    <div class="address-row">
+                        <input type="text" th:field="*{sportsFacilityAddress}" placeholder="주소 찾기 버튼을 누르세요." required readonly maxlength="100">
+                        <input type="button" onclick="getAddress()" value="주소 찾기">
+                    </div>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    경기 날짜
+                    <input type="text" id="matchDate" readonly>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    현재 참가 인원
+                    <input type="text" th:field="*{currentParticipantCount}" required readonly>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    총 모집 인원
+                    <select th:field="*{maxParticipants}" required></select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label id="minMannerTemperatureLabel">입장 가능 매너 온도</label>
+
+                <select th:field="*{minMannerTemperature}" required></select>
+
+            </div>
+            <div class="form-group">
+                <label>
+                    경기 방식 소개(1000자)
+                    <textarea th:field="*{matchDescription}" required maxlength="1000">
+                    </textarea>
+                </label>
+            </div>
+
+            <div class="btn-group">
+                <button type="submit" >저장</button>
+                <button type="button" class="cancel-btn" onclick="goBack()">취소</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

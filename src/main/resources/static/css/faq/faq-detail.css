@@ -1,0 +1,81 @@
+.titlefaq {
+    text-align: center;
+    font-weight: 800;
+    font-size: 28px;
+    margin-top: 40px;
+}
+
+.rectangle {
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid beige;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+.post-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e2e2;
+}
+
+.meta-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: #f0f3f5;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.btn-box {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn-edit {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.back-linkk {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #255e93;
+    text-decoration: none;
+}
+
+.back-linkk:hover {
+    text-decoration: underline;
+}
+.btn-edit {
+    background-color: forestgreen;
+    color: white;
+    padding: 7px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+    background-color: darkgreen;
+}
+
+.faq-content {
+    white-space: pre-line;
+}

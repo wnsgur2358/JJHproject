@@ -1,0 +1,147 @@
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* 이거 추가: 버튼 그룹 우측 정렬 */
+.topbar-buttons {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+/*.button-group,*/
+/*.topbar-buttons button {*/
+/*    background-color: dodgerblue;*/
+/*    color: white;*/
+/*    padding: 10px 20px;*/
+/*    border: none;*/
+/*    border-radius: 6px;*/
+/*    font-size: 15px;*/
+/*    font-weight: bold;*/
+/*    cursor: pointer;*/
+/*    text-decoration: none;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*.button-group:hover,*/
+/*.topbar-buttons button:hover{*/
+/*    background-color: royalblue;*/
+/*}*/
+
+.topbar-buttons .back-btn {
+    background-color: #888;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.topbar-buttons .back-btn:hover {
+    background-color: #666;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 게시판 테이블 ===== */
+.board-table {
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.board-table th,
+.board-table td {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.board-table td {
+    background-color: #ffffff;
+}
+
+.board-table tr:hover {
+    background-color: #e1f3ff;
+}
+
+/* ===== 테이블 열 너비 설정 ===== */
+.col-type {width:5%}
+.col-sports-facility-address{width:25%}
+.col-match-date {width:20%}
+.col-quota {width: 7%}
+.col-detail {width: 10%}
+.col-eval {width: 10%}
+
+
+/* ===== 페이징 ===== */
+#paging-container button {
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color : white;
+}
+
+/* hover 효과도 동일하게 */
+#paging-container button:hover {
+    background-color: #e0e0e0;
+}
+
+/* 활성화된 버튼 */
+#paging-container button.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+    cursor: not-allowed;
+}
+
+/* 페이징 영역 가운데 정렬 */
+#paging-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.no-result {
+    text-align: center !important;
+    color: #777;
+    padding: 2rem 0;
+}
+
+.truncate {
+    width: 327px;           /* 너비 고정 */
+    white-space: nowrap;    /* 줄바꿈 없음 */
+    overflow: hidden;       /* 넘친 부분 숨김 */
+    text-overflow: ellipsis; /* 말줄임표 (...) 표시 */
+}

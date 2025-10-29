@@ -1,0 +1,360 @@
+.navbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 4px 24px;
+    background-color: white;
+}
+
+/* 세 영역 구분 */
+.navbar-left {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-center {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 70px;
+}
+
+.navbar-right {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 32px;
+}
+
+/* 로고 */
+.logo {
+    height: 100px;
+    max-height: 100px;
+    padding: 4px 24px;
+    margin: 0;
+}
+
+/* 중앙 메뉴 */
+.navbar-center a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+/* 아이콘 (채팅, 알림) */
+.navbar .icons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-right: 16px;
+}
+
+/* 아이콘 이미지 */
+.navbar .icons img {
+    height: 26px;
+    cursor: pointer;
+}
+
+/* 로그인/마이/로그아웃 버튼 */
+.navbar .auth {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.navbar .auth a {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    /* margin 제거 */
+}
+
+.auth .btn {
+    padding: 14px 24px;
+    border: solid black 1px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+
+
+.blue_hr {
+    border-top: 6px solid #255E93;
+    margin-top: 6px;
+}
+
+
+/* 알림 열기 버튼 */
+#openMiniDrawerBtn {
+
+}
+
+/* 미니 알림창 */
+.mini-drawer {
+
+    position: absolute;
+    top: 120%;
+    left: 10%;
+    transform: translateX(-50%);
+    width: 280px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    display: none;
+    z-index: 9999;
+    max-height: 300px;        /* 내용이 많아질 때 제한 높이 */
+    overflow-y: auto;         /* 내부 스크롤 활성화 */
+}
+
+.mini-drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mini-drawer-header h4 {
+    margin: 0;
+}
+
+.close-mini {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.notification {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column; /* 아래로 쌓기 */
+    align-items: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.notification-date {
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-top: 3px;
+}
+
+.notification span {
+    word-break: break-word;   /* 단어 중간도 줄바꿈 허용 */
+    white-space: normal;      /* 텍스트가 줄바꿈 되도록 */
+    overflow-wrap: break-word;
+    width: 100%;              /* 부모 영역에 꽉 차게 */
+}
+
+/* 마우스 오버 시 배경색 */
+.notification:hover {
+    background-color: #f0f0f0;
+}
+
+/* 클릭 순간 (누르고 있는 상태) */
+.notification:active {
+    background-color: #d0d0d0;
+}
+
+/* 클릭 완료 후 스타일 (JS에서 클래스 추가해줌) */
+.notification.clicked {
+    background-color: #e0e0e0;
+    color: #999;
+}
+
+@keyframes bell-ring {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0); }
+}
+.bell-shake {
+    animation: bell-ring 0.6s ease-in-out;
+}
+.notification {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.notification:hover {
+    background-color: #f1f1f1;
+}
+.notification-date {
+    display: block;
+    font-size: 11px;
+    color: gray;
+    margin-top: 4px;
+}
+
+.notification-date {
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-top: 3px;
+}
+
+.notification span {
+    word-break: break-word;   /* 단어 중간도 줄바꿈 허용 */
+    white-space: normal;      /* 텍스트가 줄바꿈 되도록 */
+    overflow-wrap: break-word;
+    width: 100%;              /* 부모 영역에 꽉 차게 */
+}
+
+/* 마우스 오버 시 배경색 */
+.notification:hover {
+    background-color: #f0f0f0;
+}
+
+/* 클릭 순간 (누르고 있는 상태) */
+.notification:active {
+    background-color: #d0d0d0;
+}
+
+/* 클릭 완료 후 스타일 (JS에서 클래스 추가해줌) */
+.notification.clicked {
+    background-color: #e0e0e0;
+    color: #999;
+}
+
+
+/* ===== 반응형 ===== */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 10px;
+    }
+
+    .logo {
+        height: 70px;
+        margin-bottom: 8px;
+    }
+
+    .navbar-center {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+        align-items: center;
+    }
+
+    .navbar-center a {
+        font-size: 16px;
+        padding: 2px 4px;
+    }
+
+    .navbar .icons {
+        justify-content: center;
+        gap: 12px;
+        margin: 10px 0;
+    }
+
+    .navbar .icons img {
+        height: 22px;
+    }
+
+    .navbar .auth {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .auth .btn {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+
+
+/*메시지 히스토리*/
+
+/* 미니 알림창 */
+.mini-drawer-history {
+    position: absolute;
+    top: 120%;
+    left: 10%;
+    transform: translateX(-50%);
+    width: 280px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    padding: 15px;
+    display: none;
+    z-index: 9999;
+    max-height: 300px;        /* 내용이 많아질 때 제한 높이 */
+    overflow-y: auto;         /* 내부 스크롤 활성화 */
+}
+
+.mini-drawer-header-history {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mini-drawer-header-history h4 {
+
+    margin: 0;
+}
+
+.close-mini-history {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.notification-history {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column; /* 아래로 쌓기 */
+    align-items: flex-start;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    background-color: #e0e0e0;
+    color: #999;
+}
+
+.notification-date-history {
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-top: 3px;
+}
+
+.notification-history span {
+    word-break: break-word;   /* 단어 중간도 줄바꿈 허용 */
+    white-space: normal;      /* 텍스트가 줄바꿈 되도록 */
+    overflow-wrap: break-word;
+    width: 100%;              /* 부모 영역에 꽉 차게 */
+}
+
+/* 마우스 오버 시 배경색 */
+.notification-history:hover {
+    background-color: white;
+}
+
+/* 클릭 순간 (누르고 있는 상태) */
+.notification-history:active {
+    background-color: #d0d7e1;
+}
+
+/*!* 클릭 완료 후 스타일 (JS에서 클래스 추가해줌) *!*/
+/*.notification-history.clicked {*/
+/*    background-color: #e0e0e0;*/
+/*    color: #999;*/
+/*}*/

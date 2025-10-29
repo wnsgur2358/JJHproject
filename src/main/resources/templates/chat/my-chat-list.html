@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chat/my-chat-list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <script th:src="@{/js/chat/my-chat-list.js}" defer></script>
+</head>
+<body>
+  <div th:replace="~{common/header::header}"></div>
+  <div id="wrap">
+    <h1>chat</h1>
+    <div class="chat-room-header chat-card">
+        <div class="chat-col chat-name">채팅방이름</div>
+        <div class="chat-col chat-group">그룹 채팅 여부</div>
+        <div class="chat-col chat-unread">읽지 않은 메시지</div>
+        <div class="chat-col chat-actions">
+            입장/퇴장
+        </div>
+    </div>
+    <div class="chat-room-list">
+
+    </div>
+  </div>
+
+  <div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>FAQ</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/aibot/aichatbot.css}" />
+    <link rel="stylesheet" th:href="@{/css/faq/faq-list.css}" />
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h1 class="titlefaq">FAQ</h1>
+    <p class="title2faq">자주 묻는 질문</p>
+    <div class="faq-toolbar">
+        <div class="faq-left">
+            <form method="get" th:action="@{/cs}">
+                <label for="category"></label>
+                <select name="category" id="category">
+                    <option value="" th:selected="${category == null}">전체 보기</option>
+                    <option value="TUTORIAL" th:selected="${category?.name() == 'TUTORIAL'}">이용가이드</option>
+                    <option value="ACCOUNT" th:selected="${category?.name() == 'ACCOUNT'}">계정</option>
+                    <option value="TEAM_GUEST" th:selected="${category?.name() == 'TEAM_GUEST'}">Team / Guest</option>
+                    <option value="REPORT" th:selected="${category?.name() == 'REPORT'}">신고</option>
+                    <option value="MANNER_TEMPERATURE" th:selected="${category?.name() == 'MANNER_TEMPERATURE'}">매너온도</option>
+                </select>
+                <label for="keyword"></label>
+                <div class="search-box">
+                    <input type="text" id="keyword" name="keyword" placeholder="검색.." th:value="${keyword}" />
+<!--                    검색 버튼 추가 -->
+                    <button type="submit" class="btn-search">검색</button>
+                </div>
+            </form>
+        </div>
+        <div class="faq-right">
+            <a href="/inquiry" class="btninquiry">1:1 문의</a>
+            <th:block th:if="${isAdmin}">
+                <a href="/faq/register" class="btnsubmit">등록하기</a>
+            </th:block>
+        </div>
+    </div>
+    <table>
+        <thead>
+        <tr>
+            <th class="col-no">No.</th>
+            <th class="col-category">카테고리</th>
+            <th class="col-title">제목</th>
+            <th class="col-date">작성일</th>
+            <th class="col-modified" th:if="${isAdmin}">수정일</th>
+            <th class="col-delete" th:if="${isAdmin}">삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="faq, stat : ${faqList}">
+            <td class="col-no" th:text="${page.number * page.size + stat.index + 1}">No</td>
+            <td class="col-category" th:text="${faq.faqCategory.label}">카테고리</td>
+            <td class="col-title">
+                <a class="board-title-link" th:href="@{/faq/detail/{id}(id=${faq.faqId})}" th:text="${faq.faqTitle}">제목</a>
+            </td>
+            <td class="col-date" th:if="${!isAdmin}" th:text="${#temporals.format(faq.createdDate, 'yyyy-MM-dd')}">작성일</td>
+            <td class="col-modified" th:if="${isAdmin}" th:text="${#temporals.format(faq.modifiedDate, 'yyyy-MM-dd HH:mm')}">수정일</td>
+            <td class="col-date" th:if="${isAdmin}" th:text="${#temporals.format(faq.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</td>
+            <td class="col-delete" th:if="${isAdmin}">
+                <form th:action="@{/faq/delete/{id}(id=${faq.faqId})}" method="post">
+                    <button type="submit" class="delete">&times;</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pagination">
+        <!-- 처음 페이지로 이동 -->
+        <a th:if="${!page.first}" th:href="@{/cs(page=0, category=${category}, keyword=${keyword})}">&laquo;</a>
+
+        <!-- 이전 페이지로 이동 -->
+        <a th:if="${page.number > 0}" th:href="@{/cs(page=${page.number - 1}, category=${category}, keyword=${keyword})}">이전</a>
+
+        <!-- 페이지 번호 반복 출력 -->
+        <a th:each="i : ${#numbers.sequence(0, page.totalPages - 1)}"
+           th:href="@{/cs(page=${i}, category=${category}, keyword=${keyword})}"
+           th:classappend="${page.number == i} ? 'active'">
+            <span th:text="${i + 1}">1</span>
+        </a>
+
+        <!-- 다음 페이지로 이동 -->
+        <a th:if="${page.number < page.totalPages - 1}" th:href="@{/cs(page=${page.number + 1}, category=${category}, keyword=${keyword})}">다음</a>
+
+        <!-- 마지막 페이지로 이동 -->
+        <a th:if="${!page.last}" th:href="@{/cs(page=${page.totalPages - 1}, category=${category}, keyword=${keyword})}">&raquo;</a>
+    </div>
+
+</div>
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

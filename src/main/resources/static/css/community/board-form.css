@@ -1,0 +1,202 @@
+/* ===== 공통 레이아웃 ===== */
+.form-container {
+    width: 90%;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 40px;
+    background-color: #fff;
+    border-radius: 12px;
+    border: 1px solid beige;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== 폼 그룹 ===== */
+.form-group {
+    margin-bottom: 2px;
+}
+
+.form-group.author-group {
+    margin-top: 2px;
+    margin-bottom: 20px;
+}
+
+.form-group-editor {
+    margin-bottom: 20px;
+}
+
+/* ===== 에디터 ===== */
+.toast-editor-container {
+    border: none;
+    padding: 0;
+    margin-top: 8px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.toastui-editor-defaultUI {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* ===== 버튼 ===== */
+.submit-btn{
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover{
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.btn-outline-danger {
+    background-color: #c8c8c8;
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+    background-color: #aaa;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== 파일 업로드 ===== */
+.file-upload-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.file-upload-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #f4faff;
+    border: 1px solid #a0d2f5;
+    border-radius: 8px;
+    color: #0074cc;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: fit-content;
+}
+
+.file-upload-label:hover {
+    background-color: #e2f3ff;
+}
+
+.attach-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* ===== 첨부파일 박스 ===== */
+.attachment-box {
+    margin: 20px 0 15px;
+    padding: 20px 25px;
+    background-color: #f4f7fa;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.attachment-box strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #222;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #ccc;
+}
+
+.attachment-box ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 8px;
+}
+
+.attachment-box li {
+    margin-bottom: 6px;
+}
+
+/* ===== 첨부파일 항목 ===== */
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.attachment-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.75;
+    transition: transform 0.2s ease;
+}
+
+.attachment-item:hover .attachment-icon {
+    transform: scale(1.1);
+    opacity: 0.95;
+}
+
+.attachment-box a {
+    color: royalblue;
+    text-decoration: none;
+    word-break: break-word;
+}
+
+.attachment-box a:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+/* ===== 삭제 버튼 ===== */
+.file-delete-btn,
+.attachment-item .file-delete-btn {
+    background: none;
+    border: none;
+    color: #f44336;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.file-delete-btn:hover,
+.attachment-item .file-delete-btn:hover {
+    background-color: lemonchiffon;
+}
+
+/* ===== 파일 미리보기 영역 (추가 기능용) ===== */
+.file-preview div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.file-preview button {
+    color: red;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}

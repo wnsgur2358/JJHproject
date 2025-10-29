@@ -1,0 +1,159 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 목록</title>
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/community/common.css}">
+    <link rel="stylesheet" th:href="@{/css/community/board-list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+</head>
+<body class="flex-layout">
+<div class="page-wrapper">
+    <div th:replace="~{common/header::header}"></div>
+
+    <h2 class="page-title" th:text="${selectedCategory != null} ? ${selectedCategory.displayName} : '자유게시판'">자유게시판</h2>
+
+    <div class="board-top-bar">
+        <div class="category-select-box">
+            <label>
+                <select class="category-select">
+                    <option th:each="cat : ${categories}"
+                            th:value="${cat}"
+                            th:text="${cat.displayName}"
+                            th:selected="${cat} == ${selectedCategory}">
+                    </option>
+                </select>
+            </label>
+        </div>
+        <a th:href="@{/community/new}" class="button write-button">게시글 작성</a>
+    </div>
+
+    <div id="board-list">
+        <table class="board-table">
+            <thead>
+            <tr>
+                <th class="col-no">NO.</th>
+                <th class="col-category">카테고리</th>
+                <th class="col-title">제목</th>
+                <th class="col-author">작성자</th>
+                <th class="col-date">작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 공지글 (상단 고정글) -->
+            <tr th:each="board : ${pinnedPosts}" class="pinned-row">
+                <td class="notice-cell">공지</td>
+                <td th:text="${board.categoryName}"></td>
+                <td>
+                    <a class="board-title-link"
+                       th:href="@{'/community/' + ${board.id}}">
+                        <span class="pinned-icon">📌</span>
+                        <span th:text="${board.title}"></span>
+                        <span class="comment-count"
+                              th:if="${board.commentCount > 0}"
+                              th:text="' [' + ${board.commentCount} + ']'">
+                        </span>
+                    </a>
+                </td>
+                <td th:text="${board.authorName}"></td>
+                <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+
+            <!-- 일반게시글 -->
+            <tr th:each="board, iterStat : ${boardsPage.content}">
+                <td th:text="${boardsPage.totalElements - (boardsPage.number * boardsPage.size + iterStat.index)}"></td>
+                <td th:text="${board.categoryName}"></td>
+                <td>
+                    <a class="board-title-link"
+                       th:href="@{'/community/' + ${board.id}}">
+                        <span th:text="${board.title}"></span>
+                        <span class="comment-count"
+                              th:if="${board.commentCount > 0}"
+                              th:text="' [' + ${board.commentCount} + ']'">
+                        </span>
+                    </a>
+                </td>
+                <td th:text="${board.authorName}"></td>
+                <td th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination">
+            <a class="page-link"
+               th:if="${boardsPage.number > 0}"
+               th:data-page="0"
+               href="#">&laquo;</a>
+
+            <a class="page-link"
+               th:if="${boardsPage.hasPrevious()}"
+               th:data-page="${boardsPage.number - 1}"
+               href="#">이전</a>
+
+            <a class="page-link"
+               th:each="i : ${pageNumbers}"
+               th:data-page="${i}"
+               th:text="${i + 1}"
+               th:classappend="${i == boardsPage.number} ? 'active' : ''"
+               href="#"></a>
+
+            <a class="page-link"
+               th:if="${boardsPage.hasNext()}"
+               th:data-page="${boardsPage.number + 1}"
+               href="#">다음</a>
+
+            <a class="page-link"
+               th:if="${boardsPage.number < boardsPage.totalPages - 1}"
+               th:data-page="${boardsPage.totalPages - 1}"
+               href="#">&raquo;</a>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script>
+    function reloadBoardList(page = 0, category = document.querySelector('.category-select')?.value) {
+        fetch(`/community?category=${category}&page=${page}`)
+            .then(response => response.text())
+            .then(html => {
+                const tempDom = document.createElement('div');
+                tempDom.innerHTML = html;
+
+                const newBoardList = tempDom.querySelector('#board-list');
+                const currentBoardList = document.querySelector('#board-list');
+                if (newBoardList && currentBoardList) {
+                    currentBoardList.replaceWith(newBoardList);
+                }
+
+                const newTitle = tempDom.querySelector('.page-title');
+                const currentTitle = document.querySelector('.page-title');
+                if (newTitle && currentTitle) {
+                    currentTitle.textContent = newTitle.textContent;
+                }
+
+                attachPaginationEvents();
+            });
+    }
+
+    document.querySelector('.category-select')?.addEventListener('change', () => reloadBoardList(0));
+
+    function attachPaginationEvents() {
+        document.querySelectorAll('.page-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                if (page !== undefined) {
+                    reloadBoardList(page);
+                }
+            });
+        });
+    }
+
+    attachPaginationEvents();
+</script>
+</body>
+</html>

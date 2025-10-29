@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- faq 상세보기 -->
+    <title>Faq-detail</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/faq/faq-detail.css}">
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+
+    <h1 class="titlefaq">FAQ</h1>
+
+    <div class="rectangle">
+        <a th:href="@{/cs}" class="back-linkk">← 목록으로</a>
+
+        <div class="post-title" th:text="${faqDto.faqTitle}"></div>
+
+
+        <p th:utext="${#strings.replace(faqDto.faqContent, '\n', '<br/>')}" class="faq-content"></p>
+
+
+        <th:block th:if="${isAdmin}">
+            <div class="btn-box">
+                <form th:action="@{/faq/edit/{id}(id=${faqDto.faqId})}" method="get">
+                    <button type="submit" class="btn-edit">수정하기</button>
+                </form>
+            </div>
+        </th:block>
+    </div>
+
+</div>
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

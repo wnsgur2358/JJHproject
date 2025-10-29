@@ -1,0 +1,283 @@
+
+/*제목*/
+.page-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+/* 이거 추가: 버튼 그룹 우측 정렬 */
+.topbar-buttons {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+.topbar-buttons button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.topbar-buttons button:hover{
+    background-color: royalblue;
+}
+
+
+.match-info-table{
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.match-info-table td{
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+    background-color: #ffffff;
+}
+.match-info-table tr:hover{
+    background-color: #e1f3ff;
+}
+
+/*경기 정보 테이블 열 너비 설정*/
+.col-match-info-sports-type {width: 10%}
+.col-match-info-writer {width:10%}
+.col-match-info-address {width: 30%}
+.col-match-info-match-date {width: 25%}
+.col-match-info-status {width: 12%}
+.col-match-info-participants {width: 13%}
+
+/* ===== 게시판 테이블 ===== */
+.board-table {
+    width: 100%;
+    margin: 30px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    background: #fff;
+    border: 2px solid dodgerblue;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.board-table th,
+.board-table td {
+    padding: 16px 18px;
+    text-align: left;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+.board-table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.board-table td {
+    background-color: #ffffff;
+}
+
+.board-table tr:hover {
+    background-color: #e1f3ff;
+}
+
+/* ===== 테이블 열 너비 설정 ===== */
+
+.col-applicant {width: 7%}
+.col-self-intro {width: 30%}
+.col-participants {width: 5%}
+.col-request-status {width: 8%}
+.col-request-cancel-count {width: 8%}
+.col-action {width: 20%}
+
+/*요청 처리 버튼*/
+.button-group button{
+    background-color: dodgerblue;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin: 10px;
+}
+
+.button-group button:hover{
+    background-color: royalblue;
+}
+
+#denyWithdrawRequestBtn.disabled,
+#approveWithdrawRequestBtn.disabled,
+#deniedBtn.disabled,
+#approvedBtn.disabled{
+    background-color: #bcbcbc;
+    color: white;
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: auto;
+}
+
+/* 마우스 올려도 hover 효과 제거 */
+#denyWithdrawRequestBtn.disabled:hover,
+#approveWithdrawRequestBtn.disabled:hover,
+#deniedBtn.disabled:hover,
+#approvedBtn.disabled:hover {
+    background-color: #bcbcbc;
+    color: white;
+}
+
+
+/*!* 상단 경기 정보 요약 *!*/
+/*.match-info {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: flex-start;*/
+/*    background-color: #f8f8f8;*/
+/*    padding: 1.5rem 2rem;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 2px 8px rgba(0,0,0,0.1);*/
+/*    margin-bottom: 2rem;*/
+/*    font-size: 0.95rem;*/
+/*    line-height: 1.6;*/
+/*}*/
+
+/*.match-info p {*/
+/*    margin: 0.3rem 0;*/
+/*}*/
+
+/*.match-info span {*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*!* 요청 카드 스타일 *!*/
+/*.matchup-card {*/
+/*    background-color: white;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 10px;*/
+/*    padding: 1.2rem;*/
+/*    margin-bottom: 1rem;*/
+/*    box-shadow: 0 1px 5px rgba(0,0,0,0.08);*/
+/*    transition: transform 0.2s ease;*/
+/*}*/
+
+/*.matchup-card:hover {*/
+/*    transform: translateY(-2px);*/
+/*}*/
+
+/*.card-content {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: flex-start;*/
+/*    flex-wrap: wrap;*/
+/*    gap: 1rem;*/
+/*}*/
+
+/*.left-info {*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    flex-wrap: wrap;*/
+/*    gap: 1rem;*/
+/*    font-size: 0.95rem;*/
+/*}*/
+
+/*.left-info div {*/
+/*    min-width: 160px;*/
+/*}*/
+
+/*!* 상세보기 링크 스타일 *!*/
+/*.matchup-card a {*/
+/*    color: #0077cc;*/
+/*    text-decoration: underline;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/* ===== 페이징 ===== */
+#paging-container button {
+    text-align: center;
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    background-color : white;
+}
+
+/* hover 효과도 동일하게 */
+#paging-container button:hover {
+    background-color: #e0e0e0;
+}
+
+/* 활성화된 버튼 */
+#paging-container button.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+    cursor: not-allowed;
+}
+
+/* 페이징 영역 가운데 정렬 */
+#paging-container {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.no-result {
+    text-align: center !important;
+    color: #777;
+    padding: 2rem 0;
+}
+
+.truncate-address{
+    width: 500px;           /* 너비 고정 */
+    white-space: nowrap;    /* 줄바꿈 없음 */
+    overflow: hidden;       /* 넘친 부분 숨김 */
+    text-overflow: ellipsis; /* 말줄임표 (...) 표시 */
+}
+
+.truncate-write{
+    width: 120px;          /* 너비 고정 */
+    white-space: nowrap;    /* 줄바꿈 없음 */
+    overflow: hidden;       /* 넘친 부분 숨김 */
+    text-overflow: ellipsis; /* 말줄임표 (...) 표시 */
+}
+
+.truncate {
+    width: 250px;           /* 너비 고정 */
+    white-space: pre-wrap;    /* 줄바꿈과 공백 유지 + 자동 줄바꿈 */
+    word-break: break-word;   /* 단어 중간이라도 줄바꿈 */
+}
+
+
+
+

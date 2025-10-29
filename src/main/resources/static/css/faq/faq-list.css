@@ -1,0 +1,233 @@
+table {
+     width: 90%;
+     margin: 30px auto;
+     border-collapse: separate;
+     border-spacing: 0;
+     table-layout: fixed;
+     background: #fff;
+     border: 2px solid dodgerblue;
+     border-radius: 12px;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+     overflow: hidden;
+ }
+
+table th,
+table td {
+    padding: 16px 18px;
+    text-align: center;
+    font-size: 15px;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #eaf4fb;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+table td {
+    background-color: #ffffff;
+}
+
+table tr:hover {
+    background-color: #e1f3ff;
+}
+
+.col-no { width: 8%; }
+.col-category { width: 14%; }
+.col-title { width: 44%; }
+.col-author { width: 14%; }
+.col-date { width: 20%; }
+.col-modified { width: 10%; }
+.col-delete { width: 8%; }
+
+.board-title-link {
+    color: darkslategray;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    display: inline-block;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-title-link:hover {
+    color: #1c7ed6;
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 30px 0;
+}
+
+.pagination a {
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.pagination a:hover {
+    background-color: #f2f2f2;
+}
+
+.pagination a.active {
+    background-color: #1a8cff;
+    color: white;
+    border: none;
+    pointer-events: none;
+}
+
+.faq-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px auto;
+    width: 90%;
+}
+
+.faq-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.faq-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#category,
+.search-box input {
+    height: 40px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    border: 2px solid dodgerblue;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+#category {
+    width: 180px;
+    color: darkslategray;
+    background-color: #f9f9f9;
+}
+
+#category:focus,
+.search-box input:focus {
+    border-color: #1c7ed6;
+    box-shadow: 0 0 4px rgba(30, 144, 255, 0.5);
+}
+
+.btninquiry {
+    background: linear-gradient(to right, #429F6B, #22D6B2);
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btninquiry:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btnsubmit {
+    background: linear-gradient(to right, #FFB432, #FF7F50);
+    color: white;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btnsubmit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(255, 193, 7, 0.3);
+}
+
+.titlefaq {
+    text-align: center;
+    font-weight: 800;
+    font-size: 28px;
+    margin-top: 40px;
+}
+
+.title2faq {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+.faq-left form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    height: 40px;
+}
+
+.faq-left form > * {
+    display: inline-block;
+}
+
+.delete {
+    background: none;
+    border: none;
+    color: #ff5e5e;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.delete:hover {
+    transform: scale(1.2);
+    color: #ff1a1a;
+}
+
+.btn-search {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.btn-search:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <script th:src="@{/js/matchup/matchup-board-my.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-board-my.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h2 class="page-title">MATCHUP 내가 작성한 글 목록</h2>
+    <div class="topbar-wrapper">
+        <div id="filter">
+
+            <select id="sports-type">
+                <option value="" selected>전체 종목</option>
+                <option value="SOCCER">축구</option>
+                <option value="FUTSAL">풋살</option>
+            </select>
+
+            <input type="date" id="date-filter">
+
+            <label for="availableOnly">
+                모집 가능
+                <input type="checkbox" id="availableOnly">
+            </label>
+
+            <button id="filterBtn">검색</button>
+        </div>
+        <div class="topbar-buttons">
+            <button onclick="location.href='/matchup/board/register'" class="create-btn">글 작성하기</button>
+            <button onclick="goBack()" class="back-btn">뒤로가기</button>
+        </div>
+        <table class="board-table">
+            <thead>
+            <tr>
+                <th class="col-no">NO.</th>
+                <th class="col-type">종목</th>
+                <th class="col-sports-facility-address">경기장</th>
+                <th class="col-match-date">날짜</th>
+                <th class="col-status">상태</th>
+                <th class="col-quota">정원</th>
+                <th class="col-temp">입장 가능 온도</th>
+                <th class="col-detail">상세보기</th>
+                <th class="col-check-request">요청확인</th>
+                <th class="col-group-chat">단체채팅</th>
+                <th class="col-eval-setting">평가세팅</th>
+            </tr>
+            </thead>
+            <tbody id="board-container"></tbody>
+        </table>
+    </div>
+
+    <div id="paging-container">
+
+    </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

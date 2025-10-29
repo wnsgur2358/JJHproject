@@ -1,0 +1,181 @@
+#wrap {
+    max-width: 420px;
+    margin: 80px auto;
+    font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
+    padding: 24px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background-color: #fafafa;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+}
+
+/* 역할 선택 드롭다운 */
+#roleSelect {
+    display: block;            /* inline 요소를 블록처럼 */
+    margin: 0 0 20px 0;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+
+    /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); !* 부드러운 입체감 *!*/
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    cursor: pointer;
+    box-sizing: border-box;
+
+    text-align: left;
+    text-indent: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+#roleSelect:focus {
+    outline: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25); /* 더 진한 눌림 느낌 */
+}
+
+#roleSelect option {
+    background-color: white;
+    color: #333;
+    text-align: left;
+    padding-left: 10px;
+}
+
+/* 제목 */
+#wrap h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding-bottom: 6px;
+}
+
+/* 전체 input 필드 스타일 */
+#signupForm input[type="text"],
+#signupForm input[type="email"],
+#signupForm input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+#signupForm input:focus {
+    outline: none;
+    border-color: #2e5c9a;
+}
+
+/* 제출 버튼 */
+#signupForm button[type="submit"] {
+    width: 100%;
+    background-color: dodgerblue;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#signupForm button[type="submit"]:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(46, 92, 154, 0.3);
+}
+
+/* 그룹 및 입력 그룹 */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.input-group input {
+    flex: 1;
+}
+
+.sub-btn {
+    width: 19%;
+    background-color: forestgreen;        /* 초록색 */
+    color: white;
+    border: none;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.sub-btn:hover {
+    background-color: darkgreen;        /* hover 시 진한 초록 */
+}
+
+
+/* 메시지 및 힌트 */
+.hint {
+    font-size: 13px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.message {
+    font-size: 13px;
+    margin-top: 4px;
+    color: #444;
+}
+
+.message.error {
+    color: #d9534f;
+}
+
+.message.success {
+    color: #5cb85c;
+}
+
+/* 이메일 수신 동의 */
+.email-agreement-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.email-agreement-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: dodgerblue;
+}
+
+.email-agreement-text {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+
+
+

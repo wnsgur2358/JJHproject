@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 대회 내역</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/event/event-list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <script th:src="@{/js/event/event-list.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <h2><span class="underline">MY 등록 내역</span></h2>
+
+    <div id="eventTableContainer">
+        <div th:if="${myEvents.totalElements == 0}" class="no-data">등록된 대회가 없습니다.</div>
+
+        <div class="btn-wrap">
+            <a href="/schedule" class="back-link">돌아가기</a>
+        </div>
+
+        <table th:if="${myEvents.totalElements > 0}">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>대회명</th>
+                <th>등록자</th>
+                <th>등록일</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="event, iterStat : ${myEvents.content}">
+                <td th:text="${iterStat.index + 1 + (myEvents.number * myEvents.size)}"></td>
+                <td class="title-cell">
+                    <a th:href="@{'/event/' + ${event.id}}"
+                       th:text="${event.eventTitle}"
+                       class="detail-link event-title-ellipsis">
+                    </a>
+                </td>
+                <td th:text="${event.memberName}"></td>
+                <td th:text="${#temporals.format(event.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
+                <td>
+                    <span th:text="${event.statusLabel}"
+                          th:class="${event.eventStatus.name()} == 'APPROVED' ? 'status-approved' : (${event.eventStatus.name()} == 'DENIED' ? 'status-denied' : 'status-pending')">
+                    </span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="pagination" th:if="${myEvents.totalPages > 0}">
+            <a th:classappend="${myEvents.first} ? 'disabled'" href="#" th:data-page="${myEvents.number - 1}">&laquo;</a>
+            <span th:each="pageNum : ${#numbers.sequence(0, myEvents.totalPages - 1)}">
+                <a href="#" th:data-page="${pageNum}" th:classappend="${pageNum == myEvents.number} ? 'active'" th:text="${pageNum + 1}"></a>
+            </span>
+            <a th:classappend="${myEvents.last} ? 'disabled'" href="#" th:data-page="${myEvents.number + 1}">&raquo;</a>
+        </div>
+    </div>
+
+</div>
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

@@ -1,0 +1,135 @@
+/* popup.css */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    animation: overlayFadeIn 0.3s ease forwards;
+    z-index: 9999;
+    display: none;
+}
+
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /*transform: translate(-50%, -50%);*/
+    background: #fff;
+    padding: 30px 24px;
+    border-radius: 12px;
+    width: 380px;
+    animation: popupFadeIn 0.3s ease forwards;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+    border-top: 5px solid blueviolet;
+    z-index: 10000;
+    display: none;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes overlayFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+
+
+.popup h3 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: blueviolet;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.popup input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+.popup input:focus {
+    border-color: #e53935;
+    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
+    outline: none;
+}
+
+.popup button {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
+
+.popup button[type="submit"] {
+    background-color: blueviolet;
+    color: white;
+}
+
+.popup button[type="submit"]:hover {
+    background-color: rebeccapurple;
+}
+
+.popup button[type="button"] {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.popup button[type="button"]:hover {
+    background-color: #ebebeb;
+}
+
+
+.success-msg {
+    font-size: 14px;
+    margin: 8px 0;
+    color: #2c3e50;
+}
+
+.icon-help {
+    width: 21px;
+    height: 21px;
+    margin-left: 3px;
+    margin-bottom: 4px;
+    vertical-align: middle;
+}
+
+.popup-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* 텍스트와 아이콘 사이 여백 */
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+}
+

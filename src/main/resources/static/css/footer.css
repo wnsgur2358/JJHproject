@@ -1,0 +1,26 @@
+#wrap {
+    width: 85%;
+    margin: 0 auto;
+    min-height: calc(100vh - 340px);
+}
+
+.footer {
+    height: 60px;
+    margin: 0 auto;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: black;
+    background-color: #ffffff;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navy_hr {
+    border-top: 1px solid #000080;
+}
+
+

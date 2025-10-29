@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matchon - Main</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login/login.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+<div id="header-detail-dto" th:data-login-email="${#authentication.name}"></div>
+<div class="hero">
+    <!-- ===== NAVIGATION ===== -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <img src="/img/matchon_logo.png" alt="Matchon Logo" class="logo">
+        </div>
+        <div class="navbar-center">
+            <a th:href="@{'/introduction'}">INTRODUCTION</a>
+            <!--            <a th:href="@{/redirect(url='/introduction')}">INTRODUCTION</a>-->
+            <a th:href="@{/redirect(url='/matchup/board')}">MATCHUP</a>
+            <a th:href="@{/redirect(url='/stadium')}">STADIUM</a>
+            <a th:href="@{/redirect(url='/community')}">COMMUNITY</a>
+            <a th:href="@{/redirect(url='/schedule')}">SCHEDULE</a>
+            <a th:href="@{/redirect(url='/cs')}">CS</a>
+            <a th:href="@{/redirect(url='/team')}">TEAM</a>
+        </div>
+        <div class="navbar-right">
+            <div class="icons">
+                <img id="chat-icon" src="/img/chat-white.png">
+
+
+                <div class="notification-wrapper" style="position: relative; display: inline-block;">
+                    <img src="/img/bell-white.png" id="openMiniDrawerBtn" style="cursor: pointer;">
+                    <span id="notificationBadge" style="
+                        position: absolute;
+                        top: -20px;
+                        right: -10px;
+                        background: red;
+                        color: white;
+                        border-radius: 50%;
+                        font-size: 12px;
+                        width: 18px;
+                        height: 18px;
+                        text-align: center;
+                        line-height: 18px;
+                        display: none;">
+                        0
+                    </span>
+
+                    <div class="mini-drawer" id="miniDrawer">
+                        <div class="mini-drawer-header">
+                            <button class="close-mini" id="openMiniDrawerHistoryBtn">📜</button>
+                            <h4>알림</h4>
+                            <button class="close-mini" id="closeMiniDrawerBtn">&times;</button>
+                        </div>
+                    </div>
+                    <div class="mini-drawer-history" id="miniDrawerHistory">
+                        <div class="mini-drawer-header-history">
+                            <div></div>
+                            <h4>기존 알림</h4>
+                            <button class="close-mini-history" id="closeMiniDrawerBtnHistoryBtn">&times;</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth">
+                <a id="btn-login" th:href="@{/login}" class="btn">LOGIN</a>
+                <a id="btn-signup" th:href="@{/signup}" class="btn">SIGN UP</a>
+                <a id="btn-mypage" th:href="@{/mypage}" class="btn" style="display: none;">MY</a>
+                <a id="btn-admin" th:href="@{/admin}" class="btn" style="display: none;">ADMIN</a>
+                <a id="btn-logout" href="javascript:logout()" class="btn" style="display: none;">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== HERO TEXT ===== -->
+    <div class="hero-text">
+        <h1>Wanna Match?</h1>
+        <h1>You're On!</h1>
+        <button th:onclick="|location.href='@{/introduction}'|">GO!</button>
+    </div>
+
+    <!-- ===== CHATBOT ===== -->
+    <sec:authorize access="isAuthenticated()">
+        <img src="/img/aichatbot.png" id="chatbot-launcher" style="position: fixed; bottom: 30px; right: 20px; width: 80px; cursor: pointer; z-index: 1000;">
+        <div id="chatbot-modal" style="display: none; position: fixed; bottom: 120px; right: 30px;
+            width: 400px; height: 600px; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 9999; background: white; display: flex; flex-direction: column;">
+            <div class="chat-header">
+                <span>MatchON 챗봇</span>
+                <button class="chat-close" id="chatbot-close">✕</button>
+            </div>
+            <iframe src="/aichat" style="flex: 1; border: none;"></iframe>
+        </div>
+    </sec:authorize>
+
+    <div id="popupOverlay" class="popup-overlay" style="display: none;
+     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+     background: rgba(0,0,0,0.3); z-index: 9999;"></div>
+
+    <div id="changePasswordPopup" class="popup" style="display: none;
+     position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+     background: white; padding: 25px; border-radius: 12px;
+     box-shadow: 0 0 12px rgba(0,0,0,0.25); z-index: 10000; width: 320px;">
+        <h3 style="margin-bottom: 15px;">새 비밀번호 설정</h3>
+        <form id="changePasswordForm">
+            <input type="password" id="newPassword" placeholder="새 비밀번호" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+            <input type="password" id="confirmPassword" placeholder="비밀번호 확인" required style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+            <button type="submit" style="width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px;">비밀번호 변경</button>
+        </form>
+        <div id="changeResult" class="success-msg" style="color: red; margin-top: 10px;"></div>
+        <button type="button" onclick="closeChangePopup()" style="margin-top: 10px; width: 100%; padding: 8px;">닫기</button>
+    </div>
+
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        matchon2025@gmail.com | 02-123-123
+    </footer>
+</div>
+
+<!-- ===== SCRIPT ===== -->
+<script th:src="@{/js/aibot/aichatbot.js}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        // 로그인 상태에 따른 버튼 표시
+        fetch('/auth/check', {
+            method: 'GET',
+            credentials: 'include'
+        }).then(res => res.json())
+            .then(data => {
+                const loginBtn = document.getElementById("btn-login");
+                const signupBtn = document.getElementById("btn-signup");
+                const myBtn = document.getElementById("btn-mypage");
+                const adminBtn = document.getElementById("btn-admin");
+                const logoutBtn = document.getElementById("btn-logout");
+
+                if (data.role === "ADMIN") {
+                    loginBtn.style.display = "none";
+                    signupBtn.style.display = "none";
+                    adminBtn.style.display = "inline-block";
+                    myBtn.style.display = "none";
+                    logoutBtn.style.display = "inline-block";
+                } else {
+                    loginBtn.style.display = "none";
+                    signupBtn.style.display = "none";
+                    adminBtn.style.display = "none";
+                    myBtn.style.display = "inline-block";
+                    logoutBtn.style.display = "inline-block";
+                }
+
+                if (data.isTemporaryPassword) {
+                    openChangePasswordPopup();
+                }
+            }).catch(() => {
+            document.getElementById("btn-login").style.display = "inline-block";
+            document.getElementById("btn-signup").style.display = "inline-block";
+            document.getElementById("btn-mypage").style.display = "none";
+            document.getElementById("btn-admin").style.display = "none";
+            document.getElementById("btn-logout").style.display = "none";
+        });
+
+        // 임시 비밀번호 팝업 조건 확인
+        const shouldShowPopup = localStorage.getItem("showPasswordPopup") === "true";
+        if (shouldShowPopup) {
+            fetch("/auth/check", {
+                method: "GET",
+                credentials: "include"
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error("인증 실패");
+                    return res.json();
+                })
+                .then(data => {
+                    if (data.isTemporaryPassword) {
+                        openChangePasswordPopup();
+                    }
+                    localStorage.removeItem("showPasswordPopup");
+                })
+                .catch(() => {
+                    localStorage.removeItem("showPasswordPopup");
+                });
+        }
+
+        // 비밀번호 변경 폼 전송 처리
+        const form = document.getElementById("changePasswordForm");
+        if (form) {
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const newPassword = document.getElementById("newPassword").value;
+                const confirmPassword = document.getElementById("confirmPassword").value;
+
+                fetch("/auth/change-password", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ newPassword, confirmPassword })
+                })
+                    .then(res => {
+                        if (!res.ok) {
+                            return res.text().then(msg => {
+                                document.getElementById("changeResult").innerText = msg;
+                                document.getElementById("changeResult").style.color = "red";
+                                throw new Error(msg);
+                            });
+                        }
+                        return res.text();
+                    })
+                    .then(msg => {
+                        document.getElementById("changeResult").innerText = msg;
+                        document.getElementById("changeResult").style.color = "#28a745";
+
+                        setTimeout(() => {
+                            // 팝업 닫기
+                            document.getElementById("changePasswordPopup").style.display = "none";
+                            document.getElementById("popupOverlay").style.display = "none";
+
+                            // 버튼 다시 활성화
+                            document.querySelectorAll("a, button").forEach(btn => {
+                                btn.disabled = false;
+                                btn.style.pointerEvents = "auto";
+                                btn.style.opacity = "1";
+                            });
+
+                            localStorage.removeItem("showPasswordPopup");
+                            window.location.reload();
+                        }, 1500);
+                    })
+                    .catch(err => {
+                        console.warn("비밀번호 변경 실패:", err.message);
+                    });
+            });
+        }
+
+        // 챗봇 기능
+        const chatImg = document.querySelector("#chat-icon");
+        if (chatImg) {
+            chatImg.addEventListener("click", () => {
+                window.location.href = "/chat/my/rooms";
+            });
+        }
+
+
+        const launcher = document.getElementById("chatbot-launcher");
+        const modal = document.getElementById("chatbot-modal");
+        const closeBtn = document.getElementById("chatbot-close");
+
+        fetch('/auth/check', { credentials: 'include' }).then(res => {
+            if (!res.ok) {
+                if (launcher) launcher.remove();
+                if (modal) modal.remove();
+            }
+        });
+
+        if (launcher) {
+            launcher.addEventListener("click", function () {
+                fetch("/auth/check", {
+                    credentials: "include"
+                }).then(res => {
+                    if (res.ok) {
+                        modal.style.display = "block";
+                    } else {
+                        // alert("로그인 후 사용 가능합니다.");
+                        Swal.fire({text: '로그인 후 사용 가능합니다.', icon: 'warning', confirmButtonText: '확인'});
+                    }
+                });
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function () {
+                modal.style.display = "none";
+            });
+        }
+    });
+
+    function logout() {
+        fetch('/auth/logout', {
+            method: 'POST',
+            credentials: 'include'
+        }).then(() => {
+            // alert("로그아웃 되었습니다.");
+            Swal.fire({text: '로그아웃 되었습니다.', icon: 'success', confirmButtonText: '확인'}).then(()=>{
+                window.location.href = "/main";
+            });
+        });
+    }
+
+    function openChangePasswordPopup() {
+        const popup = document.getElementById("changePasswordPopup");
+        const overlay = document.getElementById("popupOverlay");
+
+        popup.style.display = "block";
+        overlay.style.display = "block";
+
+        // 닫기 버튼 숨기기
+        const closeBtn = popup.querySelector("button[onclick='closeChangePopup()']");
+        if (closeBtn) closeBtn.style.display = "none";
+
+        // 다른 모든 버튼 비활성화 (팝업 내부 제외)
+        document.querySelectorAll("a, button").forEach(btn => {
+            if (!popup.contains(btn)) {
+                btn.disabled = true;
+                btn.style.pointerEvents = "none";
+                btn.style.opacity = "0.4";
+            }
+        });
+
+        // 오버레이 클릭 막기
+        overlay.style.pointerEvents = "auto";
+        overlay.style.background = "rgba(0,0,0,0.5)";
+    }
+
+    function closeChangePopup() {
+
+    }
+</script>
+<script th:src="@{/js/aibot/aichatbot.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/webstomp-client@1/dist/webstomp.min.js"></script>
+<script th:src="@{/js/common/header.js}"></script>
+</body>
+</html>

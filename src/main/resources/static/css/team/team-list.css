@@ -1,0 +1,206 @@
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    margin: 40px 0 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.team-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px auto;
+    width: 80%;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.team-card img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 24px;
+    border-radius: 50%; /* 선택적: 프로필형 이미지로 */
+}
+
+.team-info {
+    flex: 1;
+}
+
+.team-info h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.team-info p {
+    margin: 4px 0;
+}
+
+.star {
+    color: #FFD700;
+    font-size: 18px;
+}
+
+#filter {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.select-dropbox {
+    width: 180px;
+    height: 40px;
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 500;
+    color: darkslategray;
+    background-color: #f9f9f9;
+    border: 2px solid dodgerblue;
+    border-radius: 6px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.select-dropbox:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+}
+
+#filter button {
+    background-color: dodgerblue;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#filter button:hover {
+    background-color: royalblue;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(30, 144, 255, 0.3);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.button-container button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/*.button-container button:hover {*/
+/*    transform: translateY(-2px);*/
+/*}*/
+
+/* 팀 등록하기 버튼 - 녹색 계열 */
+.btn-register {
+    background-color: olivedrab;
+    color: white;
+}
+.btn-register:hover {
+    background-color: darkolivegreen;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(60, 179, 113, 0.3);
+}
+
+/* 내 팀 보기 버튼 - 기존 파랑 유지 또는 진한 파랑 */
+.btn-myteam {
+    background-color: forestgreen;
+    color: white;
+}
+.btn-myteam:hover {
+    background-color: darkgreen;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(60, 179, 113, 0.3);
+}
+
+.back-list {
+    background-color: #888;
+    color: white;
+}
+
+.back-list:hover {
+    background-color: #666;
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 별점 시각화 */
+.star-rating {
+    position: relative;
+    display: inline-block;
+    font-size: 18px;
+    color: #ccc;
+}
+
+.star-rating::before {
+    content: '★★★★★';
+}
+
+.star-rating::after {
+    content: '★★★★★';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: var(--rating-width); /* 실제 너비는 style 속성에서 설정 */
+    overflow: hidden;
+    color: #FFD700;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+#paging-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-family: 'Segoe UI', sans-serif;
+    margin-bottom: 40px; /* ⬅️ Ensures breathing room above footer */
+
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.pagination a.active {
+    background-color: dodgerblue;
+    color: white;
+    border-color: dodgerblue;
+}
+
+.pagination a:hover {
+    background-color: #e0e0e0;
+}
+
+#paging-container a.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+

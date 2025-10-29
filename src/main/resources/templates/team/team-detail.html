@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${team.teamName} + ' 상세 정보'">팀 상세 정보</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/team/team-detail.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<div class="page-body">
+    <div class="content-wrapper">
+        <div class="team-tabs">
+            <a href="#" id="tab-info" class="active">홈/소개</a>
+            <a href="#" id="tab-reviews" th:text="${isTeamLeader} ? '후기 보기/답변' : '후기 보기/쓰기'"></a>
+            <a href="#"
+               id="tab-join"
+               th:classappend="${(!isTeamLeader) and (userHasTeam or !team.recruitmentStatus)} ? 'disabled-tab' : null"
+               th:attr="data-disabled=${(!isTeamLeader) and (userHasTeam or !team.recruitmentStatus)}">
+                <span th:text="${isTeamLeader} ? '가입 신청 관리' : '팀/가입 신청'"></span>
+                <span id="joinRequestDot"
+                      th:if="${isTeamLeader and joinRequestCount > 0}"
+                      style="color: red; font-weight: bold;"> •</span>
+            </a>
+            <a href="#" id="tab-chat">채팅</a>
+        </div>
+
+        <div class="team-content">
+            <div class="team-profile">
+                <div class="team-image">
+                    <img th:src="${team.imageUrl}" th:alt="${team.teamName}">
+                </div>
+                <h1 th:text="${team.teamName}" class="team-name">팀 이름</h1>
+            </div>
+
+            <!-- Team Info Section -->
+            <div class="team-info">
+                <div class="info-box">
+                    <h2>팀 소개</h2>
+                    <p class="team-intro" th:text="${team.teamIntroduction}">팀 소개 내용</p>
+                </div>
+                <div class="info-box">
+                    <h2>모집 상태</h2>
+                    <div class="recruit-status-box">
+                        <p th:text="${team.recruitmentStatus} ? '모집중' : '모집 완료'"></p>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <h2>팀 활동 지역</h2>
+                    <div class="area-box">
+                        <p th:text="${team.translatedRegion}">지역</p>
+                    </div>
+                </div>
+                <div class="info-box">
+                    <h2>팀에서 필요한 포지션</h2>
+                    <div class="position-box">
+                        <p th:if="${team.recruitingPositionsKorean != null and not #lists.isEmpty(team.recruitingPositionsKorean)}"
+                           th:text="${#strings.listJoin(team.recruitingPositionsKorean, ', ')}">
+                            필요한 포지션들
+                        </p>
+                        <p th:unless="${team.recruitingPositionsKorean != null and not #lists.isEmpty(team.recruitingPositionsKorean)}">
+                            현재 모집중인 포지션이 없습니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="team-actions" th:if="${isTeamLeader}">
+                    <a th:href="@{'/team/team/edit/' + ${team.teamId}}" class="btn-edit">수정하기</a>
+                    <button class="btn-delete">삭제하기</button>
+                </div>
+            </div>
+
+            <!-- Review Section -->
+            <div id="reviewSection" class="review-section" style="display:none;">
+                <div id="reviewListView" class="info-box">
+                    <h2>팀 후기</h2>
+                    <div id="reviewList" class="review-list">
+                        <!-- 후기는 JS에서 동적으로 채움 -->
+                    </div>
+
+
+                    <!-- ✅ Add this line below the reviewList -->
+                    <p id="noReviewsMessage" style="display: none; text-align:center; color: #777;">아직 후기가 없습니다.</p>
+
+
+                    <div id="reviewPagination" class="pagination">
+                        <!-- 페이지네이션 버튼이 여기에 렌더링됩니다 -->
+                    </div>
+                    <div class="review-actions" th:if="${!isTeamLeader}">
+                        <button id="writeReviewBtn" class="btn-primary">후기 쓰기</button>
+                        <button id="myReviewsBtn" class="btn-secondary">내가 쓴 후기</button>
+                        <button id="backToAllReviewsFromMyBtn" class="btn-cancel" style="display:none;">뒤로가기</button>
+                    </div>
+
+
+                    <div class="review-actions" th:if="${isTeamLeader}">
+
+                        <button id="myResponsesBtn" class="btn-secondary">내가 쓴 답변 보기</button>
+                        <button id="backToAllReviewsBtn" class="btn-cancel" style="display:none;">뒤로가기</button>
+                    </div>
+                </div>
+
+                <div id="reviewWriteView" class="info-box" style="display:none;">
+                    <h2>후기 쓰기</h2>
+                    <form id="reviewForm" class="review-form">
+                        <div class="form-group">
+                            <label>별점</label>
+                            <div class="rating-group" id="starRating">
+                                <span class="star" data-value="1">★</span>
+                                <span class="star" data-value="2">★</span>
+                                <span class="star" data-value="3">★</span>
+                                <span class="star" data-value="4">★</span>
+                                <span class="star" data-value="5">★</span>
+                            </div>
+                            <input type="hidden" name="rating" id="ratingInput" required>
+                            <p id="selectedRatingText"></p>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea id="reviewContent" rows="4" maxlength="200" required placeholder="후기를 작성해주세요"></textarea>
+                            <p id="wordCountInfo">0 / 200자</p>
+                            <p id="wordLimitWarning" style="color:red; display:none;">200자를 초과할 수 없습니다.</p>
+                            <!-- NEW -->
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">작성 완료</button>
+                            <button type="button" class="btn-cancel" id="cancelWriteBtn">취소</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div> <!-- End of #reviewSection -->
+
+            <!-- ✅ Join Request Section moved INSIDE -->
+            <div id="joinRequestSection" style="display: none;">
+                <h2>팀 가입 신청</h2>
+                <form id="joinTeamForm">
+                    <div class="form-group">
+                        <label for="introduction">간단한 자기소개</label>
+                        <textarea id="introduction" rows="4" maxlength="200" placeholder="자기소개 및 팀에 가입하고 싶은 이유" required></textarea>
+                        <p id="introCharCount" class="char-count">0 / 200자</p>
+                        <p id="introCharWarning" class="warning-text" style="display: none;">200자를 초과할 수 없습니다.</p>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">신청하기</button>
+                        <button type="button" class="btn-cancel" id="cancelJoinBtn">취소</button>
+                    </div>
+                </form>
+            </div>
+            <!-- 팀장 전용: 가입 요청 리스트 -->
+            <div id="joinRequestListSection" style="display: none;">
+                <h2>가입 요청 목록</h2>
+                <!-- 🔧 FIXED: Use the correct ID for rendering the list -->
+                <div id="join-request-list-section"></div>
+
+                <!-- ✅ Add this for pagination -->
+                <div id="join-request-pagination" class="pagination"></div>
+                    <!-- 요청들이 여기에 렌더링될 예정 -->
+                </div>
+            </div>
+        </div>
+    </div> <!-- End of .team-content -->
+
+
+
+<div id="leader-flag" th:data-leader="${isTeamLeader}"></div>
+<!-- Team metadata -->
+<input type="hidden" id="teamId" th:value="${team.teamId}">
+<input type="hidden" id="teamLeaderId" th:value="${teamLeaderId}">
+<input type="hidden" id="userRole" th:value="${userRole}"> <!-- e.g., 'LEADER', 'MEMBER', 'GUEST' -->
+<input type="hidden" id="recruitmentStatus" th:value="${team.recruitmentStatus}">
+<input type="hidden" id="isLeaderOfCurrentTeam" th:value="${isLeaderOfCurrentTeam}">
+<input type="hidden" id="userHasTeam" th:value="${userHasTeam}">
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        const isTeamLeader = document.getElementById('leader-flag')?.dataset?.leader === 'true';
+        const myResponsesBtn = document.getElementById('myResponsesBtn');
+        if (isTeamLeader && myResponsesBtn) {
+            myResponsesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadMyResponses(); // Reuse the new centralized logic
+            });
+        }
+        const backToAllReviewsBtn = document.getElementById('backToAllReviewsBtn');
+        function loadAllReviews() {
+            reviewListView.style.display = 'block';
+            reviewWriteView.style.display = 'none';
+            backToAllReviewsBtn.style.display = 'none';
+            loadPagedReviews(0); // ✅ correct
+        }
+
+        if (isTeamLeader && myResponsesBtn) {
+            myResponsesBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                fetch(`/team/team/${teamId}/answered-reviews`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const reviews = data.data;
+                        reviewListView.style.display = 'block';
+                        reviewWriteView.style.display = 'none';
+                        backToAllReviewsBtn.style.display = 'inline-block';
+
+                        if (!Array.isArray(reviews)) {
+                            console.error("❌ Invalid response format: expected reviews to be an array", data);
+                            reviewList.innerHTML = '<p class="no-reviews">답변이 있는 후기가 없습니다.</p>';
+                            return;
+                        }
+
+
+
+                        if (!reviews.length) {
+                            reviewList.innerHTML = '<p class="no-reviews">아직 작성한 답변이 없습니다.</p>';
+                            return;
+                        }
+
+                        reviewList.innerHTML = reviews.map(review => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-author-info">
+                                <img src="${review.profileImageUrl || '/img/default-avatar.png'}" alt="User" class="author-avatar">
+                                <span class="review-author">${review.reviewerName || '익명'}</span>
+                            </div>
+                            <div class="review-meta">
+                                <span class="review-rating">${'⭐'.repeat(review.rating)}</span>
+                                <span class="review-date">${review.createdDate.split('T')[0]}</span>
+                            </div>
+                        </div>
+                        <p class="review-content">${review.content}</p>
+                        <div class="response-box" data-response-id="${review.responseId}">
+                            <strong>답변:</strong>
+                            <p class="response-text">${review.response}</p>
+                            <p class="response-date">${review.respondedAt?.split('T')[0] || ''}</p>
+                           <div class="form-actions">
+  <button class="btn-edit-response btn-secondary">수정</button>
+  <button class="btn-delete-response btn-cancel">삭제</button>
+</div>
+                            <div class="response-edit-form" style="display: none;">
+                                <textarea class="edit-response-text">${review.response}</textarea>
+                                <p class="edit-response-char-count">0 / 150자</p>
+                                <button class="btn-save-response">저장</button>
+                                <button class="btn-cancel-edit">취소</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                        attachResponseEditHandlers();
+                        attachEditResponseCharCountHandlers();
+                    })
+                    .catch(err => {
+                        console.error('❌ Failed to fetch answered reviews:', err);
+                        reviewList.innerHTML = '<p class="no-reviews">답변을 불러오는 중 오류가 발생했습니다.</p>';
+                    });
+            });
+        }
+
+        if (backToAllReviewsBtn) {
+            backToAllReviewsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadAllReviews();
+            });
+        }
+        const teamId = document.getElementById('teamId').value;
+        const deleteBtn = document.querySelector('.btn-delete');
+        // ✅ Add red dot for join requests if leader
+        if (isTeamLeader && teamId) {
+            fetch(`/team/team/${teamId}/join-request/count`)
+                .then(res => res.json())
+                .then(result => {
+                    if (result.data > 0) {
+                        const dot = document.createElement("span");
+                        dot.textContent = " •";
+                        dot.style.color = "red";
+                        dot.style.fontWeight = "bold";
+                        document.getElementById("tab-join")?.appendChild(dot);
+                    }
+                })
+                .catch(err => console.error("❌ 가입 요청 수 불러오기 실패:", err));
+        }
+
+        if (deleteBtn) {
+            deleteBtn.addEventListener('click', function (e) {
+                //if (!confirm("정말로 팀을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) return;
+                e.preventDefault();
+                Swal.fire({
+                    text: '정말로 팀을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '예',
+                    cancelButtonText: '아니요'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 사용자가 '네'를 눌렀을 때 처리
+                        fetch(`/team/team/${teamId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error();
+                                //alert('팀이 삭제되었습니다.');
+                                Swal.fire({text: '팀이 삭제되었습니다.', icon: 'success', confirmButtonText: '확인'}).then(()=>{
+                                    window.location.href = '/team';
+                                });
+
+
+                            })
+                            .catch(() => {
+                                //alert('삭제에 실패했습니다.');
+                                Swal.fire({text: '삭제에 실패했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                            });
+                    } else {
+                        // 사용자가 '아니요' 눌렀을 때
+                        return;
+                    }
+                });
+
+
+            });
+        }
+        const reviewList = document.getElementById('reviewList');
+        const noReviewsMessage = document.getElementById('noReviewsMessage');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewListView = document.getElementById('reviewListView');
+        const reviewWriteView = document.getElementById('reviewWriteView');
+        const tabInfo = document.getElementById('tab-info');
+        const tabReviews = document.getElementById('tab-reviews');
+        const tabJoin = document.getElementById('tab-join');
+        const joinRequestSection = document.getElementById('joinRequestSection');
+        const joinRequestListSection = document.getElementById('joinRequestListSection');
+
+        let currentJoinPage = 0;
+
+        function loadJoinRequests(page = 0) {
+            const teamId = document.getElementById('teamId').value;
+
+            fetch(`/team/team/${teamId}/join-requests?page=${page}&size=5`)
+                .then(res => res.json())
+                .then(result => {
+                    const data = result.data;
+                    const requests = data.items;
+                    const pageInfo = data.pageInfo;
+
+                    currentJoinPage = page;
+
+                    const container = document.getElementById('join-request-list-section');
+                    const pagination = document.getElementById('join-request-pagination');
+
+                    if (!requests.length) {
+                        container.innerHTML = '<p>가입 요청이 없습니다.</p>';
+                        pagination.innerHTML = '';
+                        return;
+                    }
+
+                    // ✅ ADD these mappings INSIDE this function (before rendering)
+                    const statusMap = {
+                        APPROVED: '승인',
+                        DENIED: '거절',
+                        PENDING: '대기중'
+                    };
+
+                    const statusClassMap = {
+                        APPROVED: 'badge-approve',
+                        DENIED: 'badge-deny',
+                        PENDING: 'badge-pending'
+                    };
+
+                    // ✅ Render join requests
+                    container.innerHTML = requests.map(r => `
+                <div class="request-item">
+                    <p><strong>${r.applicantName}</strong> (${r.applicantEmail})</p>
+                    <p>${r.introduction}</p>
+                   <span class="${statusClassMap[r.joinRequestStatus]}">${statusMap[r.joinRequestStatus]}</span>
+                    ${r.joinRequestStatus === 'PENDING' ? `<button class="view-detail-btn" data-id="${r.requestId}">자세히 보기</button>` : ''}
+                </div>
+            `).join('');
+
+                    // ✅ Bind view buttons
+                    document.querySelectorAll('.view-detail-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const requestId = btn.dataset.id;
+                            window.location.href = `/team/team/${teamId}/join-request/${requestId}`;
+                        });
+                    });
+
+                    // ✅ Render pagination
+                    renderJoinRequestPagination(pageInfo);
+                })
+                .catch(() => {
+                    document.getElementById('join-request-list-section').innerHTML = '<p>가입 요청을 불러오는 데 실패했습니다.</p>';
+                    document.getElementById('join-request-pagination').innerHTML = '';
+                });
+        }
+        window.loadJoinRequests = loadJoinRequests;
+
+
+        function renderJoinRequestPagination(pageInfo) {
+            const pagination = document.getElementById('join-request-pagination');
+            pagination.innerHTML = '';
+
+            const totalPages = pageInfo.totalPages;
+            const currentPage = currentJoinPage;
+
+            // ⬅ 이전
+            if (currentPage > 0) {
+                pagination.innerHTML += `<button onclick="loadJoinRequests(${currentPage - 1})">이전</button>`;
+            }
+
+            // 🔢 번호들
+            for (let i = 0; i < totalPages; i++) {
+                pagination.innerHTML += `
+        <button onclick="loadJoinRequests(${i})" class="${i === currentPage ? 'active' : ''}">
+            ${i + 1}
+        </button>`;
+            }
+
+            // ➡ 다음
+            if (currentPage < totalPages - 1) {
+                pagination.innerHTML += `<button onclick="loadJoinRequests(${currentPage + 1})">다음</button>`;
+            }
+        }
+
+        function loadMyResponses() {
+            fetch(`/team/team/${teamId}/answered-reviews`)
+                .then(res => res.json())
+                .then(data => {
+                    const reviews = data.data;
+
+                    if (!reviews.length) {
+                        reviewList.innerHTML = '<p class="no-reviews">아직 작성한 답변이 없습니다.</p>';
+                        return;
+                    }
+
+                    reviewList.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-author-info">
+                            <img src="${review.profileImageUrl || '/img/default-avatar.png'}" alt="User" class="author-avatar">
+                            <span class="review-author">${review.reviewerName || '익명'}</span>
+                        </div>
+                        <div class="review-meta">
+                            <span class="review-rating">${'⭐'.repeat(review.rating)}</span>
+                            <span class="review-date">${review.createdDate.split('T')[0]}</span>
+                        </div>
+                    </div>
+                    <p class="review-content">${review.content}</p>
+                    <div class="response-box" data-response-id="${review.responseId}">
+                        <strong>답변:</strong>
+                        <p class="response-text">${review.response}</p>
+                        <p class="response-date">${review.respondedAt?.split('T')[0] || ''}</p>
+
+                     <div class="form-actions">
+  <button class="btn-edit-response btn-secondary">수정</button>
+  <button class="btn-delete-response btn-cancel">삭제</button>
+</div>
+
+
+                        <div class="response-edit-form" style="display: none;">
+                            <textarea class="edit-response-text">${review.response}</textarea>
+                            <p class="edit-response-char-count">0 / 150자</p>
+                            <button class="btn-save-response">저장</button>
+                            <button class="btn-cancel-edit">취소</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+                    attachResponseEditHandlers(); // attach editing behavior
+                    attachEditResponseCharCountHandlers();
+                });
+
+        }
+
+        function attachResponseEditHandlers() {
+            // “수정” 버튼 클릭 시 폼 열기
+            document.querySelectorAll('.btn-edit-response').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const box = btn.closest('.response-box');
+                    box.querySelector('.response-text').style.display = 'none';
+                    btn.style.display = 'none';
+                    const deleteBtn = box.querySelector('.btn-delete-response');
+                    if (deleteBtn) deleteBtn.style.display = 'none'; // ✅ hide 삭제
+
+                    box.querySelector('.response-edit-form').style.display = 'block';
+
+
+                });
+            });
+
+            // “취소” 버튼 클릭 시 폼 닫기
+            document.querySelectorAll('.btn-cancel-edit').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const box = btn.closest('.response-box');
+                    box.querySelector('.response-edit-form').style.display = 'none';
+                    box.querySelector('.response-text').style.display = 'block';
+                    box.querySelector('.btn-edit-response').style.display = 'inline-block';
+                });
+            });
+
+            // “저장” 버튼 클릭 시 서버에 수정 요청
+            document.querySelectorAll('.btn-save-response').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const box = btn.closest('.response-box');
+                    const responseId = box.getAttribute('data-response-id');
+                    const updatedText = box.querySelector('.edit-response-text').value.trim();
+                    const MAX_RESPONSE_LENGTH = 150;
+                    // ✅ Empty check
+                    if (!updatedText) {
+                        //alert("답변을 입력해주세요.");
+                        Swal.fire({text: '답변을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+                        return;
+                    }
+
+                    if (updatedText.length > MAX_RESPONSE_LENGTH) {
+                        //alert(`답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`);
+                        Swal.fire({text: `답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`, icon: 'warning', confirmButtonText: '확인'});
+                        return;
+                    }
+
+                    const res = await fetch(`/team/team/review/response/${responseId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ updatedText })
+                    });
+
+                    if (res.ok) {
+                        //alert('답변이 수정되었습니다.');
+                        Swal.fire({text: '답변이 수정되었습니다.', icon: 'success', confirmButtonText: '확인'});
+                        loadMyResponses(); // reload the screen with updated data
+                    } else {
+                        //alert('수정 실패');
+                        Swal.fire({text: '수정 실패', icon: 'warning', confirmButtonText: '확인'});
+                    }
+                });
+            });
+
+            // ✅ “삭제” 버튼 클릭 시 서버에 삭제 요청
+            document.querySelectorAll('.btn-delete-response').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    //if (!confirm('정말로 이 답변을 삭제하시겠습니까?')) return;
+
+                    Swal.fire({
+                        text: '정말로 이 답변을 삭제하시겠습니까?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: '예',
+                        cancelButtonText: '아니요'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            // 사용자가 '네'를 눌렀을 때 처리
+                            const box = btn.closest('.response-box');
+                            const responseId = box.getAttribute('data-response-id');
+
+                            const res = await fetch(`/team/team/review/response/${responseId}`, {
+                                method: 'DELETE'
+                            });
+
+                            if (res.ok) {
+                                //alert('답변이 삭제되었습니다.');
+                                Swal.fire({text: '답변이 삭제되었습니다.', icon: 'success', confirmButtonText: '확인'});
+                                loadMyResponses(); // refresh view
+                            } else {
+                                //alert('삭제 실패');
+                                Swal.fire({text: '삭제 실패', icon: 'warning', confirmButtonText: '확인'});
+                            }
+                        } else {
+                            // 사용자가 '아니요' 눌렀을 때
+                            return;
+                        }
+                    });
+
+
+                });
+            });
+
+        }
+        const stars = document.querySelectorAll('.star');
+        const ratingInput = document.getElementById('ratingInput');
+        const ratingText = document.getElementById('selectedRatingText');
+
+        let selectedRating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                highlightStars(val);
+            });
+
+
+            star.addEventListener('mouseout', () => {
+                highlightStars(selectedRating);
+            });
+
+            star.addEventListener('click', () => {
+                selectedRating = parseInt(star.getAttribute('data-value'));
+                ratingInput.value = selectedRating;
+                ratingText.textContent = `${selectedRating}점 선택됨`;
+                highlightStars(selectedRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const val = parseInt(star.getAttribute('data-value'));
+                star.classList.toggle('selected', val <= rating);
+            });
+        }
+
+        function resetStarRating() {
+            selectedRating = 0;
+            ratingInput.value = '';
+            ratingText.textContent = '';
+            highlightStars(0);
+        }
+
+
+        const introInput = document.getElementById('introduction');
+        const introCharCount = document.getElementById('introCharCount');
+        const introCharWarning = document.getElementById('introCharWarning');
+        const MAX_INTRO_CHARS = 200;
+
+        if (introInput) {
+            introInput.addEventListener('input', () => {
+                const length = introInput.value.length;
+                introCharCount.textContent = `${length} / ${MAX_INTRO_CHARS}자`;
+                introCharWarning.style.display = length > MAX_INTRO_CHARS ? 'block' : 'none';
+            });
+        }
+
+
+
+        const joinTeamForm = document.getElementById('joinTeamForm');
+        if (joinTeamForm) {
+            joinTeamForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+
+                const introduction = document.getElementById('introduction').value.trim();
+                const MAX_INTRO_CHARS = 200;
+
+                if (introduction.length > MAX_INTRO_CHARS) {
+                    //alert(`자기소개는 최대 ${MAX_INTRO_CHARS}자까지 입력할 수 있습니다.`);
+                    Swal.fire({text: `자기소개는 최대 ${MAX_INTRO_CHARS}자까지 입력할 수 있습니다.`, icon: 'warning', confirmButtonText: '확인'});
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/team/team/${teamId}/join-request`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ introduction })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.success) {
+                            //alert('팀 가입 신청이 완료되었습니다.');
+                            Swal.fire({text: '팀 가입 신청이 완료되었습니다.', icon: 'success', confirmButtonText: '확인'});
+                            joinTeamForm.reset();
+                        } else {
+                            //alert(data.message || '팀 가입 신청에 실패했습니다.');
+                            Swal.fire({text: data.message || '팀 가입 신청에 실패했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                        }
+                    } else {
+                        let errorMessage = '팀 가입 신청에 실패했습니다.';
+                        try {
+                            const errorData = await response.json();
+                            // 🔥 Match backend format: { error: "..." }
+                            errorMessage = errorData.error || errorMessage;
+                        } catch {
+                            const errorText = await response.text();
+                            errorMessage = errorText || errorMessage;
+                        }
+                        //alert(errorMessage);
+                        Swal.fire({text: errorMessage, icon: 'warning', confirmButtonText: '확인'});
+                    }
+                } catch (error) {
+                    console.error('❌ 에러 발생:', error);
+                    //alert('팀 가입 신청 중 오류가 발생했습니다.');
+                    Swal.fire({text: '팀 가입 신청 중 오류가 발생했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                }
+            });
+        }
+
+        const infoSection = document.querySelector('.team-info');
+        const reviewSection = document.getElementById('reviewSection');
+        const writeReviewBtn = document.getElementById('writeReviewBtn');
+        const cancelWriteBtn = document.getElementById('cancelWriteBtn');
+        const myReviewsBtn = document.getElementById('myReviewsBtn');
+
+
+        let isEditing = false;
+        let editingReviewId = null;
+
+        function handleCreate(e) {
+            e.preventDefault();
+            const content = reviewContent.value.trim();
+            const rating = parseInt(document.getElementById('ratingInput').value);
+
+            if (content.length > MAX_CHARS) {
+                //alert(`후기는 최대 ${MAX_CHARS}자까지만 입력할 수 있습니다. 현재: ${content.length}자`);
+                Swal.fire({text: `후기는 최대 ${MAX_CHARS}자까지만 입력할 수 있습니다. 현재: ${content.length}자`, icon: 'warning', confirmButtonText: '확인'});
+                return;
+            }
+            if (!content || isNaN(rating) || rating < 1 || rating > 5) {
+                //alert('내용과 별점을 모두 입력해주세요.');
+                Swal.fire({text: '내용과 별점을 모두 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+                return;
+
+            }
+
+            fetch(`/team/team/${teamId}/review`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({content, rating})
+            })
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    reviewForm.reset();
+                    reviewWriteView.style.display = 'none';
+                    reviewListView.style.display = 'block';
+                    loadPagedReviews(0); // ✅ correct
+                    myReviewsBtn.style.display = 'inline-block';
+                    backToAllReviewsFromMyBtn.style.display = 'none';
+                })
+                .catch(() => {
+                    //alert('후기 작성에 실패했습니다. 다시 시도해주세요.');
+                    Swal.fire({text: '후기 작성에 실패했습니다. 다시 시도해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            });
+        }
+
+        async function handleEdit(e) {
+            e.preventDefault();
+            const updatedContent = document.getElementById('reviewContent').value.trim();
+            const updatedRating = parseInt(document.getElementById('ratingInput').value);
+
+            if (!updatedContent || isNaN(updatedRating) || updatedRating < 1 || updatedRating > 5) {
+                //alert('내용과 별점을 모두 입력해주세요.');
+                Swal.fire({text: '내용과 별점을 모두 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+                return;
+            }
+
+
+            try {
+                const res = await fetch(`/team/team/review/${editingReviewId}`, {
+                    method: 'PUT',
+
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({content: updatedContent, rating: updatedRating})
+
+                });
+
+                if (!res.ok) throw new Error();
+
+                //alert('리뷰가 수정되었습니다!');
+                Swal.fire({text: '리뷰가 수정되었습니다!', icon: 'success', confirmButtonText: '확인'});
+                reviewForm.reset();
+                reviewWriteView.style.display = 'none';
+                reviewListView.style.display = 'block';
+                loadPagedReviews(0); // ✅ correct
+                myReviewsBtn.style.display = 'inline-block';
+                backToAllReviewsFromMyBtn.style.display = 'none';
+
+            } catch {
+                //alert('수정에 실패했습니다.');
+                Swal.fire({text: '수정에 실패했습니다.', icon: 'warning', confirmButtonText: '확인'});
+            } finally {
+                reviewForm.onsubmit = handleCreate;
+                isEditing = false;
+                editingReviewId = null;
+            }
+        }
+
+        reviewForm.onsubmit = handleCreate;
+
+        reviewList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-edit-review')) {
+                const reviewId = e.target.dataset.id;
+                const reviewBox = e.target.closest('.review-item');
+                const content = reviewBox.querySelector('.review-content').textContent;
+                const rating = reviewBox.querySelector('.review-rating').textContent.length;
+
+                document.getElementById('reviewContent').value = content;
+
+                document.getElementById('ratingInput').value = rating;
+                highlightStars(rating);
+
+                reviewWriteView.style.display = 'block';
+                reviewListView.style.display = 'none';
+
+                reviewForm.removeEventListener('submit', handleCreate);
+                isEditing = true;
+                editingReviewId = reviewId;
+                reviewForm.onsubmit = handleEdit;
+            }
+
+            if (e.target.classList.contains('btn-delete-review')) {
+                const reviewId = e.target.dataset.id;
+                //if (!confirm('정말 삭제하시겠습니까?')) return;
+
+                Swal.fire({
+                    text: '정말 삭제하시겠습니까?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '예',
+                    cancelButtonText: '아니요'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // 사용자가 '네'를 눌렀을 때 처리
+                        fetch(`/team/team/review/${reviewId}`, {
+                            method: 'DELETE'
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error();
+                                //alert('삭제되었습니다.');
+                                Swal.fire({text: '삭제되었습니다.', icon: 'success', confirmButtonText: '확인'});
+                                loadPagedReviews(0);
+                                myReviewsBtn.style.display = 'inline-block';
+                                backToAllReviewsFromMyBtn.style.display = 'none';
+                            })
+                            .catch(() => {
+                                //alert('삭제에 실패했습니다.');
+                                Swal.fire({text: '삭제에 실패했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                            });
+                    } else {
+                        // 사용자가 '아니요' 눌렀을 때
+                        return;
+                    }
+                });
+
+
+
+            }
+        });
+
+        const backToAllReviewsFromMyBtn = document.getElementById('backToAllReviewsFromMyBtn');
+
+        if (myReviewsBtn) {
+            myReviewsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                fetch(`/team/team/${teamId}/my-reviews`)
+                    .then(res => res.json())
+                    .then(data => {
+                        const reviews = data.data;
+
+                        // 🔁 Always update reviewList regardless of count
+                        if (!reviews.length) {
+                            reviewList.innerHTML = '<p class="no-reviews">내가 작성한 후기가 없습니다.</p>';
+                        } else {
+                            reviewList.innerHTML = reviews.map(review => `
+                        <div class="review-item" data-id="${review.id}">
+                            <div class="review-header">
+                                <div class="review-author-info">
+                                    <img src="${review.profileImageUrl || '/img/default-avatar.png'}" alt="User" class="author-avatar">
+                                    <span class="review-author">${review.reviewerName}</span>
+                                </div>
+                                <div class="review-meta">
+                                    <span class="review-rating">${'⭐'.repeat(review.rating)}</span>
+                                    <span class="review-date">${review.createdDate.split('T')[0]}</span>
+                                </div>
+                            </div>
+                            <p class="review-content">${review.content}</p>
+                            <div class="form-actions">
+                                <button class="btn-edit-review btn-secondary" data-id="${review.id}">수정</button>
+                                <button class="btn-delete-review btn-cancel" data-id="${review.id}">삭제</button>
+                            </div>
+                        </div>
+                    `).join('');
+                        }
+
+                        // ✅ Always toggle the buttons
+                        myReviewsBtn.style.display = 'none';
+                        backToAllReviewsFromMyBtn.style.display = 'inline-block';
+                    });
+            });
+        }
+
+        // 👈 Add new event listener for back button
+        if (backToAllReviewsFromMyBtn) {
+            backToAllReviewsFromMyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loadPagedReviews(0);
+                myReviewsBtn.style.display = 'inline-block';
+                backToAllReviewsFromMyBtn.style.display = 'none';
+            });
+        }
+
+        function loadReviews() {
+            fetch(`/team/team/${teamId}/reviews`)
+                .then(response => response.json())
+                .then(response => {
+                    const reviews = response.data;
+                    if (!reviews || reviews.length === 0) {
+                        reviewList.innerHTML = '<p class="no-reviews">아직 작성된 후기가 없습니다.</p>';
+                        return;
+                    }
+
+                    reviewList.innerHTML = reviews.map(review => {
+                        const hasResponse = review.response !== null;
+                        const responseHtml = hasResponse
+                            ? `<div class="review-response">
+     <strong>답변:</strong> ${review.response}
+     <span class="response-date" style="float: right; color: #888; font-size: 0.85em;">
+         ${review.respondedAt ? review.respondedAt.split('T')[0] : ''}
+     </span>
+   </div>`
+                            : isTeamLeader
+                                ? `<div class="response-form">
+                <textarea class="response-text" data-id="${review.id}" placeholder="답변을 입력하세요"></textarea>
+                <p class="response-char-count" data-id="${review.id}">0 / 150자</p>
+
+                <button class="btn-submit-response" data-id="${review.id}">답변 등록</button>
+
+
+           </div>`
+                                : '';
+
+                        return `
+                    <div class="review-item" data-id="${review.id}">
+                        <div class="review-header">
+                            <div class="review-author-info">
+                                <img src="${review.profileImageUrl || '/img/default-avatar.png'}" alt="User" class="author-avatar">
+                                <span class="review-author">${review.reviewerName || '익명'}</span>
+                            </div>
+                            <div class="review-meta">
+                                <span class="review-rating">${'⭐'.repeat(review.rating)}</span>
+                                <span class="review-date">${review.createdDate.split('T')[0]}</span>
+                            </div>
+                        </div>
+                        <p class="review-content">${review.content}</p>
+                        ${responseHtml}
+                    </div>
+                `;
+                    }).join('');
+
+                    // 리더인 경우에만 등록 버튼 활성화
+                    document.querySelectorAll('.btn-submit-response').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const reviewId = btn.dataset.id;
+                            const textArea = document.querySelector(`.response-text[data-id="${reviewId}"]`);
+                            const responseText = textArea.value.trim();
+                            if (!responseText) {
+                                //alert("답변을 입력해주세요.");
+                                Swal.fire({text: '답변을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+                                return ;
+                            }
+
+                            const MAX_RESPONSE_LENGTH = 150;
+                            if (responseText.length > MAX_RESPONSE_LENGTH) {
+                                //alert(`답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`);
+                                Swal.fire({text: `답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`, icon: 'warning', confirmButtonText: '확인'});
+                                return;
+                            }
+
+                            fetch(`/team/team/review/${reviewId}/response`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({reviewResponse: responseText})
+                            }).then(res => {
+                                if (!res.ok) throw new Error();
+                                //alert('답변이 등록되었습니다!');
+                                Swal.fire({text: '답변이 등록되었습니다!', icon: 'success', confirmButtonText: '확인'});
+
+                                loadReviews();
+                            }).catch(() => {
+                                //alert("답변 등록 실패");
+                                Swal.fire({text: '답변 등록 실패', icon: 'warning', confirmButtonText: '확인'});
+                            });
+                        });
+                    });
+                });
+            attachNewResponseCharCountHandlers(); // ✅ add this
+        }
+        const MAX_CHARS = 200;
+        const reviewContent = document.getElementById('reviewContent');
+        const charCountInfo = document.getElementById('wordCountInfo'); // You can keep the same ID if you want
+        const wordLimitWarning = document.getElementById('wordLimitWarning');
+
+        reviewContent.addEventListener('input', () => {
+            const length = reviewContent.value.length;
+
+            charCountInfo.textContent = `${length} / ${MAX_CHARS}자`;
+
+            if (length > MAX_CHARS) {
+                wordLimitWarning.style.display = 'block';
+            } else {
+                wordLimitWarning.style.display = 'none';
+            }
+        });
+
+        function clearTabs() {
+            tabInfo.classList.remove('active');
+            tabReviews.classList.remove('active');
+            tabJoin.classList.remove('active');
+
+
+            infoSection.style.display = 'none';
+            reviewSection.style.display = 'none';
+            joinRequestSection.style.display = 'none';
+            joinRequestListSection.style.display = 'none'; // ✅ new
+        }
+
+        tabInfo.addEventListener('click', (e) => {
+            e.preventDefault();
+            clearTabs();
+            infoSection.style.display = 'block';
+            tabInfo.classList.add('active');
+
+        });
+
+        tabReviews.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            clearTabs();
+
+            reviewSection.style.display = 'block';
+            reviewListView.style.display = 'block';
+            reviewWriteView.style.display = 'none';
+            tabReviews.classList.add('active');
+
+            loadPagedReviews(0); // load paged reviews instead of all
+        });
+        tabJoin.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const userRole = document.getElementById('userRole')?.value;
+            const userHasTeam = document.getElementById('userHasTeam')?.value === 'true';
+            const recruitmentStatus = document.getElementById('recruitmentStatus')?.value === 'true'; // true if 모집중
+            const isDisabled = tabJoin.classList.contains('disabled-tab');
+
+            if (isDisabled) {
+                if (userHasTeam) {
+                    //alert("이미 소속된 팀이 있습니다.");
+                    Swal.fire({text: '이미 소속된 팀이 있습니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                } else if (!recruitmentStatus) {
+                    //alert("이 팀은 더 이상 팀원을 모집하지 않습니다.");
+                    Swal.fire({text: '이 팀은 더 이상 팀원을 모집하지 않습니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                } else {
+                    //alert("가입이 불가능한 상태입니다.");
+                    Swal.fire({text: '가입이 불가능한 상태입니다.', icon: 'warning', confirmButtonText: '확인'});
+
+                }
+                return;
+            }
+
+            clearTabs();
+            tabJoin.classList.add('active');
+
+            if (isTeamLeader) {
+                joinRequestListSection.style.display = 'block';
+                loadJoinRequests(0);
+            } else {
+                joinRequestSection.style.display = 'block';
+            }
+        });
+
+        const tabChat = document.getElementById('tab-chat');
+
+        tabChat.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            const role = document.getElementById('userRole').value;
+            const teamId = document.getElementById('teamId').value;
+            const leaderId = document.getElementById('teamLeaderId').value;
+
+            if (role === 'LEADER') {
+                // ✅ Leader goes to team chat list
+                window.location.href = "/chat/my/rooms/team/view";
+
+            } else if (role === 'MEMBER') {
+                try {
+                    const res = await fetch(`/chat/group/room-id?teamId=${teamId}`);
+                    if (!res.ok) throw new Error("팀 채팅방 ID를 불러올 수 없습니다");
+
+                    const data = await res.json();
+                    const roomId = data.data;
+
+                    if (!roomId) throw new Error("팀 채팅방이 존재하지 않습니다");
+
+                    window.location.href = `/chat/group/room?roomId=${roomId}`;
+                } catch (err) {
+                    //alert("팀 채팅방 이동 실패: " + err.message);
+                    Swal.fire({text: "팀 채팅방 이동 실패: " + err.message, icon: 'warning', confirmButtonText: '확인'});
+
+                }
+            } else {
+                // 👤 GUEST opens or creates 1:1 chat with the team leader
+                try {
+                    const response = await fetch(`/chat/room/private?receiverId=${leaderId}`);
+                    if (!response.ok) throw new Error("1:1 채팅방 요청 실패");
+
+                    const data = await response.json();
+                    const roomId = data.data;
+
+                    if (!roomId) throw new Error("채팅방 ID를 불러올 수 없습니다.");
+                    window.location.href = `/chat/my/room?roomId=${roomId}`;
+                } catch (err) {
+                    //alert("채팅방 연결 실패: " + err.message);
+                    Swal.fire({text: "채팅방 연결 실패: " + err.message, icon: 'warning', confirmButtonText: '확인'});
+
+                }
+            }
+        });
+
+        if (writeReviewBtn) {
+            writeReviewBtn.addEventListener('click', () => {
+                reviewForm.reset();
+                resetStarRating(); // ⭐ Reset stars too
+                reviewListView.style.display = 'none';
+                reviewWriteView.style.display = 'block';
+            });
+        }
+
+        if (cancelWriteBtn) {
+            cancelWriteBtn.addEventListener('click', () => {
+                reviewWriteView.style.display = 'none';
+                reviewListView.style.display = 'block';
+                reviewForm.reset();
+                resetStarRating(); // ⭐ Reset stars too
+                if (isEditing) {
+                    reviewForm.onsubmit = handleCreate;
+                    isEditing = false;
+                    editingReviewId = null;
+                }
+            });
+        }
+
+        // Your pagination logic here
+        let currentReviewPage = 0;
+        const reviewPagination = document.getElementById('reviewPagination');
+
+        function loadPagedReviews(page = 0) {
+            const teamId = document.getElementById('teamId').value;
+
+            fetch(`/team/team/${teamId}/reviews/paged?page=${page}&size=10`)
+                .then(res => res.json())
+                .then(result => {
+                    const data = result.data;
+                    const reviews = data.items;
+                    const pageInfo = data.pageInfo;
+
+                    currentReviewPage = page;
+
+
+                    reviewList.innerHTML = ''; // Clear previous content
+
+                    if (!reviews || reviews.length === 0) {
+                        noReviewsMessage.style.display = 'block';
+                        reviewPagination.innerHTML = '';
+                        return;
+                    } else {
+                        noReviewsMessage.style.display = 'none';
+                    }
+
+                    // Render reviews
+                    reviewList.innerHTML = reviews.map(review => `
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="review-author-info">
+                                <img src="${review.profileImageUrl || '/img/default-avatar.png'}" class="author-avatar">
+                                <span class="review-author">${review.reviewerName}</span>
+                            </div>
+                            <div class="review-meta">
+                                <span class="review-rating">${'⭐'.repeat(review.rating)}</span>
+                                <span class="review-date">${review.createdDate.split('T')[0]}</span>
+                            </div>
+                        </div>
+                        <p class="review-content">${review.content}</p>
+                       ${review.response
+                        ? `<div class="review-response">
+     <strong>답변:</strong> ${review.response}
+     <span class="response-date" style="float: right; color: #888; font-size: 0.85em;">
+         ${review.respondedAt ? review.respondedAt.split('T')[0] : ''}
+     </span>
+   </div>`
+                        : (isTeamLeader
+                            ? `<div class="response-form">
+               <textarea class="response-text" data-id="${review.id}" placeholder="답변을 입력하세요"></textarea>
+                 <p class="response-char-count" data-id="${review.id}">0 / 150자</p>
+
+               <button class="btn-submit-response" data-id="${review.id}">답변 등록</button>
+
+
+           </div>`
+                            : '')
+                    }
+                    </div>
+                `).join('');
+
+                    attachNewResponseCharCountHandlers(); // ✅ add this
+
+
+                    document.querySelectorAll('.btn-submit-response').forEach(btn => {
+
+                        btn.addEventListener('click', () => {
+                            const reviewId = btn.dataset.id;
+                            const textArea = document.querySelector(`.response-text[data-id="${reviewId}"]`);
+                            const responseText = textArea.value.trim();
+
+                            if (!responseText) {
+                                //alert("답변을 입력해주세요.");
+                                Swal.fire({text: '답변을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+
+                                return;
+                            }
+
+                            const MAX_RESPONSE_LENGTH = 150;
+                            if (responseText.length > MAX_RESPONSE_LENGTH) {
+                                //alert(`답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`);
+                                Swal.fire({text: `답변은 최대 ${MAX_RESPONSE_LENGTH}자까지 입력할 수 있습니다.`, icon: 'warning', confirmButtonText: '확인'});
+
+                                return;
+                            }
+
+                            fetch(`/team/team/review/${reviewId}/response`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ reviewResponse: responseText })
+                            }).then(res => {
+                                if (!res.ok) throw new Error();
+                                //alert('답변이 등록되었습니다!');
+                                Swal.fire({text: '답변이 등록되었습니다!', icon: 'success', confirmButtonText: '확인'});
+
+                                loadPagedReviews(currentReviewPage); // reload same page
+                            }).catch(() => {
+                                //alert("답변 등록 실패");
+                                Swal.fire({text: '답변 등록 실패', icon: 'warning', confirmButtonText: '확인'});
+
+                            });
+                        });
+                    });
+
+                    // Render pagination
+                    renderReviewPagination(pageInfo);
+
+                })
+                .catch(err => {
+                    reviewList.innerHTML = '<p>후기를 불러오는 데 실패했습니다.</p>';
+                    reviewPagination.innerHTML = '';
+                    console.error('❌ 후기 로딩 실패:', err);
+                });
+        }
+        window.loadPagedReviews = loadPagedReviews;
+
+        function renderReviewPagination(pageInfo) {
+            reviewPagination.innerHTML = '';
+
+            const totalPages = pageInfo.totalPages;
+            const currentPage = currentReviewPage;
+
+            // 이전 버튼
+            if (currentPage > 0) {
+                reviewPagination.innerHTML += `<button onclick="loadPagedReviews(${currentPage - 1})">이전</button>`;
+            }
+
+            // 번호 버튼 (with .active class)
+            for (let i = 0; i < totalPages; i++) {
+                reviewPagination.innerHTML += `
+<button onclick="loadPagedReviews(${i})" class="${i === currentPage ? 'active' : ''}">
+    ${i + 1}
+</button>`;
+            }
+
+            // 다음 버튼
+            if (currentPage < totalPages - 1) {
+                reviewPagination.innerHTML += `<button onclick="loadPagedReviews(${currentPage + 1})">다음</button>`;
+            }
+        }
+
+        // ✅ Call on tab click or when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Only call this if #reviewSection is visible on load, or when tab is clicked
+            loadPagedReviews(0);
+        });
+        function attachEditResponseCharCountHandlers() {
+            document.querySelectorAll('.edit-response-text').forEach(textarea => {
+                const counter = textarea.parentElement.querySelector('.edit-response-char-count');
+                const MAX_LENGTH = 150;
+
+                const updateCount = () => {
+                    let value = textarea.value;
+                    if (value.length > MAX_LENGTH) {
+                        textarea.value = value.substring(0, MAX_LENGTH); // ✂️ Enforce max
+                    }
+
+                    const len = textarea.value.length;
+                    counter.textContent = `${len} / ${MAX_LENGTH}자`;
+                    counter.style.color = len === MAX_LENGTH ? 'red' : '';
+                };
+
+                updateCount();
+                textarea.addEventListener('input', updateCount);
+            });
+        }
+        function attachNewResponseCharCountHandlers() {
+            document.querySelectorAll('.response-text').forEach(textarea => {
+                const reviewId = textarea.dataset.id;
+                const counter = document.querySelector(`.response-char-count[data-id="${reviewId}"]`);
+                const MAX_LENGTH = 150;
+
+                const updateCount = () => {
+                    let value = textarea.value;
+                    if (value.length > MAX_LENGTH) {
+                        textarea.value = value.substring(0, MAX_LENGTH); // ✂️ Trim excess
+                    }
+
+                    const len = textarea.value.length;
+                    if (counter) {
+                        counter.textContent = `${len} / ${MAX_LENGTH}자`;
+                        counter.style.color = len === MAX_LENGTH ? 'red' : '';
+                    }
+                };
+
+                // Initial count
+                updateCount();
+
+                // Live input handling
+                textarea.addEventListener('input', updateCount);
+            });
+        }
+        window.loadPagedReviews = loadPagedReviews;
+    });
+</script>
+</body>
+</html>

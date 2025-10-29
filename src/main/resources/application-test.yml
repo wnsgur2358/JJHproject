@@ -1,0 +1,53 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    aws:
+      credentials:
+        access-key: dummy
+        secret-key: dummy
+      region:
+        static: sa-east-1
+      s3:
+        bucket: dummy-bucket
+        base-url: https://dummy-s3-url
+      stack:
+        auto: false
+  thymeleaf:
+    cache: false
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: test@example.com
+    password: test
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+file:
+  upload-dir: /tmp/test-upload
+jwt:
+  secret: test-secret
+  issuer: test-issuer
+matchon:
+  kakao-api: test-key
+  dialogflow-key-path: test.json
+app:
+  domain-url: http://localhost:8090

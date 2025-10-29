@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<!--    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/chat/private-chat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webstomp-client@1/dist/webstomp.min.js"></script>
+    <script th:src="@{/js/chat/private-chat.js}" defer></script>
+</head>
+<body>
+<!--  <div th:replace="~{common/header::header}"></div>-->
+  <div id="wrap">
+    <h2 class="page-title">chat</h2>
+      <div id="chat1-1-detail-dto"
+           th:data-login-email = "${#authentication.name}"
+           th:data-receiver-id = "${receiverId}"
+           th:data-room-id = "${roomId}"
+      >
+      </div>
+    <div class="container">
+      <div class="card">
+        <div class="card-title">채팅</div>
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" id="messageInput" placeholder="메시지입력" />
+        <button id="sendBtn">전송</button>
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>대회 상세</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/event/event-detail.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h2 th:text="${event.eventTitle}">대회 제목</h2>
+
+    <div class="info-box description-box">
+        <label>대회 소개:</label>
+        <div class="event-description" th:text="${event.eventDescription}"></div>
+    </div>
+    <div class="info-box"><label>주최기관:</label> <span th:text="${event.hostProfile.hostName}"></span></div>
+    <div class="info-box"><label>일자:</label> <span th:text="${event.eventDate}"></span></div>
+    <div class="info-box"><label>지역:</label> <span th:text="${regionLabel}"></span></div>
+    <div class="info-box"><label>장소:</label> <span th:text="${event.eventAddress}"></span></div>
+    <div id="map" style="width: 100%; height: 300px; margin: 20px 0;"></div>
+    <div class="info-box"><label>참가 방법:</label> <span th:text="${event.eventMethod}"></span></div>
+    <div class="info-box"><label>문의:</label> <span th:text="${event.eventContact}"></span></div>
+
+    <div class="btn-wrap">
+        <a th:href="${event.eventStatus.name() == 'APPROVED'} ? '/schedule' : '/event/my'">
+            <button class="back-btn">돌아가기</button>
+        </a>
+
+        <!-- 승인 상태가 아닌 경우에만 삭제 버튼 노출 -->
+        <div th:if="${isOwner and event.eventStatus.name() != 'APPROVED'}">
+            <form th:action="@{/event/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
+                <button type="submit" class="delete-btn" th:disabled="${event.eventStatus.name() != 'DENIED'}">
+                    삭제
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<!-- Kakao Maps API Key 및 주소 전달 -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let kakaoApiKey = /*[[${@environment.getProperty('matchon.kakao-api')}]]*/ '';
+    let eventAddress = /*[[${event.eventAddress}]]*/ '';
+    /*]]>*/
+</script>
+
+<script>
+    function loadKakaoMap() {
+        const script = document.createElement('script');
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false&libraries=services`;
+        script.onload = () => {
+            kakao.maps.load(() => {
+                initMap();
+            });
+        };
+        document.head.appendChild(script);
+    }
+
+    function initMap() {
+        const container = document.getElementById('map');
+        const options = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667),
+            level: 3
+        };
+        const map = new kakao.maps.Map(container, options);
+        const geocoder = new kakao.maps.services.Geocoder();
+
+        geocoder.addressSearch(eventAddress, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                new kakao.maps.Marker({ map: map, position: coords });
+                map.setCenter(coords);
+            }
+        });
+    }
+
+    // 실행
+    window.onload = loadKakaoMap;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>대회 등록 현황</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/admin/admin-event-list.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <script th:src="@{/js/admin/admin-event-list.js}" defer></script>
+</head>
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h2><span class="underline-title">대회 등록 현황</span></h2>
+    <div id="eventTable"></div>
+    <div id="pagination"></div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+</body>
+</html>

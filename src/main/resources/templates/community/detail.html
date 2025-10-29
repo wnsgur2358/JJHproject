@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/community/common.css}">
+    <link rel="stylesheet" th:href="@{/css/community/board-detail.css}">
+    <link rel="stylesheet" th:href="@{/css/community/modal.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="flex-layout">
+<div class="page-wrapper">
+    <div th:replace="~{common/header::header}"></div>
+
+    <div class="content-box">
+        <div class="post-header">
+            <div class="post-header-actions">
+                <a th:href="@{/community}" class="back-link">← 목록으로</a>
+                <div class="post-action-right">
+
+                    <div th:if="${#authentication.principal.member.memberRole.name() == 'ADMIN'}" class="admin-delete-wrapper">
+                        <button type="button"
+                                class="admin-delete-button"
+                                th:attr="data-board-id=${board.id}">
+                            🛑 관리자 삭제
+                        </button>
+                    </div>
+                    <div th:if="${board.member.id == #authentication.principal.member.id and #authentication.principal.member.memberRole.name() != 'ADMIN'}">
+                        <button type="button"
+                                class="board-delete-button"
+                                th:attr="data-board-id=${board.id}">
+                            ✖ 삭제
+                        </button>
+
+                    </div>
+
+                    <div th:if="${board.member.id != #authentication.principal.member.id}">
+                        <button type="button" class="report-button"
+                                th:onclick="'openReportModal(\'BOARD\', ' + ${board.id} + ')'">⚠ 게시글 신고
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h2 th:text="${board.title}" class="post-title">제목</h2>
+
+            <div class="post-meta meta-horizontal">
+                <span><strong>작성자:</strong> <span th:text="${board.member.memberName}"></span></span>
+                <span><strong>카테고리:</strong> <span th:text="${board.category.displayName}"></span></span>
+                <span><strong>작성일:</strong> <span
+                        th:text="${#temporals.format(board.createdDate, 'yyyy-MM-dd HH:mm')}"></span></span>
+            </div>
+        </div>
+
+        <div class="post-body">
+            <div th:utext="${board.content}" class="post-content"></div>
+
+            <div th:if="${attachments != null and !attachments.isEmpty()}" class="attachment-box">
+                <strong>첨부파일</strong>
+                <ul>
+                    <li th:each="att : ${attachments}" class="attachment-item">
+
+                        <img th:src="@{/img/attach-file.png}" alt="첨부 아이콘" class="attachment-icon"/>
+
+                        <a th:href="@{/community/download-force/{filename}(filename=${att.savedName})}"
+                           th:text="${att.originalName}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div th:if="${board.member.id == #authentication.principal.member.id}" class="post-actions">
+            <a th:href="@{'/community/' + ${board.id} + '/edit'}" class="edit-link">수정하기</a>
+        </div>
+    </div>
+
+    <div class="comment-section">
+        <h3>댓글</h3>
+        <form id="commentForm">
+            <textarea id="commentContent" placeholder="댓글을 입력하세요." maxlength="500"></textarea>
+            <button type="submit" class="comment-btn">작성 완료</button>
+        </form>
+
+        <ul id="commentList">
+            <li th:each="comment : ${comments}"
+                th:attr="data-comment-id=${comment.id}, id='comment-' + ${comment.id}"
+                th:classappend="${highlightedCommentId != null and highlightedCommentId == comment.id} ? 'highlight'">
+
+                <div class="comment-meta">
+                    <small>
+                        <span th:text="${comment.member.memberName}">작성자</span> |
+                        <span th:text="${#temporals.format(comment.createdDate, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                    </small>
+                    <div class="comment-actions">
+                        <button type="button" class="admin-delete-button"
+                                th:if="${#authentication.principal.member.memberRole.name() == 'ADMIN'}"
+                                th:data-comment-id="${comment.id}"
+                                th:data-board-id="${board.id}">
+                            🛑 관리자 삭제
+                        </button>
+                        <button type="button" class="btn-comment-delete"
+                                th:data-comment-id="${comment.id}"
+                                th:data-board-id="${board.id}"
+                                th:if="${comment.member.id == #authentication.principal.member.id and #authentication.principal.member.memberRole.name() != 'ADMIN'}">
+                            ✖ 삭제
+                        </button>
+
+                        <button type="button" class="report-button"
+                                th:if="${comment.member.id != #authentication.principal.member.id}"
+                                th:onclick="'openReportModal(\'COMMENT\', ' + ${comment.id} + ')'">
+                            ⚠ 댓글 신고
+                        </button>
+                    </div>
+                </div>
+                <p th:text="${comment.content}"></p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="reportModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <h3 class="report-modal-title">
+            <img th:src="@{/img/free-icon-sirens-4377558.png}" alt="신고 아이콘" class="report-icon">
+            신고하기
+        </h3>
+
+        <input type="hidden" id="reportTargetType">
+        <input type="hidden" id="reportTargetId">
+
+        <div class="form-group">
+            <label for="reportReasonSelect">신고 사유</label>
+            <select id="reportReasonSelect" required>
+                <option value="">-- 선택하세요 --</option>
+                <option value="ABUSE">욕설/비방/괴롭힘</option>
+                <option value="ADVERTISEMENT">상업/광고성 글</option>
+                <option value="SPAM">도배성 글</option>
+                <option value="IRRELEVANT">카테고리 취지에 어긋남</option>
+                <option value="ETC">기타</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="reportReasonDetail">상세 사유</label>
+            <textarea id="reportReasonDetail" rows="4" maxlength="500"
+                      placeholder="신고 상세 사유를 입력하세요. (300자 이내)" required></textarea>
+
+        </div>
+
+        <div class="modal-buttons">
+            <button type="button" onclick="submitReport()">제출</button>
+            <button type="button" onclick="closeReportModal()">취소</button>
+        </div>
+    </div>
+</div>
+
+<div id="user-info"
+     th:attr="data-user-id=${#authentication.principal?.member?.id},
+              data-user-role=${#authentication.principal?.member?.memberRole?.name()}">
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script>
+    const userInfoEl = document.getElementById('user-info');
+    const currentUserId = parseInt(userInfoEl.dataset.userId || '0');
+    const currentUserRole = userInfoEl.dataset.userRole || 'GUEST';
+
+    function formatDateTime(isoString) {
+        const date = new Date(isoString);
+        const yyyy = date.getFullYear();
+        const mm = String(date.getMonth() + 1).padStart(2, '0');
+        const dd = String(date.getDate()).padStart(2, '0');
+        const hh = String(date.getHours()).padStart(2, '0');
+        const mi = String(date.getMinutes()).padStart(2, '0');
+        return `${yyyy}-${mm}-${dd} ${hh}:${mi}`;
+    }
+
+    document.getElementById("commentForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const content = document.getElementById("commentContent").value.trim();
+        const boardId = document.location.pathname.split("/")[2];
+        const token = localStorage.getItem("accessToken");
+
+        if (!content) {
+            Swal.fire({text: '댓글을 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            return;
+        }
+
+        fetch(`/community/${boardId}/comments`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({content: content})
+        })
+            .then(res => res.json())
+            .then(data => {
+                const commentList = document.getElementById("commentList");
+                const newComment = document.createElement("li");
+                newComment.classList.add("highlighted");
+
+                let actionButtons = "";
+                if (data.memberId === currentUserId && currentUserRole !== 'ADMIN') {
+                    actionButtons += `<button type="button" class="btn-comment-delete" data-comment-id="${data.commentId}" data-board-id="${boardId}">✖ 삭제</button>`;
+                } else if (currentUserRole === 'ADMIN') {
+                    actionButtons += `<button type="button" class="admin-delete-button" data-comment-id="${data.commentId}" data-board-id="${boardId}">🛑 관리자 삭제</button>`;
+                } else {
+                    actionButtons += `<button type="button" class="report-button" onclick="openReportModal('COMMENT', ${data.commentId})">⚠ 댓글 신고</button>`;
+                }
+
+                newComment.innerHTML = `
+                <div class="comment-meta">
+                    <small>${data.memberName} | ${formatDateTime(data.createdDate)}</small>
+                    <div class="comment-actions">${actionButtons}</div>
+                </div>
+                <p>${data.content}</p>
+            `;
+                commentList.prepend(newComment);
+                document.getElementById("commentContent").value = "";
+            })
+            .catch(err => {
+                console.error("댓글 등록 오류:", err);
+                Swal.fire({text: '댓글 등록 실패', icon: 'warning', confirmButtonText: '확인'});
+            });
+    });
+
+    document.addEventListener("click", function (e) {
+        // 댓글 삭제
+        if (e.target.matches(".btn-comment-delete") || (e.target.matches(".admin-delete-button") && e.target.dataset.commentId)) {
+            const commentId = e.target.dataset.commentId;
+            const boardId = e.target.dataset.boardId;
+            const token = localStorage.getItem("accessToken");
+
+            Swal.fire({
+                text: '댓글을 삭제하시겠습니까?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '예',
+                cancelButtonText: '아니요'
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+
+                fetch(`/community/${boardId}/comments/${commentId}`, {
+                    method: "DELETE",
+                    headers: { 'Authorization': 'Bearer ' + token }
+                }).then(res => {
+                    if (res.status === 200) {
+                        e.target.closest("li").remove();
+                    } else {
+                        res.text().then(msg => {
+                            Swal.fire({text: msg || "댓글 삭제 실패", icon: 'warning', confirmButtonText: '확인'});
+                        });
+                    }
+                }).catch(err => {
+                    console.error("댓글 삭제 오류:", err);
+                    Swal.fire({text: '오류가 발생했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                });
+            });
+        }
+
+        // 게시글 삭제
+        if ((e.target.matches(".admin-delete-button") && !e.target.dataset.commentId)
+            || e.target.matches(".board-delete-button")) {
+            const boardId = e.target.dataset.boardId;
+
+            Swal.fire({
+                text: '정말 게시글을 삭제하시겠습니까?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: '예',
+                cancelButtonText: '아니요'
+            }).then((result) => {
+                if (!result.isConfirmed) return;
+
+                fetch(`/community/${boardId}/delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include'
+                }).then(response => {
+                    if (response.status === 401) {
+                        Swal.fire({text: '로그인이 필요한 서비스입니다.', icon: 'warning', confirmButtonText: '확인'})
+                            .then(() => window.location.href = "/login");
+                    } else if (response.ok) {
+                        Swal.fire({text: '게시글이 삭제되었습니다.', icon: 'success', confirmButtonText: '확인'})
+                            .then(() => window.location.href = "/community");
+                    } else {
+                        response.text().then(msg => {
+                            Swal.fire({text: msg || "게시글 삭제 실패", icon: 'warning', confirmButtonText: '확인'});
+                        });
+                    }
+                }).catch(error => {
+                    console.error("게시글 삭제 오류:", error);
+                    Swal.fire({text: '오류가 발생했습니다.', icon: 'warning', confirmButtonText: '확인'});
+                });
+            });
+        }
+    });
+
+    function openReportModal(type, id) {
+        document.getElementById("reportTargetType").value = type;
+        document.getElementById("reportTargetId").value = id;
+        document.getElementById("reportReasonSelect").value = "";
+        document.getElementById("reportReasonDetail").value = "";
+        document.getElementById("reportModal").style.display = "flex";
+    }
+
+    function closeReportModal() {
+        document.getElementById("reportModal").style.display = "none";
+    }
+
+    function submitReport() {
+        const type = document.getElementById("reportTargetType").value;
+        const id = document.getElementById("reportTargetId").value;
+        const selectedReasonType = document.getElementById("reportReasonSelect").value;
+        const detailReason = document.getElementById("reportReasonDetail").value.trim();
+
+        if (!selectedReasonType) {
+            Swal.fire({text: '신고 사유를 선택해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            return;
+        }
+        if (selectedReasonType === "ETC" && !detailReason) {
+            Swal.fire({text: '기타 사유를 선택한 경우, 상세 사유를 입력해주세요.', icon: 'warning', confirmButtonText: '확인'});
+            return;
+        }
+
+        const token = localStorage.getItem("accessToken");
+        fetch("/community/reports", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Authorization": "Bearer " + token
+            },
+            body: `type=${type}&targetId=${id}&reasonType=${selectedReasonType}&reason=${encodeURIComponent(detailReason)}`
+        }).then(res => {
+            if (res.status === 401) {
+                //alert("로그인이 필요합니다.");
+                Swal.fire({text: '로그인이 필요합니다.', icon: 'warning', confirmButtonText: '확인'}).then(()=>{
+                    location.href = "/login";
+                });
+
+            } else if (res.ok) {
+                Swal.fire({text: '신고가 접수되었습니다.', icon: 'success', confirmButtonText: '확인'});
+                closeReportModal();
+            } else {
+                res.text().then(msg => {
+                    Swal.fire({text: msg, icon: 'warning', confirmButtonText: '확인'});
+                });
+            }
+        }).catch(() => {
+            Swal.fire({text: '신고 중 오류가 발생했습니다.', icon: 'warning', confirmButtonText: '확인'});
+        });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const highlightId = params.get("highlight");
+        if (highlightId) {
+            const el = document.getElementById("comment-" + highlightId);
+            if (el) {
+                el.scrollIntoView({behavior: "smooth", block: "center"});
+                el.classList.add("highlight");
+            }
+        }
+    });
+</script>
+</body>
+</html>

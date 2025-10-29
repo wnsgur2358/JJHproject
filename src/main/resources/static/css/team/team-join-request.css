@@ -1,0 +1,84 @@
+.page-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+
+.nickname {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.button-group {
+    margin-top: 20px;
+}
+
+.btn-approve, .btn-reject {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-approve {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-reject {
+    background-color: #f44336;
+    color: white;
+}
+
+.intro-text {
+    display: block;
+    max-width: 100%;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+#startChatBtn {
+    background-color: dodgerblue;
+    color: white;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+}
+
+#startChatBtn:hover {
+    background-color: royalblue;
+    box-shadow: 0 4px 10px rgba(30, 144, 255, 0.3); /* 💡 blue 계열 그림자 */
+    transform: translateY(-1px);
+}
+
+.btn-approve:hover {
+    background-color: #45a049; /* 조금 더 짙은 녹색 */
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+    transform: translateY(-1px);
+
+}
+
+.btn-reject:hover {
+    background-color: #d32f2f; /* 더 짙은 붉은색 */
+    box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+    transform: translateY(-1px);
+}

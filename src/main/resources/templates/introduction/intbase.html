@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회사 소개</title>
+
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" th:href="@{/css/introduction/intcss.css}">
+</head>
+
+<body>
+<div th:replace="~{common/header::header}"></div>
+
+<div id="wrap">
+    <h1 class="titleint">INTRODUCTION</h1>
+
+    <div class="intro-grid">
+        <th:block th:each="group : ${introductionGroup}">
+            <th:block th:each="intro : ${group}">
+                <div class="intro-box"
+                     th:attr="data-title=${intro.title}, data-content=${intro.content}"
+                     onclick="showModalFromData(this)">
+                    <h3 th:text="${intro.title}">제목</h3>
+                </div>
+            </th:block>
+        </th:block>
+    </div>
+</div>
+
+<!-- 모달 -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">제목</h2>
+        <p id="modalContent">내용</p>
+    </div>
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+
+<script defer>
+    function showModalFromData(element) {
+        const title = element.getAttribute("data-title");
+        const content = element.getAttribute("data-content");
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalContent").innerText = content;
+        document.getElementById("modal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const modal = document.getElementById("modal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+</body>
+</html>

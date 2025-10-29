@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ 반응형 필수 -->
+    <title>Matchon</title>
+
+    <!-- 공통 스타일 -->
+    <link rel="stylesheet" th:href="@{/css/header.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+</head>
+
+<body>
+<th:block th:fragment="header">
+
+    <!-- 로그인 사용자 정보 (JS에서 활용) -->
+    <div id="header-detail-dto"
+         th:data-login-email="${#authentication.name}">
+    </div>
+
+    <!-- 상단 네비게이션 -->
+    <div class="navbar">
+        <!-- 좌측 로고 -->
+        <div class="navbar-left">
+            <a th:href="@{/}">
+                <img src="/img/matchon_logo.png" alt="Matchon Logo" class="logo">
+            </a>
+        </div>
+
+        <!-- 중앙 메뉴 -->
+        <div class="navbar-center">
+            <a th:href="@{'/introduction'}">INTRODUCTION</a>
+<!--            <a th:href="@{/redirect(url='/introduction')}">INTRODUCTION</a>-->
+            <a th:href="@{/redirect(url='/matchup/board')}">MATCHUP</a>
+            <a th:href="@{/redirect(url='/stadium')}">STADIUM</a>
+            <a th:href="@{/redirect(url='/community')}">COMMUNITY</a>
+            <a th:href="@{/redirect(url='/schedule')}">SCHEDULE</a>
+            <a th:href="@{/redirect(url='/cs')}">CS</a>
+            <a th:href="@{/redirect(url='/team')}">TEAM</a>
+        </div>
+
+        <!-- 우측 아이콘 + 버튼 -->
+        <div class="navbar-right">
+            <!-- 알림/채팅 아이콘 -->
+            <div class="icons">
+                <img id="chat-icon" src="/img/chat-black.png">
+                <div style="position: relative; display: inline-block;">
+                    <img src="/img/bell-black.png" id="openMiniDrawerBtn">
+                    <span id="notificationBadge" style="
+                    position: absolute;
+                    top: -20px;
+                    right: -10px;
+                    background: red;
+                    color: white;
+                    border-radius: 50%;
+                    font-size: 12px;
+                    width: 18px;
+                    height: 18px;
+                    text-align: center;
+                    line-height: 18px;
+                    display: none;">0</span>
+                    <div class="mini-drawer" id="miniDrawer">
+                        <div class="mini-drawer-header">
+                            <button class="close-mini" id="openMiniDrawerHistoryBtn">📜</button>
+                            <h4>알림</h4>
+                            <button class="close-mini" id="closeMiniDrawerBtn">&times;</button>
+                        </div>
+                    </div>
+                    <div class="mini-drawer-history" id="miniDrawerHistory">
+                        <div class="mini-drawer-header-history">
+                            <div></div>
+                            <h4>기존 알림</h4>
+                            <button class="close-mini-history" id="closeMiniDrawerBtnHistoryBtn">&times;</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 로그인/로그아웃 버튼 -->
+            <div class="auth">
+                <a id="btn-login" th:href="@{/login}" class="btn">LOGIN</a>
+                <a id="btn-signup" th:href="@{/signup}" class="btn">SIGN UP</a>
+
+                <a id="btn-mypage" th:href="@{/mypage}" class="btn" style="display: none;">MY</a>
+                <a id="btn-admin" th:href="@{/admin}" class="btn" style="display: none;">ADMIN</a>
+                <a id="btn-logout" href="javascript:logout()" class="btn" style="display: none;">LOGOUT</a>
+            </div>
+        </div>
+    </div>
+
+
+    <hr class="blue_hr">
+
+    <!-- 공통 스크립트 -->
+    <script th:src="@{/js/common/header.js}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/webstomp-client@1/dist/webstomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</th:block>
+</body>
+</html>

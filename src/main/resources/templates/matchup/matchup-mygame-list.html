@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>MATCHON</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/header.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/footer.css}">
+    <script th:src="@{/js/matchup/matchup-mygame-list.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/aibot/aichatbot.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/matchup/matchup-mygame-list.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div th:replace="~{common/header::header}"></div>
+<div id="wrap">
+    <div id="matchup-request-detail-dto">
+
+    </div>
+    <h2 class="page-title">MATCHUP 나의 경기 참가 이력</h2>
+
+    <div class="topbar-buttons">
+        <button class="back-btn" onclick="goBack()">뒤로가기</button>
+    </div>
+
+    <table class="board-table">
+        <thead>
+        <tr>
+            <th class="col-type">종목</th>
+            <th class="col-sports-facility-address">경기장</th>
+            <th class="col-match-date">날짜</th>
+            <th class="col-quota">참가 인원</th>
+            <th class="col-detail">상세보기</th>
+            <th class="col-eval">경기평가</th>
+        </tr>
+        </thead>
+        <tbody id="match-container"></tbody>
+    </table>
+
+    <div id="paging-container">
+
+    </div>
+
+</div>
+
+<div th:replace="~{common/footer::footer}"></div>
+</body>
+</html>
