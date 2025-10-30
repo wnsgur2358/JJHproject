@@ -32,7 +32,7 @@ MatchOn은 사용자가 **운동 종목, 지역, 시간대**를 선택해
 |------|------|
 | **Language** | Java 17 |
 | **Framework** | Spring Boot 3.4, Spring Security, WebSocket |
-| **DB / ORM** | MySQL 8, JPA, MyBatis |
+| **DB / ORM** | MySQL 8, JPA, Redis |
 | **Auth** | JWT + HttpOnly Cookie |
 | **Infra** | AWS EC2, RDS, S3 |
 | **Frontend** | Thymeleaf, HTML, CSS, JavaScript |
@@ -49,7 +49,7 @@ MatchOn은 사용자가 **운동 종목, 지역, 시간대**를 선택해
 - 관리자 권한에 따른 신고/정지 관리 기능  
 
 ### 🧾 커뮤니티
-- 게시판 CRUD (페이징 / 검색 / 정렬 지원)  
+- 게시판 CRUD (페이징 / 검색 / 공지사항)  
 - 댓글 / 대댓글 / 좋아요 기능  
 - 게시글 및 댓글 신고 → 관리자 심사 → 정지 처리
 
